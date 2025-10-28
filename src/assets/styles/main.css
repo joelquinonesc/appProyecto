@@ -1,0 +1,2350 @@
+/* =========================================================
+   🧬 ANXRISK - Sistema de Diseño CSS
+   Aplicación Médica para Evaluación de Riesgo de Ansiedad
+   Versión: 2.1 - Fondo Gris Profesional
+   ========================================================= */
+
+/* ============================================
+   1. VARIABLES CSS - Sistema de Diseño
+   ============================================ */
+:root {
+    /* Colores Principales */
+    --color-primary: #2B87D1;
+    --color-primary-dark: #1F6DB5;
+    --color-primary-light: #64B5F6;
+    
+    /* Colores de Fondo */
+    --color-background: #E8E8E8;
+    --color-surface: #FFFFFF;
+    --color-surface-variant: #F5F8FB;
+    
+    /* Colores de Texto */
+    --color-text-primary: #2E2E2E;
+    --color-text-secondary: #666666;
+    --color-text-disabled: #9E9E9E;
+    
+    /* Colores de Acento */
+    --color-success: #4CAF50;
+    --color-warning: #FF9800;
+    --color-error: #F44336;
+    --color-info: #2196F3;
+    
+    /* Bordes y Divisores */
+    --color-border: #D1D1D1;
+    --color-divider: #E0E0E0;
+    
+    /* Sombras */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 3px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 6px 20px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 10px 40px rgba(0, 0, 0, 0.15);
+    
+    /* Radios de Borde */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+    
+    /* Sistema de Espaciado */
+    --space-xs: 0.5rem;    /* 8px */
+    --space-sm: 1rem;      /* 16px */
+    --space-md: 1.5rem;    /* 24px */
+    --space-lg: 2rem;      /* 32px */
+    --space-xl: 3rem;      /* 48px */
+    --space-2xl: 4rem;     /* 64px */
+    
+    /* Tipografía */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    --font-size-xs: 0.75rem;   /* 12px */
+    --font-size-sm: 0.875rem;  /* 14px */
+    --font-size-base: 1rem;    /* 16px */
+    --font-size-lg: 1.125rem;  /* 18px */
+    --font-size-xl: 1.25rem;   /* 20px */
+    --font-size-2xl: 1.5rem;   /* 24px */
+    --font-size-3xl: 2rem;     /* 32px */
+    --font-size-4xl: 2.5rem;   /* 40px */
+    
+    /* Transiciones */
+    --transition-fast: 150ms ease-in-out;
+    --transition-base: 250ms ease-in-out;
+    --transition-slow: 350ms ease-in-out;
+}
+
+/* ============================================
+   2. RESET Y ESTILOS BASE
+   ============================================ */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background-color: #E8E8E8 !important;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    background-color: #E8E8E8 !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ASEGURAR TEXTO NEGRO EN AUTOCOMPLETADO DEL NAVEGADOR */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: #2E2E2E !important;
+    -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+    color: #2E2E2E !important;
+}
+
+/* Labels en negro */
+label,
+.stTextInput label,
+.stNumberInput label,
+.stSelectbox label {
+    color: #2E2E2E !important;
+    font-weight: 500 !important;
+}
+
+/* ============================================
+   3. FONDO GRIS EN STREAMLIT
+   ============================================ */
+.stApp {
+    background-color: #E8E8E8 !important;
+}
+
+.main {
+    background-color: #E8E8E8 !important;
+}
+
+/* Eliminar todos los espacios superiores */
+.block-container {
+    padding-top: 0 !important;
+    padding-bottom: var(--space-lg) !important;
+    margin-top: 0 !important;
+    max-width: 1400px !important;
+    background-color: #E8E8E8 !important;
+}
+
+section.main {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    background-color: #E8E8E8 !important;
+}
+
+section.main > div,
+section.main > div:first-child {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    background-color: #E8E8E8 !important;
+}
+
+div[data-testid="stVerticalBlock"],
+div[data-testid="stVerticalBlock"] > div:first-child {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Ocultar header y toolbar de Streamlit */
+header[data-testid="stHeader"],
+div[data-testid="stToolbar"],
+.stDeployButton {
+    display: none !important;
+    height: 0 !important;
+}
+
+/* ============================================
+   4. ESTRUCTURA PRINCIPAL
+   ============================================ */
+.main-content {
+    background-color: #E8E8E8;
+    min-height: 100vh;
+    padding: 0 var(--space-lg) var(--space-2xl);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   5. LOGO Y BRANDING
+   ============================================ */
+.logo-section {
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 0 var(--space-sm) 0 !important;
+    line-height: 0 !important;
+    animation: fadeInDown 0.6s ease-out;
+    background-color: transparent !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.logo-section img {
+    max-width: 50% !important;
+    height: auto !important;
+    filter: drop-shadow(var(--shadow-sm));
+    transition: transform var(--transition-base);
+    margin: 0 auto !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+.logo-section img:hover {
+    transform: scale(1.02);
+}
+
+/* ============================================
+   6. TIPOGRAFÍA
+   ============================================ */
+.big-title {
+    font-size: var(--font-size-4xl) !important;
+    font-weight: 700 !important;
+    color: var(--color-primary) !important;
+    text-align: center;
+    margin: var(--space-lg) 0 var(--space-md) 0 !important;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.subtitle {
+    font-size: var(--font-size-xl) !important;
+    color: var(--color-text-secondary) !important;
+    text-align: center;
+    margin: var(--space-sm) auto var(--space-md) auto !important;
+    font-weight: 400 !important;
+    max-width: 800px;
+    line-height: 1.6;
+    padding: 0 var(--space-md);
+    animation: fadeIn 1s ease-out;
+}
+
+.welcome-title {
+    font-size: var(--font-size-2xl) !important;
+    font-weight: 600 !important;
+    color: var(--color-text-primary) !important;
+    text-align: center;
+    margin: var(--space-lg) auto var(--space-md) auto !important;
+    max-width: 900px;
+    line-height: 1.4;
+    padding: 0 var(--space-md);
+    animation: fadeIn 0.9s ease-out;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-text-primary);
+}
+
+p {
+    margin-bottom: var(--space-md);
+    line-height: 1.7;
+}
+
+/* ============================================
+   7. SECCIÓN DE BIENVENIDA
+   ============================================ */
+.welcome-text {
+    background: var(--color-surface);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin: 0 auto var(--space-xl) auto;
+    max-width: 900px;
+    border: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.8s ease-out;
+}
+
+.welcome-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.welcome-text p {
+    color: var(--color-text-primary);
+    line-height: 1.8;
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-lg);
+    text-align: justify;
+}
+
+.welcome-text p:last-child {
+    margin-bottom: 0;
+}
+
+.welcome-text p:first-of-type {
+    font-weight: 500;
+}
+
+/* ============================================
+   8. TARJETAS INFORMATIVAS
+   ============================================ */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+    margin: var(--space-xl) 0;
+    animation: fadeIn 1s ease-out;
+}
+
+.info-card {
+    background: var(--color-surface);
+    padding: var(--space-xl);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+    transition: all var(--transition-base);
+    height: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
+}
+
+.info-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary-light);
+}
+
+.info-card:hover::before {
+    transform: scaleX(1);
+}
+
+.info-card h4 {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+}
+
+.info-card p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ============================================
+   9. BOTONES
+   ============================================ */
+.center-button {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: var(--space-xl) 0 !important;
+    text-align: center !important;
+}
+
+.center-button .stButton {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+div[data-testid="column"] .stButton {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.stButton > button {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%) !important;
+    color: white !important;
+    padding: 1rem 2.5rem !important;
+    border-radius: var(--radius-full) !important;
+    border: none !important;
+    font-weight: 600 !important;
+    font-size: var(--font-size-lg) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 100% !important;
+}
+
+.stButton > button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.stButton > button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stButton > button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.stButton > button:active {
+    transform: translateY(-1px);
+}
+
+.stButton > button:focus {
+    outline: 3px solid rgba(43, 135, 209, 0.3);
+    outline-offset: 2px;
+}
+
+/* ============================================
+   10. NOTA DE CONFIDENCIALIDAD
+   ============================================ */
+.confidentiality-note {
+    background: linear-gradient(135deg, var(--color-surface-variant) 0%, #E9ECEF 100%);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    text-align: center;
+    border: 1px solid var(--color-border);
+    margin-top: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+    animation: fadeIn 1.2s ease-out;
+    color: var(--color-text-primary);
+}
+
+.confidentiality-note::before {
+    content: '🔒';
+    display: block;
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-sm);
+}
+
+.confidentiality-note p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin: var(--space-xs) 0;
+    line-height: 1.6;
+}
+
+/* ============================================
+   11. FORMULARIOS Y CONTROLES
+   ============================================ */
+
+/* Títulos de páginas */
+h1[class*="st-"] {
+    color: #2E2E2E !important;
+    font-size: var(--font-size-3xl) !important;
+    font-weight: 700 !important;
+    text-align: center;
+    margin-bottom: var(--space-lg) !important;
+}
+
+/* Subtítulos de secciones */
+h3[class*="st-"] {
+    color: #2E2E2E !important;
+    font-size: var(--font-size-xl) !important;
+    font-weight: 600 !important;
+    margin-top: var(--space-lg) !important;
+    margin-bottom: var(--space-md) !important;
+}
+
+/* Contenedor de formulario */
+div[data-testid="stForm"] {
+    background: var(--color-surface) !important;
+    padding: var(--space-xl) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-md) !important;
+    border: 1px solid var(--color-border) !important;
+    margin: var(--space-md) 0 !important;
+}
+
+/* Inputs de texto y selectores */
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input,
+.stNumberInput input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--color-border) !important;
+    transition: all var(--transition-fast) !important;
+    padding: 0.75rem 1rem !important;
+    font-size: var(--font-size-base) !important;
+    color: #2E2E2E !important;
+}
+
+.stTextInput > div > div > input:hover,
+.stNumberInput > div > div > input:hover,
+.stNumberInput input:hover {
+    border-color: var(--color-primary) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stNumberInput > div > div > input:focus,
+.stNumberInput input:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
+    outline: none !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* FORZAR FONDO BLANCO Y TEXTO NEGRO EN TODOS LOS INPUTS */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Inputs dentro de contenedores de Streamlit */
+.stTextInput input,
+.stNumberInput input,
+div[data-testid="stTextInput"] input,
+div[data-testid="stNumberInput"] input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Todos los divs que contienen inputs */
+.stTextInput > div,
+.stNumberInput > div,
+.stTextInput > div > div,
+.stNumberInput > div > div,
+.stTextInput > div > div > div,
+.stNumberInput > div > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Placeholder text */
+.stTextInput input::placeholder,
+.stNumberInput input::placeholder {
+    color: #999999 !important;
+    opacity: 0.7 !important;
+}
+
+/* Input en focus */
+.stTextInput input:focus,
+.stNumberInput input:focus {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Selectbox con fondo blanco y texto negro */
+.stSelectbox select,
+.stSelectbox div[role="button"] {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Contenedores de number input con fondo blanco */
+.stNumberInput > div,
+.stNumberInput > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Botones de incremento/decremento del number input */
+.stNumberInput button {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+    border: none !important;
+}
+
+.stNumberInput button:hover {
+    background: #F5F5F5 !important;
+    background-color: #F5F5F5 !important;
+}
+
+/* Forzar todos los elementos dentro de stNumberInput */
+.stNumberInput * {
+    background-color: transparent !important;
+}
+
+.stNumberInput > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Selectbox */
+.stSelectbox > div > div,
+.stSelectbox > div > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--color-border) !important;
+    transition: all var(--transition-fast) !important;
+    color: #2E2E2E !important;
+}
+
+.stSelectbox > div > div:hover {
+    border-color: var(--color-primary) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+.stSelectbox > div > div:focus-within {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Texto dentro del selectbox */
+.stSelectbox div[data-baseweb="select"] > div,
+.stSelectbox div[data-baseweb="select"] span {
+    color: #2E2E2E !important;
+    background: #FFFFFF !important;
+}
+
+/* Opciones del dropdown del selectbox */
+div[role="listbox"] {
+    background: #FFFFFF !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+div[role="option"] {
+    color: #2E2E2E !important;
+    background: #FFFFFF !important;
+    padding: 0.75rem 1rem !important;
+    transition: background-color var(--transition-fast) !important;
+}
+
+div[role="option"]:hover {
+    background: #F5F8FB !important;
+    background-color: #F5F8FB !important;
+}
+
+div[role="option"][aria-selected="true"] {
+    background: #E3F2FD !important;
+    background-color: #E3F2FD !important;
+    font-weight: 600 !important;
+}
+
+/* Radio buttons y checkboxes */
+.stRadio > label {
+    color: var(--color-text-primary) !important;
+    font-weight: 500 !important;
+    font-size: var(--font-size-base) !important;
+    margin-bottom: var(--space-sm) !important;
+}
+
+.stRadio > div {
+    background: #FFFFFF !important;
+    padding: 0.5rem !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+.stRadio > div[role="radiogroup"] {
+    gap: 1rem !important;
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.stRadio > div[role="radiogroup"] > label {
+    background: #FFFFFF !important;
+    padding: 0.75rem 1.5rem !important;
+    border: 2px solid #D1D1D1 !important;
+    border-radius: var(--radius-sm) !important;
+    cursor: pointer !important;
+    transition: all var(--transition-fast) !important;
+    color: #2E2E2E !important;
+    font-weight: 500 !important;
+    min-width: 80px !important;
+    text-align: center !important;
+}
+
+.stRadio > div[role="radiogroup"] > label:hover {
+    border-color: #4CAF50 !important;
+    background: #F5F5F5 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+.stRadio > div[role="radiogroup"] > label[data-checked="true"] {
+    background: #4CAF50 !important;
+    border-color: #4CAF50 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3) !important;
+}
+
+/* Ocultar el círculo de radio nativo */
+.stRadio input[type="radio"] {
+    display: none !important;
+}
+
+/* Contenedor de preguntas */
+.question-container {
+    background: #FFFFFF !important;
+    padding: 1rem 1.5rem !important;
+    margin: 0.75rem 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid #E0E0E0 !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.question-container:hover {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1) !important;
+}
+
+/* ============================================
+   10. NOTA DE CONFIDENCIALIDAD
+   ============================================ */
+.confidentiality-note {
+    background: linear-gradient(135deg, var(--color-surface-variant) 0%, #E9ECEF 100%);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    text-align: center;
+    border: 1px solid var(--color-border);
+    margin-top: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+    animation: fadeIn 1.2s ease-out;
+    color: var(--color-text-primary);
+}
+
+.confidentiality-note::before {
+    content: '🔒';
+    display: block;
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-sm);
+}
+
+.confidentiality-note p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin: var(--space-xs) 0;
+    line-height: 1.6;
+}
+
+/* ============================================
+   11. FORMULARIOS Y CONTROLES
+   ============================================ */
+
+/* Títulos de páginas */
+h1[class*="st-"] {
+    color: #2E2E2E !important;
+    font-size: var(--font-size-3xl) !important;
+    font-weight: 700 !important;
+    text-align: center;
+    margin-bottom: var(--space-lg) !important;
+}
+
+/* Subtítulos de secciones */
+h3[class*="st-"] {
+    color: #2E2E2E !important;
+    font-size: var(--font-size-xl) !important;
+    font-weight: 600 !important;
+    margin-top: var(--space-lg) !important;
+    margin-bottom: var(--space-md) !important;
+}
+
+/* Contenedor de formulario */
+div[data-testid="stForm"] {
+    background: var(--color-surface) !important;
+    padding: var(--space-xl) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-md) !important;
+    border: 1px solid var(--color-border) !important;
+    margin: var(--space-md) 0 !important;
+}
+
+/* Inputs de texto y selectores */
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input,
+.stNumberInput input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--color-border) !important;
+    transition: all var(--transition-fast) !important;
+    padding: 0.75rem 1rem !important;
+    font-size: var(--font-size-base) !important;
+    color: #2E2E2E !important;
+}
+
+.stTextInput > div > div > input:hover,
+.stNumberInput > div > div > input:hover,
+.stNumberInput input:hover {
+    border-color: var(--color-primary) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stNumberInput > div > div > input:focus,
+.stNumberInput input:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
+    outline: none !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* FORZAR FONDO BLANCO Y TEXTO NEGRO EN TODOS LOS INPUTS */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Inputs dentro de contenedores de Streamlit */
+.stTextInput input,
+.stNumberInput input,
+div[data-testid="stTextInput"] input,
+div[data-testid="stNumberInput"] input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Todos los divs que contienen inputs */
+.stTextInput > div,
+.stNumberInput > div,
+.stTextInput > div > div,
+.stNumberInput > div > div,
+.stTextInput > div > div > div,
+.stNumberInput > div > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Placeholder text */
+.stTextInput input::placeholder,
+.stNumberInput input::placeholder {
+    color: #999999 !important;
+    opacity: 0.7 !important;
+}
+
+/* Input en focus */
+.stTextInput input:focus,
+.stNumberInput input:focus {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Selectbox con fondo blanco y texto negro */
+.stSelectbox select,
+.stSelectbox div[role="button"] {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Contenedores de number input con fondo blanco */
+.stNumberInput > div,
+.stNumberInput > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Botones de incremento/decremento del number input */
+.stNumberInput button {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+    border: none !important;
+}
+
+.stNumberInput button:hover {
+    background: #F5F5F5 !important;
+    background-color: #F5F5F5 !important;
+}
+
+/* Forzar todos los elementos dentro de stNumberInput */
+.stNumberInput * {
+    background-color: transparent !important;
+}
+
+.stNumberInput > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Selectbox */
+.stSelectbox > div > div,
+.stSelectbox > div > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--color-border) !important;
+    transition: all var(--transition-fast) !important;
+    color: #2E2E2E !important;
+}
+
+.stSelectbox > div > div:hover {
+    border-color: var(--color-primary) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+.stSelectbox > div > div:focus-within {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Texto dentro del selectbox */
+.stSelectbox div[data-baseweb="select"] > div,
+.stSelectbox div[data-baseweb="select"] span {
+    color: #2E2E2E !important;
+    background: #FFFFFF !important;
+}
+
+/* Opciones del dropdown del selectbox */
+div[role="listbox"] {
+    background: #FFFFFF !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+div[role="option"] {
+    color: #2E2E2E !important;
+    background: #FFFFFF !important;
+    padding: 0.75rem 1rem !important;
+    transition: background-color var(--transition-fast) !important;
+}
+
+div[role="option"]:hover {
+    background: #F5F8FB !important;
+    background-color: #F5F8FB !important;
+}
+
+div[role="option"][aria-selected="true"] {
+    background: #E3F2FD !important;
+    background-color: #E3F2FD !important;
+    font-weight: 600 !important;
+}
+
+/* Radio buttons y checkboxes */
+.stRadio > label {
+    color: var(--color-text-primary) !important;
+    font-weight: 500 !important;
+    font-size: var(--font-size-base) !important;
+    margin-bottom: var(--space-sm) !important;
+}
+
+.stRadio > div {
+    background: #FFFFFF !important;
+    padding: 0.5rem !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+.stRadio > div[role="radiogroup"] {
+    gap: 1rem !important;
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.stRadio > div[role="radiogroup"] > label {
+    background: #FFFFFF !important;
+    padding: 0.75rem 1.5rem !important;
+    border: 2px solid #D1D1D1 !important;
+    border-radius: var(--radius-sm) !important;
+    cursor: pointer !important;
+    transition: all var(--transition-fast) !important;
+    color: #2E2E2E !important;
+    font-weight: 500 !important;
+    min-width: 80px !important;
+    text-align: center !important;
+}
+
+.stRadio > div[role="radiogroup"] > label:hover {
+    border-color: #4CAF50 !important;
+    background: #F5F5F5 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+.stRadio > div[role="radiogroup"] > label[data-checked="true"] {
+    background: #4CAF50 !important;
+    border-color: #4CAF50 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3) !important;
+}
+
+/* Ocultar el círculo de radio nativo */
+.stRadio input[type="radio"] {
+    display: none !important;
+}
+
+/* Contenedor de preguntas */
+.question-container {
+    background: #FFFFFF !important;
+    padding: 1rem 1.5rem !important;
+    margin: 0.75rem 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid #E0E0E0 !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.question-container:hover {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1) !important;
+}
+
+/* ============================================
+   13. ANIMACIONES
+   ============================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* ============================================
+   14. UTILIDADES
+   ============================================ */
+.text-center {
+    text-align: center !important;
+}
+
+.text-primary {
+    color: var(--color-primary) !important;
+}
+
+.bg-surface {
+    background-color: var(--color-surface) !important;
+}
+
+.shadow-md {
+    box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   15. DISEÑO RESPONSIVO
+   ============================================ */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 0 var(--space-md) var(--space-xl);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --font-size-4xl: 2rem;
+        --font-size-3xl: 1.75rem;
+        --font-size-2xl: 1.5rem;
+    }
+    
+    .main-content {
+        padding: 0 var(--space-sm) var(--space-lg);
+    }
+    
+    .logo-section img {
+        max-width: 70% !important;
+    }
+    
+    .subtitle {
+        font-size: var(--font-size-lg) !important;
+        padding: 0 var(--space-sm);
+    }
+    
+    .welcome-text {
+        padding: var(--space-lg);
+        margin: 0 auto var(--space-lg) auto;
+    }
+    
+    .welcome-text p {
+        font-size: var(--font-size-base);
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+    
+    .info-card {
+        padding: var(--space-lg);
+    }
+    
+    .stButton > button {
+        padding: 0.9rem 2.5rem !important;
+        font-size: var(--font-size-base) !important;
+    }
+    
+    .confidentiality-note {
+        padding: var(--space-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 0 var(--space-xs) var(--space-md);
+    }
+    
+    .logo-section img {
+        max-width: 85% !important;
+    }
+    
+    .welcome-text {
+        padding: var(--space-md);
+        border-radius: var(--radius-sm);
+    }
+    
+    .info-card {
+        padding: var(--space-md);
+    }
+    
+    .stButton > button {
+        padding: 0.8rem 2rem !important;
+        font-size: var(--font-size-sm) !important;
+    }
+}
+
+/* ============================================
+   16. MODO IMPRESIÓN
+   ============================================ */
+@media print {
+    .stButton,
+    [data-testid="stSidebar"],
+    .confidentiality-note {
+        display: none !important;
+    }
+    
+    .main-content {
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    .welcome-text,
+    .info-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
+
+/* ============================================
+   17. ACCESIBILIDAD
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Mejorar contraste para lectores de pantalla */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Focus visible mejorado */
+*:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Iconos y flechas del selectbox en negro */
+.stSelectbox svg {
+    color: #2E2E2E !important;
+    fill: #2E2E2E !important;
+}
+
+.stSelectbox div[data-baseweb="select"] svg {
+    color: #2E2E2E !important;
+    fill: #2E2E2E !important;
+}
+
+/* Icono de dropdown cuando está abierto/cerrado */
+.stSelectbox button svg,
+.stSelectbox span svg {
+    color: #2E2E2E !important;
+    fill: #2E2E2E !important;
+}
+
+/* Asegurar que todos los elementos SVG dentro del select sean negros */
+.stSelectbox path {
+    fill: #2E2E2E !important;
+}
+
+/* ============================================
+   CLASES REUTILIZABLES - Estilos Generales
+   ============================================ */
+
+/* FORZAR COLOR NEGRO EN TODOS LOS INPUTS - MÁXIMA PRIORIDAD */
+input,
+input[type="text"],
+input[type="number"],
+.stTextInput input,
+.stNumberInput input,
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input,
+div[data-testid="stTextInput"] input,
+div[data-testid="stNumberInput"] input {
+    color: #2E2E2E !important;
+    -webkit-text-fill-color: #2E2E2E !important;
+}
+
+/* Instrucciones y Descripciones */
+.form-instruction {
+    color: #666666;
+    font-size: 1.75rem;
+    font-weight: 600;
+    text-align: left;
+    margin-bottom: 1rem;
+    font-style: italic;
+    padding: 0.5rem 0;
+}
+
+.form-instruction-centered {
+    color: #666666;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-style: italic;
+    padding: 0.5rem 0;
+}
+
+.form-instruction-highlight {
+    color: #2E2E2E;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-left: 4px solid #4CAF50;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.form-instruction-alert {
+    color: #2E2E2E;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #FFF9E6;
+    border-left: 4px solid #FF9800;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Contenedores de Formulario */
+.form-container {
+    background: #FFFFFF;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    border: 1px solid #D1D1D1;
+    margin: 1.5rem 0;
+}
+
+.form-container-light {
+    background: #F5F8FB;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    border: 1px solid #D1D1D1;
+    margin: 1.5rem 0;
+}
+
+/* Secciones de Preguntas */
+.question-box {
+    background: #FFFFFF;
+    padding: 1.25rem;
+    margin: 0.75rem 0;
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.question-box:hover {
+    border-color: #4CAF50;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
+    transition: all 0.2s ease;
+}
+
+/* Texto de Pregunta */
+.question-text {
+    color: #2E2E2E;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.question-number {
+    color: #4CAF50;
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+/* Tarjetas de Información */
+.info-box {
+    background: #E3F2FD;
+    border-left: 4px solid #2196F3;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.success-box {
+    background: #E8F5E9;
+    border-left: 4px solid #4CAF50;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.warning-box {
+    background: #FFF9E6;
+    border-left: 4px solid #FF9800;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.error-box {
+    background: #FFEBEE;
+    border-left: 4px solid #F44336;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+/* Títulos de Sección */
+.section-title {
+    color: #2E2E2E;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    color: #666666;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Divisores y Espaciadores */
+.spacer-sm {
+    height: 0.5rem;
+}
+
+.spacer-md {
+    height: 1rem;
+}
+
+.spacer-lg {
+    height: 2rem;
+}
+
+.divider {
+    height: 1px;
+    background: #E0E0E0;
+    margin: 1.5rem 0;
+}
+
+/* Badges y Etiquetas */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.badge-success {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+.badge-warning {
+    background: #FFF9E6;
+    color: #F57C00;
+}
+
+.badge-info {
+    background: #E3F2FD;
+    color: #1976D2;
+}
+
+.badge-error {
+    background: #FFEBEE;
+    color: #C62828;
+}
+
+/* ============================================
+   2. RESET Y ESTILOS BASE
+   ============================================ */
+
+/* FORZAR COLOR NEGRO EN TODOS LOS INPUTS - PRIORIDAD MÁXIMA */
+input,
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="url"],
+textarea,
+.stTextInput input,
+.stNumberInput input,
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input,
+div[data-testid="stTextInput"] input,
+div[data-testid="stNumberInput"] input,
+div[data-baseweb="input"] input,
+[class*="textInput"] input,
+[class*="numberInput"] input {
+    color: #2E2E2E !important;
+    -webkit-text-fill-color: #2E2E2E !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Asegurar que el texto se vea negro incluso con autocompletado */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: #2E2E2E !important;
+    -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+    box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+    color: #2E2E2E !important;
+}
+
+/* Labels de los inputs en negro */
+.stTextInput label,
+.stNumberInput label
+
+section.main {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    background-color: #E8E8E8 !important;
+}
+
+section.main > div,
+section.main > div:first-child {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    background-color: #E8E8E8 !important;
+}
+
+div[data-testid="stVerticalBlock"],
+div[data-testid="stVerticalBlock"] > div:first-child {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Ocultar header y toolbar de Streamlit */
+header[data-testid="stHeader"],
+div[data-testid="stToolbar"],
+.stDeployButton {
+    display: none !important;
+    height: 0 !important;
+}
+
+/* ============================================
+   4. ESTRUCTURA PRINCIPAL
+   ============================================ */
+.main-content {
+    background-color: #E8E8E8;
+    min-height: 100vh;
+    padding: 0 var(--space-lg) var(--space-2xl);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   5. LOGO Y BRANDING
+   ============================================ */
+.logo-section {
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 0 var(--space-sm) 0 !important;
+    line-height: 0 !important;
+    animation: fadeInDown 0.6s ease-out;
+    background-color: transparent !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.logo-section img {
+    max-width: 50% !important;
+    height: auto !important;
+    filter: drop-shadow(var(--shadow-sm));
+    transition: transform var(--transition-base);
+    margin: 0 auto !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+.logo-section img:hover {
+    transform: scale(1.02);
+}
+
+/* ============================================
+   6. TIPOGRAFÍA
+   ============================================ */
+.big-title {
+    font-size: var(--font-size-4xl) !important;
+    font-weight: 700 !important;
+    color: var(--color-primary) !important;
+    text-align: center;
+    margin: var(--space-lg) 0 var(--space-md) 0 !important;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.subtitle {
+    font-size: var(--font-size-xl) !important;
+    color: var(--color-text-secondary) !important;
+    text-align: center;
+    margin: var(--space-sm) auto var(--space-md) auto !important;
+    font-weight: 400 !important;
+    max-width: 800px;
+    line-height: 1.6;
+    padding: 0 var(--space-md);
+    animation: fadeIn 1s ease-out;
+}
+
+.welcome-title {
+    font-size: var(--font-size-2xl) !important;
+    font-weight: 600 !important;
+    color: var(--color-text-primary) !important;
+    text-align: center;
+    margin: var(--space-lg) auto var(--space-md) auto !important;
+    max-width: 900px;
+    line-height: 1.4;
+    padding: 0 var(--space-md);
+    animation: fadeIn 0.9s ease-out;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-text-primary);
+}
+
+p {
+    margin-bottom: var(--space-md);
+    line-height: 1.7;
+}
+
+/* ============================================
+   7. SECCIÓN DE BIENVENIDA
+   ============================================ */
+.welcome-text {
+    background: var(--color-surface);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin: 0 auto var(--space-xl) auto;
+    max-width: 900px;
+    border: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.8s ease-out;
+}
+
+.welcome-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.welcome-text p {
+    color: var(--color-text-primary);
+    line-height: 1.8;
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-lg);
+    text-align: justify;
+}
+
+.welcome-text p:last-child {
+    margin-bottom: 0;
+}
+
+.welcome-text p:first-of-type {
+    font-weight: 500;
+}
+
+/* ============================================
+   8. TARJETAS INFORMATIVAS
+   ============================================ */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+    margin: var(--space-xl) 0;
+    animation: fadeIn 1s ease-out;
+}
+
+.info-card {
+    background: var(--color-surface);
+    padding: var(--space-xl);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+    transition: all var(--transition-base);
+    height: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
+}
+
+.info-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary-light);
+}
+
+.info-card:hover::before {
+    transform: scaleX(1);
+}
+
+.info-card h4 {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+}
+
+.info-card p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ============================================
+   9. BOTONES
+   ============================================ */
+.center-button {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: var(--space-xl) 0 !important;
+    text-align: center !important;
+}
+
+.center-button .stButton {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+div[data-testid="column"] .stButton {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.stButton > button {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%) !important;
+    color: white !important;
+    padding: 1rem 2.5rem !important;
+    border-radius: var(--radius-full) !important;
+    border: none !important;
+    font-weight: 600 !important;
+    font-size: var(--font-size-lg) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 100% !important;
+}
+
+.stButton > button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.stButton > button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stButton > button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.stButton > button:active {
+    transform: translateY(-1px);
+}
+
+.stButton > button:focus {
+    outline: 3px solid rgba(43, 135, 209, 0.3);
+    outline-offset: 2px;
+}
+
+/* ============================================
+   10. NOTA DE CONFIDENCIALIDAD
+   ============================================ */
+.confidentiality-note {
+    background: linear-gradient(135deg, var(--color-surface-variant) 0%, #E9ECEF 100%);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    text-align: center;
+    border: 1px solid var(--color-border);
+    margin-top: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+    animation: fadeIn 1.2s ease-out;
+    color: var(--color-text-primary);
+}
+
+.confidentiality-note::before {
+    content: '🔒';
+    display: block;
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-sm);
+}
+
+.confidentiality-note p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin: var(--space-xs) 0;
+    line-height: 1.6;
+}
+
+/* ============================================
+   11. FORMULARIOS Y CONTROLES
+   ============================================ */
+
+/* Títulos de páginas */
+h1[class*="st-"] {
+    color: #2E2E2E !important;
+    font-size: var(--font-size-3xl) !important;
+    font-weight: 700 !important;
+    text-align: center;
+    margin-bottom: var(--space-lg) !important;
+}
+
+/* Subtítulos de secciones */
+h3[class*="st-"] {
+    color: #2E2E2E !important;
+    font-size: var(--font-size-xl) !important;
+    font-weight: 600 !important;
+    margin-top: var(--space-lg) !important;
+    margin-bottom: var(--space-md) !important;
+}
+
+/* Contenedor de formulario */
+div[data-testid="stForm"] {
+    background: var(--color-surface) !important;
+    padding: var(--space-xl) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-md) !important;
+    border: 1px solid var(--color-border) !important;
+    margin: var(--space-md) 0 !important;
+}
+
+/* Inputs de texto y selectores */
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input,
+.stNumberInput input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--color-border) !important;
+    transition: all var(--transition-fast) !important;
+    padding: 0.75rem 1rem !important;
+    font-size: var(--font-size-base) !important;
+    color: #2E2E2E !important;
+}
+
+.stTextInput > div > div > input:hover,
+.stNumberInput > div > div > input:hover,
+.stNumberInput input:hover {
+    border-color: var(--color-primary) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stNumberInput > div > div > input:focus,
+.stNumberInput input:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
+    outline: none !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* FORZAR FONDO BLANCO Y TEXTO NEGRO EN TODOS LOS INPUTS */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Inputs dentro de contenedores de Streamlit */
+.stTextInput input,
+.stNumberInput input,
+div[data-testid="stTextInput"] input,
+div[data-testid="stNumberInput"] input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Todos los divs que contienen inputs */
+.stTextInput > div,
+.stNumberInput > div,
+.stTextInput > div > div,
+.stNumberInput > div > div,
+.stTextInput > div > div > div,
+.stNumberInput > div > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Placeholder text */
+.stTextInput input::placeholder,
+.stNumberInput input::placeholder {
+    color: #999999 !important;
+    opacity: 0.7 !important;
+}
+
+/* Input en focus */
+.stTextInput input:focus,
+.stNumberInput input:focus {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Selectbox con fondo blanco y texto negro */
+.stSelectbox select,
+.stSelectbox div[role="button"] {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Contenedores de number input con fondo blanco */
+.stNumberInput > div,
+.stNumberInput > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Botones de incremento/decremento del number input */
+.stNumberInput button {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+    border: none !important;
+}
+
+.stNumberInput button:hover {
+    background: #F5F5F5 !important;
+    background-color: #F5F5F5 !important;
+}
+
+/* Forzar todos los elementos dentro de stNumberInput */
+.stNumberInput * {
+    background-color: transparent !important;
+}
+
+.stNumberInput > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Selectbox */
+.stSelectbox > div > div,
+.stSelectbox > div > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--color-border) !important;
+    transition: all var(--transition-fast) !important;
+    color: #2E2E2E !important;
+}
+
+.stSelectbox > div > div:hover {
+    border-color: var(--color-primary) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+.stSelectbox > div > div:focus-within {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Texto dentro del selectbox */
+.stSelectbox div[data-baseweb="select"] > div,
+.stSelectbox div[data-baseweb="select"] span {
+    color: #2E2E2E !important;
+    background: #FFFFFF !important;
+}
+
+/* Opciones del dropdown del selectbox */
+div[role="listbox"] {
+    background: #FFFFFF !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+div[role="option"] {
+    color: #2E2E2E !important;
+    background: #FFFFFF !important;
+    padding: 0.75rem 1rem !important;
+    transition: background-color var(--transition-fast) !important;
+}
+
+div[role="option"]:hover {
+    background: #F5F8FB !important;
+    background-color: #F5F8FB !important;
+}
+
+div[role="option"][aria-selected="true"] {
+    background: #E3F2FD !important;
+    background-color: #E3F2FD !important;
+    font-weight: 600 !important;
+}
+
+/* Radio buttons y checkboxes */
+.stRadio > label {
+    color: var(--color-text-primary) !important;
+    font-weight: 500 !important;
+    font-size: var(--font-size-base) !important;
+    margin-bottom: var(--space-sm) !important;
+}
+
+.stRadio > div {
+    background: #FFFFFF !important;
+    padding: 0.5rem !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+.stRadio > div[role="radiogroup"] {
+    gap: 1rem !important;
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.stRadio > div[role="radiogroup"] > label {
+    background: #FFFFFF !important;
+    padding: 0.75rem 1.5rem !important;
+    border: 2px solid #D1D1D1 !important;
+    border-radius: var(--radius-sm) !important;
+    cursor: pointer !important;
+    transition: all var(--transition-fast) !important;
+    color: #2E2E2E !important;
+    font-weight: 500 !important;
+    min-width: 80px !important;
+    text-align: center !important;
+}
+
+.stRadio > div[role="radiogroup"] > label:hover {
+    border-color: #4CAF50 !important;
+    background: #F5F5F5 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+.stRadio > div[role="radiogroup"] > label[data-checked="true"] {
+    background: #4CAF50 !important;
+    border-color: #4CAF50 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3) !important;
+}
+
+/* Ocultar el círculo de radio nativo */
+.stRadio input[type="radio"] {
+    display: none !important;
+}
+
+/* Contenedor de preguntas */
+.question-container {
+    background: #FFFFFF !important;
+    padding: 1rem 1.5rem !important;
+    margin: 0.75rem 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid #E0E0E0 !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.question-container:hover {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1) !important;
+}
+
+/* ============================================
+   13. ANIMACIONES
+   ============================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* ============================================
+   14. UTILIDADES
+   ============================================ */
+.text-center {
+    text-align: center !important;
+}
+
+.text-primary {
+    color: var(--color-primary) !important;
+}
+
+.bg-surface {
+    background-color: var(--color-surface) !important;
+}
+
+.shadow-md {
+    box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   15. DISEÑO RESPONSIVO
+   ============================================ */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 0 var(--space-md) var(--space-xl);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --font-size-4xl: 2rem;
+        --font-size-3xl: 1.75rem;
+        --font-size-2xl: 1.5rem;
+    }
+    
+    .main-content {
+        padding: 0 var(--space-sm) var(--space-lg);
+    }
+    
+    .logo-section img {
+        max-width: 70% !important;
+    }
+    
+    .subtitle {
+        font-size: var(--font-size-lg) !important;
+        padding: 0 var(--space-sm);
+    }
+    
+    .welcome-text {
+        padding: var(--space-lg);
+        margin: 0 auto var(--space-lg) auto;
+    }
+    
+    .welcome-text p {
+        font-size: var(--font-size-base);
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+    
+    .info-card {
+        padding: var(--space-lg);
+    }
+    
+    .stButton > button {
+        padding: 0.9rem 2.5rem !important;
+        font-size: var(--font-size-base) !important;
+    }
+    
+    .confidentiality-note {
+        padding: var(--space-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 0 var(--space-xs) var(--space-md);
+    }
+    
+    .logo-section img {
+        max-width: 85% !important;
+    }
+    
+    .welcome-text {
+        padding: var(--space-md);
+        border-radius: var(--radius-sm);
+    }
+    
+    .info-card {
+        padding: var(--space-md);
+    }
+    
+    .stButton > button {
+        padding: 0.8rem 2rem !important;
+        font-size: var(--font-size-sm) !important;
+    }
+}
+
+/* ============================================
+   16. MODO IMPRESIÓN
+   ============================================ */
+@media print {
+    .stButton,
+    [data-testid="stSidebar"],
+    .confidentiality-note {
+        display: none !important;
+    }
+    
+    .main-content {
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    .welcome-text,
+    .info-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
+
+/* ============================================
+   17. ACCESIBILIDAD
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Mejorar contraste para lectores de pantalla */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Focus visible mejorado */
+*:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Iconos y flechas del selectbox en negro */
+.stSelectbox svg {
+    color: #2E2E2E !important;
+    fill: #2E2E2E !important;
+}
+
+.stSelectbox div[data-baseweb="select"] svg {
+    color: #2E2E2E !important;
+    fill: #2E2E2E !important;
+}
+
+/* Icono de dropdown cuando está abierto/cerrado */
+.stSelectbox button svg,
+.stSelectbox span svg {
+    color: #2E2E2E !important;
+    fill: #2E2E2E !important;
+}
+
+/* Asegurar que todos los elementos SVG dentro del select sean negros */
+.stSelectbox path {
+    fill: #2E2E2E !important;
+}
