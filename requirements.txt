@@ -1,0 +1,23 @@
+# ===================================
+# ANXRISK - Requisitos del Proyecto
+# ===================================
+# Aplicación de evaluación de riesgo de ansiedad
+# Incluye cuestionarios: SF-12, HADS, ZSAS, LTE-12
+# y análisis genético (PRKCA, TCF4, CDH20)
+
+# Framework principal
+streamlit>=1.28.0
+
+# Librerías estándar de Python (incluidas por defecto)
+# - base64 (para codificación de imágenes)
+# - os (operaciones del sistema)
+# - sys (parámetros del sistema)
+# - subprocess (ejecución de procesos)
+
+# ===================================
+# Instalación:
+# ===================================
+# pip install -r requirements.txt
+#
+# O para actualizar:
+# pip install --upgrade -r requirements.txt
