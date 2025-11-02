@@ -312,8 +312,46 @@ Para reportar problemas o sugerencias:
 - Documente el error con capturas de pantalla
 - Incluya su versión de Python y sistema operativo
 
+## 🔧 Comandos Git básicos
+
+Aquí hay una lista de comandos Git útiles para trabajar con el repositorio:
+
+```bash
+# Configurar identidad (una sola vez)
+git config --global user.name "Tu Nombre"
+git config --global user.email "tu@correo.com"
+
+# Inicializar y conectar al remoto (si es necesario)
+git init
+git remote add origin <url-del-repositorio>
+
+# Flujo de trabajo básico
+git status                     # Ver archivos modificados
+git add .                      # Añadir todos los cambios al área de staging
+git commit -m "Mensaje de commit"  # Crear un commit
+
+# Ramas y sincronización
+git branch -M main             # Renombrar rama a main (si aplica)
+git checkout -b feature/nueva-funcion   # Crear y moverse a una rama
+git pull origin main           # Traer cambios del remoto
+git push -u origin main        # Enviar cambios al remoto
+
+# Revisión y limpieza
+git log --oneline              # Historial compacto
+git diff                       # Ver diferencias sin commitear
+git stash                      # Guardar cambios temporales
+git stash pop                  # Recuperar cambios guardados
+
+# Versionado
+git tag -a v1.0 -m "v1.0"     # Crear una etiqueta
+```
+
+Sustituya `<url-del-repositorio>` por la URL real del repositorio remoto (por ejemplo, `git@github.com:usuario/repo.git` o `https://github.com/usuario/repo.git`).
+
 ---
 
 **Versión**: 1.0.0  
 **Última actualización**: Octubre 2025  
 **Estado**: Producción
+
+
