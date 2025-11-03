@@ -5,7 +5,7 @@ Incluye ejemplos para procesamiento en batch y datos dinámicos.
 """
 
 import pandas as pd
-from src.utils.calculos import transformar_edad_a_grupo
+from src.utils.calculos import transformar_edad_a_grupo, transformar_genero_a_binario
 
 
 def ejemplo_basico():
@@ -18,17 +18,21 @@ def ejemplo_basico():
     
     # Crear DataFrame de ejemplo
     df = pd.DataFrame({
-        'edad': [18, 22, 25, 30]
+        'edad': [18, 22, 25, 30],
+        'genero': ['Masculino', 'Femenino', 'Femenino', 'Masculino']
     })
     
-    # Aplicar la transformación
+    # Aplicar las transformaciones
     df['grupo_edad'] = df['edad'].apply(transformar_edad_a_grupo)
+    df['genero_binario'] = df['genero'].apply(transformar_genero_a_binario)
     
-    print("\nDataFrame con transformación aplicada:")
+    print("\nDataFrame con transformaciones aplicadas:")
     print(df)
-    print("\nRegla aplicada:")
-    print("  - edad <= 24 → grupo_edad = 0")
-    print("  - edad > 24  → grupo_edad = 1")
+    print("\nReglas aplicadas:")
+    print("  - edad <= 24 -> grupo_edad = 0 (Joven)")
+    print("  - edad > 24  -> grupo_edad = 1 (Adulto)")
+    print("  - Masculino  -> genero_binario = 0")
+    print("  - Femenino   -> genero_binario = 1")
     print()
 
 
@@ -47,8 +51,9 @@ def ejemplo_datos_multiples():
         'genero': ['Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino']
     })
     
-    # Aplicar transformación
+    # Aplicar transformaciones
     df['grupo_edad'] = df['edad'].apply(transformar_edad_a_grupo)
+    df['genero_binario'] = df['genero'].apply(transformar_genero_a_binario)
     
     print("\nDataFrame completo:")
     print(df)
@@ -75,7 +80,7 @@ def procesar_registro_individual(edad, nombre="Paciente"):
         'nombre': nombre,
         'edad': edad,
         'grupo_edad': grupo_edad,
-        'etiqueta_grupo': 'Joven (≤24 años)' if grupo_edad == 0 else 'Adulto (>24 años)'
+        'etiqueta_grupo': 'Joven (<=24 años)' if grupo_edad == 0 else 'Adulto (>24 años)'
     }
 
 
@@ -105,7 +110,7 @@ def ejemplo_streaming_simulado():
         resultado = procesar_registro_individual(dato['edad'], dato['nombre'])
         resultados.append(resultado)
         
-        print(f"✓ {resultado['nombre']}: edad={resultado['edad']} → "
+        print(f"[OK] {resultado['nombre']}: edad={resultado['edad']} -> "
               f"grupo_edad={resultado['grupo_edad']} ({resultado['etiqueta_grupo']})")
     
     # Convertir a DataFrame para análisis
@@ -129,11 +134,13 @@ def ejemplo_vectorizado():
     
     df = pd.DataFrame({
         'id': range(1, 1001),
-        'edad': np.random.randint(18, 65, 1000)
+        'edad': np.random.randint(18, 65, 1000),
+        'genero': np.random.choice(['Masculino', 'Femenino'], 1000)
     })
     
     # Transformación vectorizada (más rápida para grandes datasets)
     df['grupo_edad'] = (df['edad'] > 24).astype(int)
+    df['genero_binario'] = (df['genero'] == 'Femenino').astype(int)
     
     print(f"\nDataFrame procesado: {len(df)} registros")
     print("\nPrimeras 10 filas:")
@@ -142,7 +149,7 @@ def ejemplo_vectorizado():
     print("\nDistribución por grupos:")
     distribucion = df['grupo_edad'].value_counts().sort_index()
     print(distribucion)
-    print(f"\nGrupo 0 (≤24 años): {distribucion[0]} personas ({distribucion[0]/len(df)*100:.1f}%)")
+    print(f"\nGrupo 0 (<=24 años): {distribucion[0]} personas ({distribucion[0]/len(df)*100:.1f}%)")
     print(f"Grupo 1 (>24 años): {distribucion[1]} personas ({distribucion[1]/len(df)*100:.1f}%)")
     print()
 
@@ -171,7 +178,7 @@ if edad > 0:
     
     # Mostrar resultado
     if grupo_edad == 0:
-        st.info(f"Grupo de edad: Joven (≤24 años)")
+        st.info(f"Grupo de edad: Joven (<=24 años)")
     else:
         st.info(f"Grupo de edad: Adulto (>24 años)")
     
@@ -184,9 +191,9 @@ if edad > 0:
 
 if __name__ == "__main__":
     print("\n")
-    print("╔" + "═" * 58 + "╗")
-    print("║" + " " * 10 + "EJEMPLOS DE TRANSFORMACIÓN EDAD → GRUPO_EDAD" + " " * 3 + "║")
-    print("╚" + "═" * 58 + "╝")
+    print("=" * 60)
+    print("  EJEMPLOS DE TRANSFORMACION EDAD Y GENERO")
+    print("=" * 60)
     print()
     
     # Ejecutar todos los ejemplos
@@ -197,6 +204,6 @@ if __name__ == "__main__":
     ejemplo_integracion_streamlit()
     
     print("=" * 60)
-    print("✓ TODOS LOS EJEMPLOS EJECUTADOS CORRECTAMENTE")
+    print("[OK] TODOS LOS EJEMPLOS EJECUTADOS CORRECTAMENTE")
     print("=" * 60)
     print()

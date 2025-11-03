@@ -10,6 +10,20 @@ def transformar_edad_a_grupo(edad):
     """
     return 0 if edad <= 24 else 1
 
+def transformar_genero_a_binario(genero):
+    """
+    Transforma el género en una variable binaria.
+    
+    Args:
+        genero (str): Género ('Masculino' o 'Femenino')
+        
+    Returns:
+        int: 0 si Masculino, 1 si Femenino
+    """
+    if isinstance(genero, str):
+        return 0 if genero.lower() in ['masculino', 'hombre', 'male', 'm'] else 1
+    return genero  # Si ya es numérico, retornar tal cual
+
 def calcular_nivel_hads(puntaje):
     if puntaje <= 7:
         return "Normal"

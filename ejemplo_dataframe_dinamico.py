@@ -7,7 +7,7 @@ import pandas as pd
 import sys
 sys.path.append('.')
 
-from src.utils.calculos import transformar_edad_a_grupo
+from src.utils.calculos import transformar_edad_a_grupo, transformar_genero_a_binario
 
 
 def simular_llenado_formulario():
@@ -26,6 +26,7 @@ def simular_llenado_formulario():
         'edad',
         'grupo_edad',
         'genero',
+        'genero_binario',
         'años_educacion',
         'lte12_puntaje',
         'sf12_fisica',
@@ -54,14 +55,16 @@ def simular_llenado_formulario():
         'años_educacion': 16
     }
     
-    # Aplicar transformación de edad automáticamente
+    # Aplicar transformaciones automáticamente
     datos_demograficos['grupo_edad'] = transformar_edad_a_grupo(datos_demograficos['edad'])
+    datos_demograficos['genero_binario'] = transformar_genero_a_binario(datos_demograficos['genero'])
     
     print(f"\nUsuario ingresó:")
     print(f"  Nombre: {datos_demograficos['nombre']}")
     print(f"  Edad: {datos_demograficos['edad']}")
     print(f"  → Grupo edad: {datos_demograficos['grupo_edad']} {'(Joven ≤24 años)' if datos_demograficos['grupo_edad'] == 0 else '(Adulto >24 años)'}")
     print(f"  Género: {datos_demograficos['genero']}")
+    print(f"  → Género binario: {datos_demograficos['genero_binario']} {'(Masculino=0)' if datos_demograficos['genero_binario'] == 0 else '(Femenino=1)'}")
     print(f"  Años educación: {datos_demograficos['años_educacion']}")
     
     # Agregar registro al DataFrame
@@ -69,7 +72,7 @@ def simular_llenado_formulario():
     
     print(f"\n✅ DataFrame actualizado - Ahora tiene {len(df)} registro(s)")
     print("\nDataFrame actual:")
-    print(df[['nombre', 'edad', 'grupo_edad', 'genero', 'años_educacion']])
+    print(df[['nombre', 'edad', 'grupo_edad', 'genero', 'genero_binario', 'años_educacion']])
     print()
     
     # ===== FORMULARIO 2: EVENTOS VITALES (LTE-12) =====
@@ -227,6 +230,7 @@ def ejemplo_multiples_pacientes():
             'edad': p['edad'],
             'grupo_edad': transformar_edad_a_grupo(p['edad']),
             'genero': p['genero'],
+            'genero_binario': transformar_genero_a_binario(p['genero']),
             'años_educacion': p['años_educacion'],
             'lte12_puntaje': p['lte12']
         })
@@ -257,9 +261,9 @@ def ejemplo_multiples_pacientes():
 
 if __name__ == "__main__":
     print("\n")
-    print("╔" + "═" * 78 + "╗")
-    print("║" + " " * 15 + "DEMOSTRACIÓN DE DATAFRAME DINÁMICO" + " " * 28 + "║")
-    print("╚" + "═" * 78 + "╝")
+    print("=" * 80)
+    print("         DEMOSTRACION DE DATAFRAME DINAMICO")
+    print("=" * 80)
     print()
     
     simular_llenado_formulario()

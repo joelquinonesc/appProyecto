@@ -2,7 +2,7 @@
 Formulario de Datos Demográficos
 """
 import streamlit as st
-from src.utils.calculos import transformar_edad_a_grupo
+from src.utils.calculos import transformar_edad_a_grupo, transformar_genero_a_binario
 from src.utils.dataframe_manager import agregar_o_actualizar_registro, mostrar_dataframe_actual
 
 def mostrar_demograficos():
@@ -201,11 +201,14 @@ def mostrar_demograficos():
             ])
             
             if datos_completos:
+                genero_binario = transformar_genero_a_binario(genero)
+                
                 datos = {
                     "nombre": nombre,
                     "edad": edad,
                     "grupo_edad": grupo_edad,
                     "genero": genero,
+                    "genero_binario": genero_binario,
                     "años_educacion": años_educacion,
                 }
                 st.session_state['datos_demograficos'] = datos

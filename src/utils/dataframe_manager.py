@@ -18,6 +18,7 @@ def inicializar_dataframe():
             'edad',
             'grupo_edad',
             'genero',
+            'genero_binario',
             'años_educacion',
             'lte12_puntaje',
             'sf12_fisica',
@@ -59,6 +60,7 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
             'edad': None,
             'grupo_edad': None,
             'genero': None,
+            'genero_binario': None,
             'años_educacion': None,
             'lte12_puntaje': None,
             'sf12_fisica': None,
@@ -84,6 +86,7 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
         st.session_state['df_pacientes'].at[idx, 'edad'] = datos.get('edad')
         st.session_state['df_pacientes'].at[idx, 'grupo_edad'] = datos.get('grupo_edad')
         st.session_state['df_pacientes'].at[idx, 'genero'] = datos.get('genero')
+        st.session_state['df_pacientes'].at[idx, 'genero_binario'] = datos.get('genero_binario')
         st.session_state['df_pacientes'].at[idx, 'años_educacion'] = datos.get('años_educacion')
     
     elif tipo_datos == 'eventos_vitales':
