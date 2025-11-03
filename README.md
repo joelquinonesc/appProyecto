@@ -333,7 +333,7 @@ git commit -m "Mensaje de commit"  # Crear un commit
 # Ramas y sincronización
 git branch -M main             # Renombrar rama a main (si aplica)
 git checkout -b feature/nueva-funcion   # Crear y moverse a una rama
-git pull origin main           # Traer cambios del remoto
+git pull origin main           # Traer cambios del remoto -- IMPORTANTE
 git push -u origin main        # Enviar cambios al remoto
 
 # Revisión y limpieza
