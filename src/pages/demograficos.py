@@ -138,53 +138,52 @@ def mostrar_demograficos():
         
         return datos
     
-    # Formulario para nuevos datos
-    with st.form("formulario_demografico"):
-        # Estilos personalizados para el campo nombre - eliminar TODO fondo gris
-        st.markdown("""
-        <style>
-        /* Eliminar TODOS los fondos grises del campo "Nombre completo" */
-        div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) label,
-        div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) > div,
-        div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) > div > div,
-        div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) > div > div > div,
-        div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) * {
-            background: transparent !important;
-            background-color: transparent !important;
-        }
-        /* Mantener el input con fondo blanco */
-        div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) input {
-            background: #FFFFFF !important;
-            background-color: #FFFFFF !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+    # Estilos personalizados para el campo nombre - eliminar TODO fondo gris
+    st.markdown("""
+    <style>
+    /* Eliminar TODOS los fondos grises del campo "Nombre completo" */
+    div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) label,
+    div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) > div,
+    div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) > div > div,
+    div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) > div > div > div,
+    div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) * {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+    /* Mantener el input con fondo blanco */
+    div[data-testid="stTextInput"]:has(input[id*="nombre_completo"]) input {
+        background: #FFFFFF !important;
+        background-color: #FFFFFF !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-        st.markdown('<p class="form-instruction">Complete la siguiente información:</p>', unsafe_allow_html=True)
-        st.markdown('<div class="spacer-sm"></div>', unsafe_allow_html=True)
-        
+    st.markdown('<p class="form-instruction">Complete la siguiente información:</p>', unsafe_allow_html=True)
+    st.markdown('<div class="spacer-sm"></div>', unsafe_allow_html=True)
+    
+    # Campo de edad FUERA del formulario para actualización en tiempo real
+    edad = st.number_input("Edad", min_value=0, max_value=120, step=1, key="edad_temp", help="Ingrese su edad en años")
+    
+    # Calcular el máximo de años de educación permitidos (ahora se actualiza en tiempo real)
+    max_educacion = max(0, edad - 5) if edad > 0 else 0
+    
+    # Mensaje informativo sobre años de educación (ahora funciona en tiempo real)
+    if edad > 0:
+        st.info(f"ℹ️ Según tu edad ({edad} años), puedes tener un **máximo de {max_educacion} años** de educación formal.")
+    else:
+        st.warning("⚠️ Por favor, ingrese primero su edad para calcular los años de educación válidos.")
+    
+    st.markdown('<div class="spacer-sm"></div>', unsafe_allow_html=True)
+    
+    # Formulario para el resto de los datos
+    with st.form("formulario_demografico"):
         nombre = st.text_input("Nombre completo", key="nombre_completo", placeholder="Ingrese su nombre completo")
         
-        col1, col2 = st.columns(2)
-        with col1:
-            edad = st.number_input("Edad", min_value=0, max_value=120, step=1, key="edad", help="Ingrese su edad en años")
-            grupo_edad = transformar_edad_a_grupo(edad)
-        
-        with col2:
-            genero = st.selectbox(
-                "Género",
-                ["Seleccionar", "Masculino", "Femenino"],
-                key="genero"
-            )
-        
-        # Calcular el máximo de años de educación permitidos
-        max_educacion = max(0, edad - 5) if edad > 0 else 0
-        
-        # Mensaje informativo sobre años de educación
-        if edad > 0:
-            st.info(f"ℹ️ Según tu edad ({edad} años), puedes tener un **máximo de {max_educacion} años** de educación formal.")
-        else:
-            st.warning("⚠️ Por favor, ingrese primero su edad para calcular los años de educación válidos.")
+        genero = st.selectbox(
+            "Género",
+            ["Seleccionar", "Masculino", "Femenino"],
+            key="genero"
+        )
         
         # Campo de años de educación con límite estricto
         años_educacion = st.number_input(
@@ -232,6 +231,7 @@ def mostrar_demograficos():
                 return None
             
             # Si todas las validaciones pasan
+            grupo_edad = transformar_edad_a_grupo(edad)
             genero_binario = transformar_genero_a_binario(genero)
             
             datos = {
