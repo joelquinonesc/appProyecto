@@ -5,46 +5,60 @@ Script para ejecutar la aplicación ANXRISK localmente
 import os
 import sys
 import subprocess
+import shutil
 
-def main():
-    # Verificar si estamos en un entorno virtual
-    in_venv = hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)
+def verificar_dependencias():
+    """Verifica e instala las dependencias necesarias"""
+    dependencias_faltantes = []
     
-    if not in_venv:
-        print("No se detectó un entorno virtual activo.")
-        create_venv = input("¿Desea crear y activar un nuevo entorno virtual? (s/n): ").lower()
-        
-        if create_venv == 's':
-            print("\n Creando entorno virtual...")
-            subprocess.run([sys.executable, "-m", "venv", "venv"], check=True)
-            
-            # Determinar el script de activación según el sistema operativo
-            if sys.platform == "win32":
-                activate_script = os.path.join("venv", "Scripts", "activate")
-            else:
-                activate_script = os.path.join("venv", "bin", "activate")
-            
-            print(f"\n🔧 Para activar el entorno virtual, ejecute:")
-            if sys.platform == "win32":
-                print(f"    {activate_script}")
-            else:
-                print(f"    source {activate_script}")
-            
-            print("\nLuego vuelva a ejecutar este script.")
-            sys.exit(1)
-        else:
-            print("\n Continuando sin entorno virtual...")
-    
-    # Verificar si streamlit está instalado
     try:
         import streamlit
     except ImportError:
-        print("\n Instalando dependencias...")
-        subprocess.run([sys.executable, "-m", "pip", "install", "streamlit"], check=True)
+        dependencias_faltantes.append('streamlit')
+    
+    try:
+        import pandas
+    except ImportError:
+        dependencias_faltantes.append('pandas')
+    
+    try:
+        import numpy
+    except ImportError:
+        dependencias_faltantes.append('numpy')
+    
+    if dependencias_faltantes:
+        print(f"\n[INFO] Instalando dependencias faltantes: {', '.join(dependencias_faltantes)}...")
+        try:
+            subprocess.run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"], check=True)
+            print("[OK] Dependencias instaladas correctamente\n")
+        except subprocess.CalledProcessError:
+            print("[ERROR] No se pudieron instalar las dependencias")
+            sys.exit(1)
+
+def main():
+    print("\n" + "="*50)
+    print("   Iniciando ANXRISK")
+    print("="*50 + "\n")
+    
+    # Verificar e instalar dependencias
+    verificar_dependencias()
     
     # Ejecutar la aplicación
-    print("\n Iniciando la aplicación ANXRISK...")
-    subprocess.run(["streamlit", "run", "app.py"])
+    print("[OK] Iniciando la aplicación ANXRISK...")
+    print("\nPresiona Ctrl+C para detener el servidor\n")
+    
+    try:
+        # Buscar streamlit en diferentes ubicaciones
+        streamlit_cmd = shutil.which("streamlit")
+        if streamlit_cmd:
+            subprocess.run([streamlit_cmd, "run", "app.py"])
+        else:
+            # Intentar ejecutar como módulo de Python
+            subprocess.run([sys.executable, "-m", "streamlit", "run", "app.py"])
+    except FileNotFoundError:
+        print("\n[ERROR] No se pudo encontrar streamlit.")
+        print("Intente ejecutar: python -m pip install streamlit")
+        sys.exit(1)
 
 if __name__ == "__main__":
     try:

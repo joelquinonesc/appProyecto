@@ -17,7 +17,7 @@ st.set_page_config(
 )
 
 # Cargar y aplicar estilos CSS
-with open("src/assets/styles/main.css") as f:
+with open("src/assets/styles/main.css", encoding="utf-8") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 

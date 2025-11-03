@@ -5,7 +5,7 @@ import streamlit as st
 
 def mostrar_datos_geneticos():
     # --- Cargar estilos CSS globales ---
-    with open("src/assets/styles/main.css") as f:
+    with open("src/assets/styles/main.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
     
     # Estilos específicos para selectbox con texto negro

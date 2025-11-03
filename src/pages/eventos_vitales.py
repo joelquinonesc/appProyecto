@@ -2,10 +2,11 @@
 Cuestionario de Eventos Vitales (LTE-12)
 """
 import streamlit as st
+from src.utils.dataframe_manager import agregar_o_actualizar_registro
 
 def mostrar_eventos_vitales():
     # --- Cargar estilos CSS globales ---
-    with open("src/assets/styles/main.css") as f:
+    with open("src/assets/styles/main.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
     
     # Estilos específicos para radio buttons con texto negro
@@ -142,6 +143,12 @@ def mostrar_eventos_vitales():
                 'total': total,
                 'respuestas': respuestas
             }
+            
+            # Actualizar DataFrame dinámico
+            agregar_o_actualizar_registro(
+                {'puntaje_total': total}, 
+                tipo_datos='eventos_vitales'
+            )
             
             # Cambiar a la siguiente sección
             st.session_state.pagina_actual = "SF-12 Salud"

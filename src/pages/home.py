@@ -6,7 +6,7 @@ import base64
 
 def mostrar_home():
     # --- Cargar estilos CSS globales ---
-    with open("src/assets/styles/main.css") as f:
+    with open("src/assets/styles/main.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
     # --- Logo centrado ---

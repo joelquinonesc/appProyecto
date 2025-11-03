@@ -6,7 +6,7 @@ from ..utils.calculos import calcular_nivel_hads
 
 def mostrar_hads():
     # --- Cargar estilos CSS globales ---
-    with open("src/assets/styles/main.css") as f:
+    with open("src/assets/styles/main.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
     
     # Estilos específicos para radio buttons con texto negro

@@ -2,6 +2,8 @@
 Formulario de Datos Demográficos
 """
 import streamlit as st
+from src.utils.calculos import transformar_edad_a_grupo
+from src.utils.dataframe_manager import agregar_o_actualizar_registro, mostrar_dataframe_actual
 
 def mostrar_demograficos():
     """
@@ -9,7 +11,7 @@ def mostrar_demograficos():
     Retorna un diccionario con los datos del paciente o None si no están completos.
     """
     # --- Cargar estilos CSS globales ---
-    with open("src/assets/styles/main.css") as f:
+    with open("src/assets/styles/main.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
     
     # Título centrado y en negro
@@ -128,6 +130,12 @@ def mostrar_demograficos():
                 st.session_state.pagina_actual = "LTE-12"
                 st.rerun()
         
+        # Mostrar DataFrame actualizado
+        st.markdown("---")
+        st.markdown("### 📊 Vista de Datos en DataFrame")
+        with st.expander("Ver DataFrame completo", expanded=False):
+            mostrar_dataframe_actual()
+        
         return datos
     
     # Formulario para nuevos datos
@@ -160,7 +168,7 @@ def mostrar_demograficos():
         col1, col2 = st.columns(2)
         with col1:
             edad = st.number_input("Edad", min_value=0, max_value=120, step=1, key="edad", help="Ingrese su edad en años")
-            edad_valor = 1 if edad > 24 else 0
+            grupo_edad = transformar_edad_a_grupo(edad)
         
         with col2:
             genero = st.selectbox(
@@ -196,11 +204,15 @@ def mostrar_demograficos():
                 datos = {
                     "nombre": nombre,
                     "edad": edad,
-                    "edad_valor": edad_valor,
+                    "grupo_edad": grupo_edad,
                     "genero": genero,
                     "años_educacion": años_educacion,
                 }
                 st.session_state['datos_demograficos'] = datos
+                
+                # Agregar/actualizar en el DataFrame dinámico
+                agregar_o_actualizar_registro(datos, tipo_datos='demograficos')
+                
                 st.rerun()
             else:
                 st.error("Por favor, complete todos los campos correctamente.")

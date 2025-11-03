@@ -1,3 +1,15 @@
+def transformar_edad_a_grupo(edad):
+    """
+    Transforma la edad en una variable categórica binaria.
+    
+    Args:
+        edad (int): Edad en años
+        
+    Returns:
+        int: 0 si edad <= 24, 1 si edad > 24
+    """
+    return 0 if edad <= 24 else 1
+
 def calcular_nivel_hads(puntaje):
     if puntaje <= 7:
         return "Normal"
