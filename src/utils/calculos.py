@@ -24,6 +24,28 @@ def transformar_genero_a_binario(genero):
         return 0 if genero.lower() in ['masculino', 'hombre', 'male', 'm'] else 1
     return genero  # Si ya es numérico, retornar tal cual
 
+def validar_años_educacion(edad, años_educacion):
+    """
+    Valida que los años de educación no excedan el máximo permitido.
+    Regla: años_educacion <= (edad - 5)
+    
+    Args:
+        edad (int): Edad del paciente
+        años_educacion (int): Años de educación formal
+        
+    Returns:
+        tuple: (es_valido, max_permitido, mensaje)
+    """
+    max_permitido = max(0, edad - 5)
+    es_valido = años_educacion <= max_permitido
+    
+    if es_valido:
+        mensaje = f"✓ Años de educación válidos ({años_educacion} <= {max_permitido})"
+    else:
+        mensaje = f"✗ Los años de educación ({años_educacion}) exceden el máximo permitido ({max_permitido})"
+    
+    return es_valido, max_permitido, mensaje
+
 def calcular_nivel_hads(puntaje):
     if puntaje <= 7:
         return "Normal"

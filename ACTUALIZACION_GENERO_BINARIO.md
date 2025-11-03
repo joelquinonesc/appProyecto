@@ -16,21 +16,26 @@ genero_binario = 1  # Si Femenino
 ## 📁 Archivos Modificados
 
 ### 1. **`src/utils/calculos.py`**
+
 ✅ Agregada función `transformar_genero_a_binario(genero)`
+
 - Convierte "Masculino" → 0
 - Convierte "Femenino" → 1
 - Maneja variaciones: 'masculino', 'hombre', 'male', 'm'
 
 ### 2. **`src/pages/demograficos.py`**
+
 ✅ Importa `transformar_genero_a_binario`
 ✅ Calcula `genero_binario` automáticamente al guardar datos
 ✅ Agrega campo `genero_binario` al diccionario de datos
 
 ### 3. **`src/utils/dataframe_manager.py`**
+
 ✅ Agregada columna `genero_binario` al DataFrame
 ✅ Actualización automática del campo en registro demográfico
 
 ### 4. **Archivos de Ejemplo**
+
 ✅ `ejemplo_transformacion_edad.py` - Actualizado con transformación de género
 ✅ `ejemplo_dataframe_dinamico.py` - Incluye genero_binario
 ✅ `test_transformaciones.py` - Nuevo script de prueba rápida
@@ -97,6 +102,7 @@ python test_transformaciones.py
 ```
 
 Este script muestra:
+
 - ✅ DataFrame con ambas transformaciones aplicadas
 - ✅ Reglas de transformación
 - ✅ Resumen por grupo de edad
@@ -118,10 +124,10 @@ Cuando un usuario llena el formulario demográfico:
 
 ## 📝 Resumen de Transformaciones Aplicadas
 
-| Variable Original | Variable Transformada | Regla |
-|-------------------|----------------------|-------|
-| edad              | grupo_edad           | ≤24 → 0, >24 → 1 |
-| genero            | genero_binario       | Masculino → 0, Femenino → 1 |
+| Variable Original | Variable Transformada | Regla                       |
+| ----------------- | --------------------- | --------------------------- |
+| edad              | grupo_edad            | ≤24 → 0, >24 → 1            |
+| genero            | genero_binario        | Masculino → 0, Femenino → 1 |
 
 ---
 
@@ -131,24 +137,27 @@ Cuando un usuario llena el formulario demográfico:
 ✅ **Transformación genero → genero_binario** (recién implementada)  
 ✅ **DataFrame dinámico** actualizado con ambas transformaciones  
 ✅ **Ejemplos** actualizados y funcionando  
-✅ **Tests** disponibles para verificación  
+✅ **Tests** disponibles para verificación
 
 ---
 
 ## 🎉 Listo para Usar
 
 La aplicación ahora transforma automáticamente:
+
 - ✅ Edad a grupo de edad binario
 - ✅ Género a variable binaria
 - ✅ Almacena ambas transformaciones en el DataFrame
 - ✅ Disponible para análisis estadístico inmediato
 
 **Ejecutar aplicación:**
+
 ```bash
 python run.py
 ```
 
 **Ejecutar tests:**
+
 ```bash
 python test_transformaciones.py
 ```

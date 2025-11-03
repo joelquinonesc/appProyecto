@@ -5,7 +5,7 @@ import pandas as pd
 import sys
 sys.path.append('.')
 
-from src.utils.calculos import transformar_edad_a_grupo, transformar_genero_a_binario
+from src.utils.calculos import transformar_edad_a_grupo, transformar_genero_a_binario, validar_años_educacion
 
 print("\n" + "="*60)
 print("  PRUEBA DE TRANSFORMACIONES")
@@ -15,7 +15,8 @@ print("="*60 + "\n")
 datos = {
     'nombre': ['Ana Garcia', 'Carlos Lopez', 'Maria Rodriguez', 'Juan Perez'],
     'edad': [22, 28, 24, 35],
-    'genero': ['Femenino', 'Masculino', 'Femenino', 'Masculino']
+    'genero': ['Femenino', 'Masculino', 'Femenino', 'Masculino'],
+    'años_educacion': [15, 18, 16, 25]
 }
 
 df = pd.DataFrame(datos)
@@ -24,6 +25,13 @@ df = pd.DataFrame(datos)
 df['grupo_edad'] = df['edad'].apply(transformar_edad_a_grupo)
 df['genero_binario'] = df['genero'].apply(transformar_genero_a_binario)
 
+# Calcular máximo permitido y validar
+df['max_educacion'] = df['edad'] - 5
+df['educacion_valida'] = df.apply(
+    lambda row: validar_años_educacion(row['edad'], row['años_educacion'])[0], 
+    axis=1
+)
+
 print("DataFrame con transformaciones:\n")
 print(df)
 
@@ -31,6 +39,12 @@ print("\n" + "="*60)
 print("REGLAS APLICADAS:")
 print("  - Edad: 0 (Joven <=24 años) | 1 (Adulto >24 años)")
 print("  - Genero: 0 (Masculino) | 1 (Femenino)")
+print("="*60)
+print("\nVALIDACION DE AÑOS DE EDUCACION:")
+print("  Formula: max_educacion = edad - 5")
+for idx, row in df.iterrows():
+    estado = "✓ VALIDO" if row['educacion_valida'] else "✗ INVALIDO"
+    print(f"  {row['nombre']}: {row['años_educacion']} años (max: {row['max_educacion']}) - {estado}")
 print("="*60 + "\n")
 
 # Mostrar resumen

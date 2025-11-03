@@ -177,12 +177,20 @@ def mostrar_demograficos():
                 key="genero"
             )
         
+        # Calcular el máximo de años de educación permitidos
+        max_educacion = max(0, edad - 5) if edad > 0 else 0
+        
+        # Mensaje informativo sobre años de educación
+        if edad > 0:
+            st.info(f"ℹ️ Según tu edad ({edad} años), puedes tener un máximo de **{max_educacion} años** de educación formal (edad - 5).")
+        
         años_educacion = st.number_input(
             "Años de educación formal",
             min_value=0,
-            max_value=30,
+            max_value=max_educacion if edad > 0 else 30,
             step=1,
-            help="Ingrese el número total de años de educación formal completados",
+            value=0,
+            help=f"Máximo permitido: {max_educacion} años (edad - 5)",
             key="educacion"
         )
         
@@ -193,6 +201,7 @@ def mostrar_demograficos():
             submitted = st.form_submit_button("Guardar datos", type="primary", use_container_width=True)
 
         if submitted:
+            # Validaciones
             datos_completos = all([
                 nombre.strip(),
                 edad > 0,
@@ -200,25 +209,37 @@ def mostrar_demograficos():
                 años_educacion >= 0
             ])
             
-            if datos_completos:
-                genero_binario = transformar_genero_a_binario(genero)
-                
-                datos = {
-                    "nombre": nombre,
-                    "edad": edad,
-                    "grupo_edad": grupo_edad,
-                    "genero": genero,
-                    "genero_binario": genero_binario,
-                    "años_educacion": años_educacion,
-                }
-                st.session_state['datos_demograficos'] = datos
-                
-                # Agregar/actualizar en el DataFrame dinámico
-                agregar_o_actualizar_registro(datos, tipo_datos='demograficos')
-                
-                st.rerun()
-            else:
-                st.error("Por favor, complete todos los campos correctamente.")
+            # Validar que los años de educación no excedan el máximo permitido
+            max_educacion_permitido = max(0, edad - 5)
+            educacion_valida = años_educacion <= max_educacion_permitido
+            
+            if not datos_completos:
+                st.error("❌ Por favor, complete todos los campos correctamente.")
                 return None
+            
+            if not educacion_valida:
+                st.error(f"❌ Los años de educación formal ({años_educacion}) no pueden ser más de {max_educacion_permitido} años (edad - 5). Por favor, corrija el valor.")
+                return None
+            
+            # Si todas las validaciones pasan
+            genero_binario = transformar_genero_a_binario(genero)
+            
+            datos = {
+                "nombre": nombre,
+                "edad": edad,
+                "grupo_edad": grupo_edad,
+                "genero": genero,
+                "genero_binario": genero_binario,
+                "años_educacion": años_educacion,
+            }
+            st.session_state['datos_demograficos'] = datos
+            
+            # Agregar/actualizar en el DataFrame dinámico
+            agregar_o_actualizar_registro(datos, tipo_datos='demograficos')
+            
+            # Mensaje de éxito
+            st.success(f"✅ Datos guardados correctamente para {nombre}")
+            
+            st.rerun()
     
     return None
