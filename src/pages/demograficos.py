@@ -182,17 +182,28 @@ def mostrar_demograficos():
         
         # Mensaje informativo sobre años de educación
         if edad > 0:
-            st.info(f"ℹ️ Según tu edad ({edad} años), puedes tener un máximo de **{max_educacion} años** de educación formal (edad - 5).")
+            st.info(f"ℹ️ Según tu edad ({edad} años), puedes tener un **máximo de {max_educacion} años** de educación formal.")
+        else:
+            st.warning("⚠️ Por favor, ingrese primero su edad para calcular los años de educación válidos.")
         
+        # Campo de años de educación con límite estricto
         años_educacion = st.number_input(
             "Años de educación formal",
             min_value=0,
-            max_value=max_educacion if edad > 0 else 30,
+            max_value=max_educacion if edad > 0 else 0,
             step=1,
             value=0,
-            help=f"Máximo permitido: {max_educacion} años (edad - 5)",
-            key="educacion"
+            help=f"Máximo permitido: {max_educacion} años (calculado como edad - 5)",
+            key="educacion",
+            disabled=(edad == 0)  # Deshabilitar si no hay edad
         )
+        
+        # Mostrar estado de validación visualmente
+        if edad > 0 and años_educacion > 0:
+            if años_educacion <= max_educacion:
+                st.success(f"✅ Años de educación válidos ({años_educacion}/{max_educacion})")
+            else:
+                st.error(f"❌ Excede el máximo permitido. Máximo: {max_educacion} años")
         
         st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
         
