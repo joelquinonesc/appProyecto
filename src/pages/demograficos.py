@@ -190,12 +190,11 @@ def mostrar_demograficos():
         años_educacion = st.number_input(
             "Años de educación formal",
             min_value=0,
-            max_value=max_educacion if edad > 0 else 0,
+            max_value=max_educacion if edad > 0 else 30,  # Valor alto por defecto
             step=1,
             value=0,
             help=f"Máximo permitido: {max_educacion} años (calculado como edad - 5)",
-            key="educacion",
-            disabled=(edad == 0)  # Deshabilitar si no hay edad
+            key="educacion"
         )
         
         # Mostrar estado de validación visualmente
