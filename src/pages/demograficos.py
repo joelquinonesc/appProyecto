@@ -161,35 +161,47 @@ def mostrar_demograficos():
     st.markdown('<p class="form-instruction">Complete la siguiente información:</p>', unsafe_allow_html=True)
     st.markdown('<div class="spacer-sm"></div>', unsafe_allow_html=True)
     
-    # Campo de edad FUERA del formulario para actualización en tiempo real
-    edad = st.number_input("Edad", min_value=0, max_value=120, step=1, key="edad_temp", help="Ingrese su edad en años")
-    
-    # Calcular el máximo de años de educación permitidos (ahora se actualiza en tiempo real)
-    max_educacion = max(0, edad - 5) if edad > 0 else 0
-    
-    # Mensaje informativo sobre años de educación (ahora funciona en tiempo real)
-    if edad > 0:
-        st.info(f"ℹ️ Según tu edad ({edad} años), puedes tener un **máximo de {max_educacion} años** de educación formal.")
-    else:
-        st.warning("⚠️ Por favor, ingrese primero su edad para calcular los años de educación válidos.")
-    
-    st.markdown('<div class="spacer-sm"></div>', unsafe_allow_html=True)
-    
-    # Formulario para el resto de los datos
+    # Formulario con campos en el orden: Nombre, Edad, Género, Educación
     with st.form("formulario_demografico"):
+        # 1. Nombre completo
         nombre = st.text_input("Nombre completo", key="nombre_completo", placeholder="Ingrese su nombre completo")
         
+        # 2. Edad FUERA del formulario para actualización en tiempo real
+        edad = st.number_input("Edad", min_value=0, max_value=120, step=1, key="edad_temp", help="Ingrese su edad en años")
+        
+        # Calcular el máximo de años de educación permitidos (ahora se actualiza en tiempo real)
+        max_educacion = max(0, edad - 5) if edad > 0 else 0
+        
+        # Mensaje informativo sobre años de educación con texto ROJO
+        if edad > 0:
+            st.markdown(f"""
+            <div style="padding: 1rem; background-color: #FFF3CD; border-left: 4px solid #FF6B6B; border-radius: 4px; margin: 1rem 0;">
+                <p style="margin: 0; color: #DC3545; font-weight: 600; font-size: 0.95rem;">
+                    ⚠️ Según tu edad ({edad} años), puedes tener un <strong>máximo de {max_educacion} años</strong> de educación formal.
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div style="padding: 1rem; background-color: #FFF3CD; border-left: 4px solid #FF6B6B; border-radius: 4px; margin: 1rem 0;">
+                <p style="margin: 0; color: #DC3545; font-weight: 600; font-size: 0.95rem;">
+                    ⚠️ Por favor, ingrese primero su edad para calcular los años de educación válidos.
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # 3. Género
         genero = st.selectbox(
             "Género",
             ["Seleccionar", "Masculino", "Femenino"],
             key="genero"
         )
         
-        # Campo de años de educación con límite estricto
+        # 4. Años de educación formal
         años_educacion = st.number_input(
             "Años de educación formal",
             min_value=0,
-            max_value=max_educacion if edad > 0 else 30,  # Valor alto por defecto
+            max_value=max_educacion if edad > 0 else 30,
             step=1,
             value=0,
             help=f"Máximo permitido: {max_educacion} años (calculado como edad - 5)",
@@ -210,24 +222,33 @@ def mostrar_demograficos():
             submitted = st.form_submit_button("Guardar datos", type="primary", use_container_width=True)
 
         if submitted:
-            # Validaciones
-            datos_completos = all([
-                nombre.strip(),
-                edad > 0,
-                genero != "Seleccionar",
-                años_educacion >= 0
-            ])
+            # VALIDACIONES COMPLETAS - No permitir guardar si no cumplen TODAS
+            errores = []
             
-            # Validar que los años de educación no excedan el máximo permitido
+            # 1. Validar nombre
+            if not nombre.strip():
+                errores.append("El nombre completo es obligatorio")
+            
+            # 2. Validar edad
+            if edad <= 0:
+                errores.append("Debe ingresar una edad válida (mayor a 0)")
+            
+            # 3. Validar género
+            if genero == "Seleccionar":
+                errores.append("Debe seleccionar un género")
+            
+            # 4. Validar años de educación
             max_educacion_permitido = max(0, edad - 5)
-            educacion_valida = años_educacion <= max_educacion_permitido
+            if años_educacion < 0:
+                errores.append("Los años de educación no pueden ser negativos")
+            elif años_educacion > max_educacion_permitido:
+                errores.append(f"Los años de educación ({años_educacion}) no pueden ser más de {max_educacion_permitido} años (edad - 5)")
             
-            if not datos_completos:
-                st.error("❌ Por favor, complete todos los campos correctamente.")
-                return None
-            
-            if not educacion_valida:
-                st.error(f"❌ Los años de educación formal ({años_educacion}) no pueden ser más de {max_educacion_permitido} años (edad - 5). Por favor, corrija el valor.")
+            # Si hay errores, mostrarlos y NO GUARDAR
+            if errores:
+                st.error("❌ **No se pueden guardar los datos. Corrija los siguientes errores:**")
+                for error in errores:
+                    st.markdown(f"- {error}")
                 return None
             
             # Si todas las validaciones pasan
