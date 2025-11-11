@@ -2,7 +2,8 @@
 Cuestionario de Eventos Vitales (LTE-12)
 """
 import streamlit as st
-from src.utils.dataframe_manager import agregar_o_actualizar_registro
+from src.utils.dataframe_manager import agregar_o_actualizar_registro, mostrar_dataframe_actual
+from src.utils.calculos import transformar_lte12_a_clasificacion
 
 def mostrar_eventos_vitales():
     # --- Cargar estilos CSS globales ---
@@ -117,42 +118,60 @@ def mostrar_eventos_vitales():
             disabled = False
     
     with col2:
-        if st.button("Siguiente →", key="btn_eventos_next", type="primary", disabled=disabled, use_container_width=True):
+        if st.button("Siguiente →", key="btn_eventos_next", type="primary", disabled=disabled, width='stretch'):
             # Mostrar resultados en tarjeta
-            st.markdown("""
+            st.markdown(
+                """
             <div style="background: #FFFFFF; padding: 2rem; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); border: 1px solid #D1D1D1; margin: 1.5rem 0;">
-            """, unsafe_allow_html=True)
-            
-            st.markdown("<h3 style='color: #2E2E2E; text-align: center; margin-bottom: 1.5rem;'>📊 Resultados LTE-12</h3>", unsafe_allow_html=True)
-            
+            """,
+                unsafe_allow_html=True,
+            )
+
+            st.markdown(
+                "<h3 style='color: #2E2E2E; text-align: center; margin-bottom: 1.5rem;'>📊 Resultados LTE-12</h3>",
+                unsafe_allow_html=True,
+            )
+
             st.metric(label="Total de eventos vitales experimentados", value=total)
-            
-            st.markdown("""
+
+            st.markdown(
+                """
             <div style='margin-top: 1rem; padding: 1rem; background: #F5F8FB; border-radius: 8px; border-left: 4px solid #2B87D1;'>
                 <p style='color: #2E2E2E; margin: 0.5rem 0;'><strong>Interpretación:</strong></p>
                 <p style='color: #2E2E2E; margin: 0.5rem 0;'>Un mayor número de eventos vitales estresantes puede estar asociado con un mayor riesgo de problemas de salud mental.</p>
             </div>
-            """, unsafe_allow_html=True)
-            
+            """,
+                unsafe_allow_html=True,
+            )
+
             st.markdown("</div>", unsafe_allow_html=True)
-            
+
             # Guardar resultados en session state
             if 'resultados' not in st.session_state:
                 st.session_state.resultados = {}
             st.session_state.resultados['eventos_vitales'] = {
                 'total': total,
-                'respuestas': respuestas
+                'respuestas': respuestas,
+                'clasificacion': transformar_lte12_a_clasificacion(total),
             }
-            
+
             # Actualizar DataFrame dinámico
             agregar_o_actualizar_registro(
-                {'puntaje_total': total}, 
-                tipo_datos='eventos_vitales'
+                {
+                    'puntaje_total': total,
+                    'lte12_clasificacion': transformar_lte12_a_clasificacion(total),
+                },
+                tipo_datos='eventos_vitales',
             )
-            
+
             # Cambiar a la siguiente sección
-            st.session_state.pagina_actual = "SF-12 Salud"
+            st.session_state.pagina_actual = "SF-12 Física"
             st.rerun()
-            
+
             return total
+    # Mostrar DataFrame actual para monitoreo
+    st.markdown("---")
+    with st.expander("Ver DataFrame completo"):
+        mostrar_dataframe_actual()
+
     return None
