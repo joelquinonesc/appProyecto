@@ -3,6 +3,7 @@ Escala de Ansiedad de Zung (ZSAS)
 """
 import streamlit as st
 from ..utils.calculos import calcular_nivel_zsas
+from ..utils.dataframe_manager import mostrar_dataframe_actual
 
 def mostrar_zsas():
     # --- Cargar estilos CSS globales ---
@@ -75,31 +76,41 @@ def mostrar_zsas():
             disabled = False
     
     with col2:
-        if st.button("Siguiente →", key="btn_zsas_next", type="primary", disabled=disabled, use_container_width=True):
+        if st.button("Siguiente →", key="btn_zsas_next", type="primary", disabled=disabled, width='stretch'):
             total = sum(respuestas)
             total_normalizado = total * 1.25
             nivel = calcular_nivel_zsas(total_normalizado)
-            
+
             # Mostrar resultados en tarjeta
-            st.markdown("""
+            st.markdown(
+                """
             <div style="background: #FFFFFF; padding: 2rem; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); border: 1px solid #D1D1D1; margin: 1.5rem 0;">
-            """, unsafe_allow_html=True)
-            
-            st.markdown("<h3 style='color: #2E2E2E; text-align: center; margin-bottom: 1.5rem;'>📊 Resultados ZSAS - Ansiedad de Zung</h3>", unsafe_allow_html=True)
-            
+            """,
+                unsafe_allow_html=True,
+            )
+
+            st.markdown(
+                "<h3 style='color: #2E2E2E; text-align: center; margin-bottom: 1.5rem;'>📊 Resultados ZSAS - Ansiedad de Zung</h3>",
+                unsafe_allow_html=True,
+            )
+
             col1, col2 = st.columns(2)
             with col1:
                 st.metric(label="Puntaje bruto", value=total)
             with col2:
                 st.metric(label="Índice de ansiedad", value=f"{total_normalizado:.1f}")
-            
-            st.markdown(f"""
+
+            st.markdown(
+                f"""
             <div style='margin-top: 1rem; padding: 1rem; background: #F0F0F0; border-radius: 8px; text-align: center;'>
                 <p style='color: #2E2E2E; margin: 0; font-size: 1.1rem;'><strong>Nivel de ansiedad:</strong> <span style='color: #4CAF50; font-weight: 700;'>{nivel}</span></p>
             </div>
-            """, unsafe_allow_html=True)
-            
-            st.markdown("""
+            """,
+                unsafe_allow_html=True,
+            )
+
+            st.markdown(
+                """
             <div style='margin-top: 1.5rem; padding: 1rem; background: #F5F8FB; border-radius: 8px; border-left: 4px solid #2B87D1;'>
                 <p style='color: #2E2E2E; margin: 0.5rem 0;'><strong>Interpretación del Índice de Ansiedad:</strong></p>
                 <ul style='color: #2E2E2E; margin: 0.5rem 0;'>
@@ -112,25 +123,32 @@ def mostrar_zsas():
                 Este es un resultado preliminar. Consulta con un profesional de la salud para una evaluación completa.
                 </p>
             </div>
-            """, unsafe_allow_html=True)
-            
+            """,
+                unsafe_allow_html=True,
+            )
+
             st.markdown("</div>", unsafe_allow_html=True)
-            
+
             # Guardar resultados en session state
             if 'resultados' not in st.session_state:
                 st.session_state.resultados = {}
-            
+
             st.session_state.resultados['zsas'] = {
                 'total': total,
                 'total_normalizado': total_normalizado,
-                'nivel': nivel
+                'nivel': nivel,
             }
-            
+
             # Cambiar a la página de datos genéticos
             st.session_state.pagina_actual = "Datos Genéticos"
             st.rerun()
-            
+
             return total, total_normalizado, nivel
+    # Mostrar DataFrame actual para monitoreo
+    st.markdown("---")
+    with st.expander("Ver DataFrame completo"):
+        mostrar_dataframe_actual()
+
     return None
 
 def _mostrar_todas_preguntas(respuestas):

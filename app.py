@@ -4,7 +4,8 @@ from src.pages import (
     demograficos,
     datos_geneticos,
     mostrar_eventos_vitales,
-    mostrar_sf12,
+    mostrar_sf12_fisica,
+    mostrar_sf12_mental,
     mostrar_hads,
     mostrar_zsas
 )
@@ -27,14 +28,34 @@ if 'pagina_actual' not in st.session_state:
     st.session_state.pagina_actual = "Home"
 
 # Definir el orden de las páginas para la barra de progreso
-ORDEN_PAGINAS = ["Datos demograficos", "LTE-12", "SF-12 Salud", "Ansiedad (HADS)", "Ansiedad (ZSAS)", "Datos Genéticos"]
+ORDEN_PAGINAS = ["Datos demograficos", "LTE-12", "SF-12 Física", "SF-12 Mental", "Ansiedad (HADS)", "Ansiedad (ZSAS)", "Datos Genéticos"]
 
 # Configuración de la barra lateral
 st.sidebar.title("Progreso de la Evaluación")
 
 # Función para obtener el índice de la página actual
 def obtener_indice_pagina():
-    return ORDEN_PAGINAS.index(st.session_state.pagina_actual) + 1
+    """Return the 1-based index of current page in ORDEN_PAGINAS.
+
+    This is robust to legacy values in `st.session_state.pagina_actual`.
+    If the current value isn't in ORDEN_PAGINAS we attempt a small mapping
+    (e.g. 'SF-12 Salud' -> 'SF-12 Física'). If still not found, fall back to 1.
+    """
+    pagina = st.session_state.get('pagina_actual', 'Home')
+    try:
+        return ORDEN_PAGINAS.index(pagina) + 1
+    except ValueError:
+        # handle a few known legacy labels
+        legacy_map = {
+            'SF-12 Salud': 'SF-12 Física',
+        }
+        mapped = legacy_map.get(pagina)
+        if mapped and mapped in ORDEN_PAGINAS:
+            # update state to avoid repeating the problem
+            st.session_state.pagina_actual = mapped
+            return ORDEN_PAGINAS.index(mapped) + 1
+        # fallback to 1 (Home / safe default)
+        return 1
 
 # Mostrar el progreso actual
 if st.session_state.pagina_actual != "Home":
@@ -51,14 +72,18 @@ elif st.session_state.pagina_actual == "LTE-12":
         st.session_state.pagina_actual = "Datos demograficos"
         st.rerun()
     mostrar_eventos_vitales()
-elif st.session_state.pagina_actual == "SF-12 Salud":
+elif st.session_state.pagina_actual == "SF-12 Física":
     if st.session_state.get('resultados', {}).get('eventos_vitales') is None:
         st.session_state.pagina_actual = "LTE-12"
         st.rerun()
-    mostrar_sf12()
+    mostrar_sf12_fisica()
+elif st.session_state.pagina_actual == "SF-12 Mental":
+    # no obligatorio chequear eventos aquí porque venimos desde SF-12 Física
+    mostrar_sf12_mental()
 elif st.session_state.pagina_actual == "Ansiedad (HADS)":
     if st.session_state.get('resultados', {}).get('sf12') is None:
-        st.session_state.pagina_actual = "SF-12 Salud"
+        # redirect to start of SF-12 flow
+        st.session_state.pagina_actual = "SF-12 Física"
         st.rerun()
     mostrar_hads()
 elif st.session_state.pagina_actual == "Ansiedad (ZSAS)":

@@ -3,6 +3,7 @@ Escala HADS de Ansiedad
 """
 import streamlit as st
 from ..utils.calculos import calcular_nivel_hads
+from ..utils.dataframe_manager import mostrar_dataframe_actual
 
 def mostrar_hads():
     # --- Cargar estilos CSS globales ---
@@ -124,7 +125,8 @@ def mostrar_hads():
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        if len(respuestas) < len(preguntas_hads):
+        # Asegurarse de que no haya respuestas None (la longitud puede ser igual si se añadieron None)
+        if any(r is None for r in respuestas) or len(respuestas) < len(preguntas_hads):
             st.error("❗ Por favor, responde todas las preguntas antes de continuar.")
             disabled = True
         else:
@@ -132,24 +134,31 @@ def mostrar_hads():
             disabled = False
     
     with col2:
-        if st.button("Siguiente →", key="btn_hads_next", type="primary", disabled=disabled, use_container_width=True):
+        if st.button("Siguiente →", key="btn_hads_next", type="primary", disabled=disabled, width='stretch'):
             total = sum(respuestas)
             nivel = calcular_nivel_hads(total)
-            
+
             # Mostrar resultados en tarjeta
-            st.markdown("""
+            st.markdown(
+                """
             <div style="background: #FFFFFF; padding: 2rem; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); border: 1px solid #D1D1D1; margin: 1.5rem 0;">
-            """, unsafe_allow_html=True)
-            
-            st.markdown("<h3 style='color: #2E2E2E; text-align: center; margin-bottom: 1.5rem;'>📊 Resultados HADS - Ansiedad</h3>", unsafe_allow_html=True)
-            
+            """,
+                unsafe_allow_html=True,
+            )
+
+            st.markdown(
+                "<h3 style='color: #2E2E2E; text-align: center; margin-bottom: 1.5rem;'>📊 Resultados HADS - Ansiedad</h3>",
+                unsafe_allow_html=True,
+            )
+
             col1, col2 = st.columns(2)
             with col1:
                 st.metric(label="Puntaje total", value=total)
             with col2:
                 st.metric(label="Nivel de ansiedad", value=nivel)
-            
-            st.markdown("""
+
+            st.markdown(
+                """
             <div style='margin-top: 1.5rem; padding: 1rem; background: #F5F8FB; border-radius: 8px; border-left: 4px solid #2B87D1;'>
                 <p style='color: #2E2E2E; margin: 0.5rem 0;'><strong>Interpretación:</strong></p>
                 <ul style='color: #2E2E2E; margin: 0.5rem 0;'>
@@ -162,22 +171,29 @@ def mostrar_hads():
                 Este es un resultado preliminar. Consulta con un profesional de la salud para una evaluación completa.
                 </p>
             </div>
-            """, unsafe_allow_html=True)
-            
+            """,
+                unsafe_allow_html=True,
+            )
+
             st.markdown("</div>", unsafe_allow_html=True)
-            
+
             # Guardar resultados en session state
             if 'resultados' not in st.session_state:
                 st.session_state.resultados = {}
             st.session_state.resultados['hads'] = {
                 'puntaje': total,
                 'nivel': nivel,
-                'respuestas': respuestas
+                'respuestas': respuestas,
             }
-            
+
             # Cambiar a la siguiente sección
             st.session_state.pagina_actual = "Ansiedad (ZSAS)"
             st.rerun()
-            
+
             return total, nivel
+    # Mostrar DataFrame actual para monitoreo
+    st.markdown("---")
+    with st.expander("Ver DataFrame completo"):
+        mostrar_dataframe_actual()
+
     return None

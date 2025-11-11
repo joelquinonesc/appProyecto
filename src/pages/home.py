@@ -45,7 +45,7 @@ def mostrar_home():
     # Botón principal centrado
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button("Empezar Análisis ➜", key="start_button", use_container_width=True):
+        if st.button("Empezar Análisis ➜", key="start_button", width='stretch'):
             st.session_state.pagina_actual = "Datos demograficos"
             st.rerun()
     

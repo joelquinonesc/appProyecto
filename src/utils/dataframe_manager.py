@@ -17,6 +17,10 @@ def inicializar_dataframe():
             'nombre',
             'edad',
             'grupo_edad',
+            'educacion_binaria',
+            'lte12_clasificacion',
+            'sf12_fisica_cuartil',
+            'sf12_fisica_cuartil_label',
             'genero',
             'genero_binario',
             'años_educacion',
@@ -59,6 +63,10 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
             'nombre': None,
             'edad': None,
             'grupo_edad': None,
+            'educacion_binaria': None,
+            'lte12_clasificacion': None,
+            'sf12_fisica_cuartil': None,
+            'sf12_fisica_cuartil_label': None,
             'genero': None,
             'genero_binario': None,
             'años_educacion': None,
@@ -85,16 +93,23 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
         st.session_state['df_pacientes'].at[idx, 'nombre'] = datos.get('nombre')
         st.session_state['df_pacientes'].at[idx, 'edad'] = datos.get('edad')
         st.session_state['df_pacientes'].at[idx, 'grupo_edad'] = datos.get('grupo_edad')
+        st.session_state['df_pacientes'].at[idx, 'educacion_binaria'] = datos.get('educacion_binaria')
         st.session_state['df_pacientes'].at[idx, 'genero'] = datos.get('genero')
         st.session_state['df_pacientes'].at[idx, 'genero_binario'] = datos.get('genero_binario')
         st.session_state['df_pacientes'].at[idx, 'años_educacion'] = datos.get('años_educacion')
     
     elif tipo_datos == 'eventos_vitales':
         st.session_state['df_pacientes'].at[idx, 'lte12_puntaje'] = datos.get('puntaje_total')
+        # Guardar clasificación LTE-12 (0,1,2)
+        st.session_state['df_pacientes'].at[idx, 'lte12_clasificacion'] = datos.get('lte12_clasificacion')
     
     elif tipo_datos == 'sf12':
         st.session_state['df_pacientes'].at[idx, 'sf12_fisica'] = datos.get('salud_fisica')
         st.session_state['df_pacientes'].at[idx, 'sf12_mental'] = datos.get('salud_mental')
+        # Guardar clasificación en cuartiles para la componente física
+        st.session_state['df_pacientes'].at[idx, 'sf12_fisica_cuartil'] = datos.get('sf12_fisica_cuartil')
+        # Guardar etiqueta textual del cuartil (ej. Q1..Q4)
+        st.session_state['df_pacientes'].at[idx, 'sf12_fisica_cuartil_label'] = datos.get('sf12_fisica_cuartil_label')
     
     elif tipo_datos == 'hads':
         st.session_state['df_pacientes'].at[idx, 'hads_ansiedad'] = datos.get('ansiedad')
@@ -145,15 +160,15 @@ def mostrar_dataframe_actual():
     
     if len(df) > 0:
         st.subheader("📊 Datos Recolectados")
-        st.dataframe(df, use_container_width=True)
-        
+        st.dataframe(df, width='stretch')
+
         # Botón de descarga
         csv = exportar_dataframe_csv()
         st.download_button(
             label="⬇️ Descargar datos (CSV)",
             data=csv,
             file_name=f"datos_pacientes_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
-            mime="text/csv"
+            mime="text/csv",
         )
     else:
         st.info("No hay datos recolectados aún")
