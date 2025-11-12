@@ -115,6 +115,11 @@ def mostrar_datos_geneticos():
     with col2:
         # Botón deshabilitado si faltan datos
         disabled = not (genotipos_validos and cuestionarios_completos)
+    
+    # Mostrar el DataFrame actual también en el formulario de selección de genotipos
+    st.markdown("---")
+    with st.expander("Ver DataFrame actual"):
+        mostrar_dataframe_actual()
         
     if st.button("🔬 Calcular Riesgo", key="btn_calcular_riesgo", type="primary", disabled=disabled, width='stretch'):
             # Guardar los datos genéticos

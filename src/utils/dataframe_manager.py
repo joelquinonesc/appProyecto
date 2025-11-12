@@ -4,7 +4,7 @@ Gestor de DataFrame dinámico para almacenar datos de pacientes
 import pandas as pd
 import streamlit as st
 from datetime import datetime
-from src.utils.calculos import transformar_edad_a_grupo
+from src.utils.calculos import transformar_edad_a_grupo, transformar_sf12_fisica_a_label, transformar_sf12_mental_a_label
 
 
 def inicializar_dataframe():
@@ -21,6 +21,11 @@ def inicializar_dataframe():
             'lte12_clasificacion',
             'sf12_fisica_cuartil',
             'sf12_fisica_cuartil_label',
+            # Cuartiles para componente mental SF-12
+            'sf12_mental_cuartil',
+            'sf12_mental_cuartil_label',
+            # Clasificación combinada HADS + ZSAS (0/1)
+            'hads_zsas_clasificacion',
             'genero',
             'genero_binario',
             'años_educacion',
@@ -34,6 +39,8 @@ def inicializar_dataframe():
             'gen_tcf4',
             'gen_cdh20'
         ])
+        # Sincronizar etiquetas de cuartiles SF-12 si existen puntajes numéricos previos
+        sincronizar_sf12_cuartil_labels()
 
 
 def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
@@ -67,6 +74,9 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
             'lte12_clasificacion': None,
             'sf12_fisica_cuartil': None,
             'sf12_fisica_cuartil_label': None,
+            'sf12_mental_cuartil': None,
+            'sf12_mental_cuartil_label': None,
+            'hads_zsas_clasificacion': None,
             'genero': None,
             'genero_binario': None,
             'años_educacion': None,
@@ -106,17 +116,69 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
     elif tipo_datos == 'sf12':
         st.session_state['df_pacientes'].at[idx, 'sf12_fisica'] = datos.get('salud_fisica')
         st.session_state['df_pacientes'].at[idx, 'sf12_mental'] = datos.get('salud_mental')
-        # Guardar clasificación en cuartiles para la componente física
-        st.session_state['df_pacientes'].at[idx, 'sf12_fisica_cuartil'] = datos.get('sf12_fisica_cuartil')
-        # Guardar etiqueta textual del cuartil (ej. Q1..Q4)
-        st.session_state['df_pacientes'].at[idx, 'sf12_fisica_cuartil_label'] = datos.get('sf12_fisica_cuartil_label')
+        # Guardar clasificación en cuartiles para la componente física si se provee (la página física debe ser quien la envie)
+        if datos.get('sf12_fisica_cuartil') is not None:
+            st.session_state['df_pacientes'].at[idx, 'sf12_fisica_cuartil'] = datos.get('sf12_fisica_cuartil')
+        if datos.get('sf12_fisica_cuartil_label') is not None:
+            st.session_state['df_pacientes'].at[idx, 'sf12_fisica_cuartil_label'] = datos.get('sf12_fisica_cuartil_label')
+
+        # Guardar clasificación en cuartiles para la componente mental si se provee (la página mental debe ser quien la envie)
+        if datos.get('sf12_mental_cuartil') is not None:
+            st.session_state['df_pacientes'].at[idx, 'sf12_mental_cuartil'] = datos.get('sf12_mental_cuartil')
+        if datos.get('sf12_mental_cuartil_label') is not None:
+            st.session_state['df_pacientes'].at[idx, 'sf12_mental_cuartil_label'] = datos.get('sf12_mental_cuartil_label')
+
+        # Asegurar que, si por alguna razón falta la etiqueta textual para cualquiera de las componentes,
+        # la generamos a partir del valor numérico
+        sincronizar_sf12_cuartil_labels()
     
     elif tipo_datos == 'hads':
         st.session_state['df_pacientes'].at[idx, 'hads_ansiedad'] = datos.get('ansiedad')
         st.session_state['df_pacientes'].at[idx, 'hads_depresion'] = datos.get('depresion')
+        # Recalcular clasificación combinada HADS+ZSAS si hay suficientes datos
+        try:
+            hads_val = st.session_state['df_pacientes'].at[idx, 'hads_ansiedad']
+        except Exception:
+            hads_val = None
+        try:
+            zsas_val = st.session_state['df_pacientes'].at[idx, 'zsas_puntaje']
+        except Exception:
+            zsas_val = None
+
+        # Clasificación: 1 si HADS >=8 y ZSAS >=36; 0 si HADS <8 and ZSAS <36; None otherwise
+        if hads_val is not None and zsas_val is not None:
+            try:
+                if float(hads_val) >= 8 and float(zsas_val) >= 36:
+                    st.session_state['df_pacientes'].at[idx, 'hads_zsas_clasificacion'] = 1
+                elif float(hads_val) < 8 and float(zsas_val) < 36:
+                    st.session_state['df_pacientes'].at[idx, 'hads_zsas_clasificacion'] = 0
+                else:
+                    st.session_state['df_pacientes'].at[idx, 'hads_zsas_clasificacion'] = None
+            except Exception:
+                st.session_state['df_pacientes'].at[idx, 'hads_zsas_clasificacion'] = None
     
     elif tipo_datos == 'zsas':
         st.session_state['df_pacientes'].at[idx, 'zsas_puntaje'] = datos.get('puntaje_normalizado')
+        # Recalcular clasificación combinada HADS+ZSAS si hay suficientes datos
+        try:
+            hads_val = st.session_state['df_pacientes'].at[idx, 'hads_ansiedad']
+        except Exception:
+            hads_val = None
+        try:
+            zsas_val = st.session_state['df_pacientes'].at[idx, 'zsas_puntaje']
+        except Exception:
+            zsas_val = None
+
+        if hads_val is not None and zsas_val is not None:
+            try:
+                if float(hads_val) >= 8 and float(zsas_val) >= 36:
+                    st.session_state['df_pacientes'].at[idx, 'hads_zsas_clasificacion'] = 1
+                elif float(hads_val) < 8 and float(zsas_val) < 36:
+                    st.session_state['df_pacientes'].at[idx, 'hads_zsas_clasificacion'] = 0
+                else:
+                    st.session_state['df_pacientes'].at[idx, 'hads_zsas_clasificacion'] = None
+            except Exception:
+                st.session_state['df_pacientes'].at[idx, 'hads_zsas_clasificacion'] = None
     
     elif tipo_datos == 'geneticos':
         st.session_state['df_pacientes'].at[idx, 'gen_prkca'] = datos.get('prkca')
@@ -129,7 +191,66 @@ def obtener_dataframe():
     Retorna el DataFrame completo
     """
     inicializar_dataframe()
+    # Asegurar sincronización antes de devolver
+    sincronizar_sf12_cuartil_labels()
     return st.session_state['df_pacientes']
+
+
+def sincronizar_sf12_cuartil_labels():
+    """
+    Completa la columna `sf12_fisica_cuartil_label` a partir de
+    `sf12_fisica_cuartil` cuando la etiqueta esté ausente.
+    Esta función no sobrescribe la columna numérica; sólo rellena labels faltantes.
+    """
+    inicializar_dataframe()
+    df = st.session_state['df_pacientes']
+
+    if 'sf12_fisica_cuartil' not in df.columns:
+        return
+
+    # Aplicar mapeo sólo en filas donde existe el cuartil numérico pero falta la etiqueta
+    def _label_from_num(row):
+        num = row.get('sf12_fisica_cuartil')
+        label = row.get('sf12_fisica_cuartil_label')
+        if (label is None or (isinstance(label, float) and pd.isna(label))) and num is not None:
+            try:
+                return transformar_sf12_fisica_a_label(num)
+            except Exception:
+                return None
+        return label
+
+    # Generar la serie de etiquetas y asignarla sólo donde corresponda
+    try:
+        etiquetas = df.apply(_label_from_num, axis=1)
+        # Asignar etiquetas generadas (si no son None)
+        for i, val in etiquetas.items():
+            if val is not None:
+                st.session_state['df_pacientes'].at[i, 'sf12_fisica_cuartil_label'] = val
+    except Exception:
+        # En caso de error, no bloquear la app; dejar como estaba
+        return
+
+    # Ahora hacer lo mismo para la componente mental (si las columnas existen)
+    if 'sf12_mental_cuartil' not in df.columns:
+        return
+
+    def _label_from_num_mental(row):
+        num = row.get('sf12_mental_cuartil')
+        label = row.get('sf12_mental_cuartil_label')
+        if (label is None or (isinstance(label, float) and pd.isna(label))) and num is not None:
+            try:
+                return transformar_sf12_mental_a_label(num)
+            except Exception:
+                return None
+        return label
+
+    try:
+        etiquetas_m = df.apply(_label_from_num_mental, axis=1)
+        for i, val in etiquetas_m.items():
+            if val is not None:
+                st.session_state['df_pacientes'].at[i, 'sf12_mental_cuartil_label'] = val
+    except Exception:
+        return
 
 
 def obtener_registro_actual():

@@ -189,3 +189,42 @@ def transformar_sf12_fisica_a_label(puntaje):
     if cuartil is None:
         return None
     return f"Q{cuartil}"
+
+
+def transformar_sf12_mental_a_cuartil(puntaje):
+    """
+    Clasifica el puntaje mental del SF-12 en cuartiles según umbrales sugeridos:
+    - Cuartil 1 (1) si puntaje <= 15
+    - Cuartil 2 (2) si puntaje <= 18
+    - Cuartil 3 (3) si puntaje <= 21
+    - Cuartil 4 (4) si puntaje >= 22
+
+    Args:
+        puntaje (int|float): Puntaje mental calculado
+
+    Returns:
+        int: 1..4 representando el cuartil, o None si entrada inválida
+    """
+    try:
+        p = float(puntaje)
+    except Exception:
+        return None
+
+    if p <= 15:
+        return 1
+    if p <= 18:
+        return 2
+    if p <= 21:
+        return 3
+    return 4
+
+
+def transformar_sf12_mental_a_label(puntaje):
+    """
+    Devuelve una etiqueta textual del cuartil para la componente mental del SF-12.
+    Etiquetas: 'Q1', 'Q2', 'Q3', 'Q4'
+    """
+    cuartil = transformar_sf12_mental_a_cuartil(puntaje)
+    if cuartil is None:
+        return None
+    return f"Q{cuartil}"
