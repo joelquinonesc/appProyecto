@@ -3,7 +3,7 @@ Escala HADS de Ansiedad
 """
 import streamlit as st
 from ..utils.calculos import calcular_nivel_hads
-from ..utils.dataframe_manager import mostrar_dataframe_actual
+from ..utils.dataframe_manager import mostrar_dataframe_actual, agregar_o_actualizar_registro
 
 def mostrar_hads():
     # --- Cargar estilos CSS globales ---
@@ -185,6 +185,9 @@ def mostrar_hads():
                 'nivel': nivel,
                 'respuestas': respuestas,
             }
+
+            # Guardar en DataFrame
+            agregar_o_actualizar_registro({'ansiedad': total, 'depresion': None}, tipo_datos='hads')
 
             # Cambiar a la siguiente sección
             st.session_state.pagina_actual = "Ansiedad (ZSAS)"

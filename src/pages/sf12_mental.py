@@ -47,43 +47,60 @@ def mostrar_sf12_mental():
         st.session_state['sf12_m_partial'] = [None] * 6
     m = st.session_state['sf12_m_partial']
 
-    # Preguntas 1 y 2 (problemas emocionales) -> corresponden internamente a posiciones 5 y 6
-    resp1 = st.radio("1. ¿Hizo menos de lo que hubiera querido hacer, por algún problema emocional?", ["Sí", "No"], key="sf12_m_q1", horizontal=True, index=None)
-    # Radios: mapear a 0/1 (Sí=0, No=1)
-    m[0] = 0 if resp1 == "Sí" else 1 if resp1 == "No" else None
-
-    resp2 = st.radio("2. ¿No hizo su trabajo o sus actividades tan cuidadosamente como de costumbre, por algún problema emocional?", ["Sí", "No"], key="sf12_m_q2", horizontal=True, index=None)
-    m[1] = 0 if resp2 == "Sí" else 1 if resp2 == "No" else None
-
-    # Preguntas 9-11 (estado emocional) -> posiciones 8,9,10
-    opciones_emoc = ["Seleccione una opción", "Siempre", "Casi siempre", "Muchas veces", "Algunas veces", "Sólo una vez", "Nunca"]
-    # Preguntas 3-5 (estado emocional) -> posiciones 8,9,10
-    resp3 = st.selectbox("3. ¿Se sintió calmado y tranquilo?", options=opciones_emoc, key="sf12_m_q3", index=None)
-    if resp3 is None or resp3 == "Seleccione una opción":
+    # Preguntas del componente mental SF-12
+    opciones_binario = ["Seleccione una opción", "Sí", "No"]
+    opciones_frecuencia = ["Seleccione una opción", "Siempre", "Casi siempre", "Algunas veces", "Sólo alguna vez", "Nunca"]
+    opciones_tiempo = ["Seleccione una opción", "Siempre", "Casi siempre", "Muchas veces", "Algunas veces", "Sólo una vez", "Nunca"]
+    
+    # Pregunta 1: ¿Hizo menos de lo que hubiera querido hacer, por algún problema emocional?
+    resp1 = st.radio("1. ¿Hizo menos de lo que hubiera querido hacer, por algún problema emocional?", options=opciones_binario[1:], key="sf12_m_q1", horizontal=True, index=None)
+    if resp1 == "Sí":
+        m[0] = 1
+    elif resp1 == "No":
+        m[0] = 2
+    else:
+        m[0] = None
+    
+    # Pregunta 2: ¿No hizo su trabajo o sus actividades cotidianas tan cuidadosamente como de costumbre, por algún problema emocional?
+    resp2 = st.radio("2. ¿No hizo su trabajo o sus actividades cotidianas tan cuidadosamente como de costumbre, por algún problema emocional?", options=opciones_binario[1:], key="sf12_m_q2", horizontal=True, index=None)
+    if resp2 == "Sí":
+        m[1] = 1
+    elif resp2 == "No":
+        m[1] = 2
+    else:
+        m[1] = None
+    
+    # Pregunta 3: ¿Con qué frecuencia la salud física o los problemas emocionales le han dificultado sus actividades sociales?
+    resp3 = st.selectbox("3. ¿Con qué frecuencia la salud física o los problemas emocionales le han dificultado sus actividades sociales (como visitar a los amigos o familiares)?", options=opciones_frecuencia, key="sf12_m_q3", index=None)
+    if resp3 == "Seleccione una opción" or resp3 is None:
         m[2] = None
     else:
-        # Restar 1 para que las opciones válidas empiecen en 0 (placeholder está en 0)
-        m[2] = opciones_emoc.index(resp3) - 1
-
-    resp4 = st.selectbox("4. ¿Tuvo mucha energía?", options=opciones_emoc, key="sf12_m_q4", index=None)
-    if resp4 is None or resp4 == "Seleccione una opción":
+        m[2] = opciones_frecuencia.index(resp3)
+    
+    # Pregunta 4: ¿Se sintió calmado y tranquilo? ¿Cuánto tiempo?
+    resp4 = st.selectbox("4. ¿Se sintió calmado y tranquilo? ¿Cuánto tiempo?", options=opciones_tiempo, key="sf12_m_q4", index=None)
+    if resp4 == "Seleccione una opción" or resp4 is None:
         m[3] = None
     else:
-        m[3] = opciones_emoc.index(resp4) - 1
-
-    resp5 = st.selectbox("5. ¿Se sintió desanimado y triste?", options=opciones_emoc, key="sf12_m_q5", index=None)
-    if resp5 is None or resp5 == "Seleccione una opción":
+        # Siempre (6), Casi siempre (5), ..., Nunca (1)
+        index = opciones_tiempo.index(resp4)
+        m[3] = 7 - index  # 7-1=6 for Siempre, 7-6=1 for Nunca
+    
+    # Pregunta 5: ¿Tuvo mucha energía? ¿Cuánto tiempo?
+    resp5 = st.selectbox("5. ¿Tuvo mucha energía? ¿Cuánto tiempo?", options=opciones_tiempo, key="sf12_m_q5", index=None)
+    if resp5 == "Seleccione una opción" or resp5 is None:
         m[4] = None
     else:
-        m[4] = opciones_emoc.index(resp5) - 1
-
-    # Pregunta 12 (actividades sociales) -> posición 11
-    opciones_social = ["Seleccione una opción", "Siempre", "Casi siempre", "Muchas veces", "Algunas veces", "Sólo una vez", "Nunca"]
-    resp6 = st.selectbox("6. Durante las 4 últimas semanas, ¿con qué frecuencia la salud física o los problemas emocionales le han dificultado sus actividades sociales?", options=opciones_social, key="sf12_m_q6", index=None)
-    if resp6 is None or resp6 == "Seleccione una opción":
+        index = opciones_tiempo.index(resp5)
+        m[4] = 7 - index  # Siempre (6), ..., Nunca (1)
+    
+    # Pregunta 6: ¿Se ha sentido desanimado(a) y triste? ¿Cuánto tiempo?
+    resp6 = st.selectbox("6. ¿Se ha sentido desanimado(a) y triste? ¿Cuánto tiempo?", options=opciones_tiempo, key="sf12_m_q6", index=None)
+    if resp6 == "Seleccione una opción" or resp6 is None:
         m[5] = None
     else:
-        m[5] = opciones_social.index(resp6) - 1
+        # Siempre (1), Casi siempre (2), ..., Nunca (6)
+        m[5] = opciones_tiempo.index(resp6)
 
     # Guardar parcial mental en session_state
     st.session_state['sf12_m_partial'] = m

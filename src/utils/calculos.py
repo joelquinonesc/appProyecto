@@ -148,11 +148,11 @@ def transformar_lte12_a_clasificacion(total_puntaje):
 
 def transformar_sf12_fisica_a_cuartil(puntaje):
     """
-    Clasifica el puntaje físico del SF-12 en cuartiles según umbrales provistos:
+    Clasifica el puntaje físico del SF-12 en cuartiles según el nuevo rango 6-30:
     - Cuartil 1 (1) si puntaje <= 15
-    - Cuartil 2 (2) si puntaje <= 17
-    - Cuartil 3 (3) si puntaje <= 19
-    - Cuartil 4 (4) si puntaje >= 20
+    - Cuartil 2 (2) si puntaje <= 20
+    - Cuartil 3 (3) si puntaje <= 25
+    - Cuartil 4 (4) si puntaje >= 26
 
     Args:
         puntaje (int|float): Puntaje físico calculado
@@ -167,9 +167,9 @@ def transformar_sf12_fisica_a_cuartil(puntaje):
 
     if p <= 15:
         return 1
-    if p <= 17:
+    if p <= 20:
         return 2
-    if p <= 19:
+    if p <= 25:
         return 3
     return 4
 
@@ -193,11 +193,11 @@ def transformar_sf12_fisica_a_label(puntaje):
 
 def transformar_sf12_mental_a_cuartil(puntaje):
     """
-    Clasifica el puntaje mental del SF-12 en cuartiles según umbrales sugeridos:
+    Clasifica el puntaje mental del SF-12 en cuartiles según el rango 6-30:
     - Cuartil 1 (1) si puntaje <= 15
-    - Cuartil 2 (2) si puntaje <= 18
-    - Cuartil 3 (3) si puntaje <= 21
-    - Cuartil 4 (4) si puntaje >= 22
+    - Cuartil 2 (2) si puntaje <= 20
+    - Cuartil 3 (3) si puntaje <= 25
+    - Cuartil 4 (4) si puntaje >= 26
 
     Args:
         puntaje (int|float): Puntaje mental calculado
@@ -212,9 +212,9 @@ def transformar_sf12_mental_a_cuartil(puntaje):
 
     if p <= 15:
         return 1
-    if p <= 18:
+    if p <= 20:
         return 2
-    if p <= 21:
+    if p <= 25:
         return 3
     return 4
 
@@ -228,3 +228,30 @@ def transformar_sf12_mental_a_label(puntaje):
     if cuartil is None:
         return None
     return f"Q{cuartil}"
+
+
+def transformar_genotipo_prkca(genotipo):
+    """
+    Transforma el genotipo PRKCA a valor numérico.
+    T/T: 0, C/T: 1, C/C: 2
+    """
+    mapping = {'T/T': 0, 'C/T': 1, 'C/C': 2}
+    return mapping.get(genotipo, -1)
+
+
+def transformar_genotipo_tcf4(genotipo):
+    """
+    Transforma el genotipo TCF4 a valor numérico.
+    A/A: 0, A/T: 1, T/T: 2
+    """
+    mapping = {'A/A': 0, 'A/T': 1, 'T/T': 2}
+    return mapping.get(genotipo, -1)
+
+
+def transformar_genotipo_cdh20(genotipo):
+    """
+    Transforma el genotipo CDH20 a valor numérico.
+    G/G: 0, G/A: 1, A/A: 2
+    """
+    mapping = {'G/G': 0, 'G/A': 1, 'A/A': 2}
+    return mapping.get(genotipo, -1)

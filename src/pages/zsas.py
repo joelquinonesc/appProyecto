@@ -3,7 +3,7 @@ Escala de Ansiedad de Zung (ZSAS)
 """
 import streamlit as st
 from ..utils.calculos import calcular_nivel_zsas
-from ..utils.dataframe_manager import mostrar_dataframe_actual
+from ..utils.dataframe_manager import mostrar_dataframe_actual, agregar_o_actualizar_registro
 
 def mostrar_zsas():
     # --- Cargar estilos CSS globales ---
@@ -68,7 +68,9 @@ def mostrar_zsas():
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        if len(respuestas) < 20:  # Total de preguntas en ZSAS
+        # Filtrar respuestas válidas (no None)
+        respuestas_validas = [r for r in respuestas if r is not None]
+        if len(respuestas_validas) < 20:  # Total de preguntas en ZSAS
             st.error("❗ Por favor, responde todas las preguntas antes de continuar.")
             disabled = True
         else:
@@ -77,7 +79,9 @@ def mostrar_zsas():
     
     with col2:
         if st.button("Siguiente →", key="btn_zsas_next", type="primary", disabled=disabled, width='stretch'):
-            total = sum(respuestas)
+            # Asegurarse de que todas las respuestas sean válidas
+            respuestas_validas = [r for r in respuestas if r is not None]
+            total = sum(respuestas_validas)
             total_normalizado = total * 1.25
             nivel = calcular_nivel_zsas(total_normalizado)
 
@@ -138,6 +142,9 @@ def mostrar_zsas():
                 'total_normalizado': total_normalizado,
                 'nivel': nivel,
             }
+
+            # Guardar en DataFrame
+            agregar_o_actualizar_registro({'puntaje_normalizado': total_normalizado}, tipo_datos='zsas')
 
             # Cambiar a la página de datos genéticos
             st.session_state.pagina_actual = "Datos Genéticos"
