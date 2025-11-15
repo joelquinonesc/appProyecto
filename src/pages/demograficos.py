@@ -22,7 +22,7 @@ def mostrar_demograficos():
 
     # Título de página
     st.markdown(
-        "<h1 style='text-align: center;'>Datos Demográficos del Paciente</h1>",
+        "<h1 style='text-align: center;'> Datos Demográficos del Paciente</h1>",
         unsafe_allow_html=True
     )
 
@@ -33,26 +33,26 @@ def mostrar_demograficos():
     # Si ya existen datos, mostrarlos
     if st.session_state["datos_demograficos"] is not None:
         datos = st.session_state["datos_demograficos"]
-        st.success("✅ Datos demográficos ya registrados")
+        st.success("Datos demográficos ya registrados")
 
         col1, col2 = st.columns(2)
 
         with col1:
-            st.info(f"👤 **Nombre:** {datos['nombre']}")
-            st.info(f"🎂 **Edad:** {datos['edad']} años")
+            st.info(f" **Nombre:** {datos['nombre']}")
+            st.info(f" **Edad:** {datos['edad']} años")
 
         with col2:
-            st.info(f"⚧ **Género:** {datos['genero']}")
-            st.info(f"🎓 **Años de educación:** {datos['años_educacion']} años")
+            st.info(f" **Género:** {datos['genero']}")
+            st.info(f" **Años de educación:** {datos['años_educacion']} años")
 
         st.markdown("---")
-        st.markdown("### 📊 Vista de Datos en DataFrame")
+        st.markdown("### Vista de Datos en DataFrame")
         with st.expander("Ver DataFrame completo"):
             mostrar_dataframe_actual()
 
         col_edit, col_next = st.columns(2)
         with col_edit:
-            if st.button("✏️ Editar datos"):
+            if st.button("Editar datos"):
                 st.session_state["datos_demograficos"] = None
                 st.rerun()
 
@@ -85,7 +85,7 @@ def mostrar_demograficos():
         unsafe_allow_html=True,
     )
 
-    st.markdown("#### 📝 Complete la información:")
+    st.markdown("#### Complete la información:")
 
     # Nombre (encabezando, ocupa full-width)
     nombre = st.text_input("Nombre completo *", placeholder="Ingrese su nombre completo", key="nombre_completo")
@@ -112,12 +112,12 @@ def mostrar_demograficos():
     # Mensaje informativo en rojo
     if edad > 0:
         st.markdown(
-            f"<p style='color:#DC3545; font-weight:600;'>⚠️ Según tu edad ({edad} años), puedes tener un máximo de <strong>{max_educacion}</strong> años de educación formal.</p>",
+            f"<p style='color:#DC3545; font-weight:600;'>Según tu edad ({edad} años), puedes tener un máximo de <strong>{max_educacion}</strong> años de educación formal.</p>",
             unsafe_allow_html=True,
         )
     else:
         st.markdown(
-            "<p style='color:#DC3545; font-weight:600;'>⚠️ Por favor, ingrese primero su edad para calcular los años de educación válidos.</p>",
+            "<p style='color:#DC3545; font-weight:600;'>Por favor, ingrese primero su edad para calcular los años de educación válidos.</p>",
             unsafe_allow_html=True,
         )
 
@@ -161,7 +161,7 @@ def mostrar_demograficos():
         live_errores.append(f"Los años de educación ({años_educacion}) no pueden ser más de {max_educacion} años (edad - 5)")
 
     if live_errores:
-        st.error("❌ No se puede guardar. Corrija los siguientes errores:")
+        st.error(" No se puede guardar. Corrija los siguientes errores:")
         for e in live_errores:
             st.markdown(f"- {e}")
 
@@ -179,7 +179,7 @@ def mostrar_demograficos():
             errores.append(f"Los años de educación no pueden ser mayores a {max_educacion}.")
 
         if errores:
-            st.error("❌ No se pudieron guardar los datos:")
+            st.error(" No se pudieron guardar los datos:")
             for e in errores:
                 st.markdown(f"- {e}")
             return None
@@ -188,8 +188,7 @@ def mostrar_demograficos():
             "nombre": nombre,
             "edad": edad,
             "grupo_edad": transformar_edad_a_grupo(edad),
-            "genero": genero,
-            "genero_binario": transformar_genero_a_binario(genero),
+            "genero": transformar_genero_a_binario(genero),
             "años_educacion": años_educacion,
             "educacion_binaria": transformar_educacion_a_binaria(años_educacion),
         }

@@ -58,32 +58,33 @@ def mostrar_sf12_fisica():
     if resp1 is None or resp1 == "Seleccione una opción":
         m[0] = None
     else:
-        # Restar 1 para que las opciones válidas empiecen en 0 (placeholder está en 0)
-        m[0] = opciones_salud.index(resp1) - 1
+        # Puntuación estándar SF-12: Excelente=5, Muy buena=4, Buena=3, Regular=2, Mala=1
+        scoring = {"Excelente": 5, "Muy buena": 4, "Buena": 3, "Regular": 2, "Mala": 1}
+        m[0] = scoring[resp1]
 
     # Pregunta 2
     resp2 = st.radio("2. Esfuerzos moderados (mover una mesa,  caminar más de 1 hora)", ["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"], key="sf12_f_q2", horizontal=True, index=None)
-    m[1] = (["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"].index(resp2)) if resp2 is not None else None
+    m[1] = (["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"].index(resp2) + 1) if resp2 is not None else None
 
     # Pregunta 3
     resp3 = st.radio("3. Subir varios pisos por la escalera", ["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"], key="sf12_f_q3", horizontal=True, index=None)
-    m[2] = (["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"].index(resp3)) if resp3 is not None else None
+    m[2] = (["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"].index(resp3) + 1) if resp3 is not None else None
 
     st.markdown("####  Durante las 4 últimas semanas, ¿ha tenido alguno de los siguientes problemas en su trabajo o en sus actividades cotidianas, a causa de su salud física? :")
 
     # Pregunta 4
     resp4 = st.radio("4. ¿Hizo menos de lo que hubiera querido hacer?", ["Sí", "No"], key="sf12_f_q4", horizontal=True, index=None)
-    # Radios: mapear a 0/1 (Sí=0, No=1)
-    m[3] = 0 if resp4 == "Sí" else 1 if resp4 == "No" else None
+    # Radios: Sí=1, No=2
+    m[3] = 1 if resp4 == "Sí" else 2 if resp4 == "No" else None
 
     # Pregunta 5
     resp5 = st.radio("5. ¿Tuvo que dejar de hacer algunas tareas en su trabajo o en sus actividades cotidianas?", ["Sí", "No"], key="sf12_f_q5", horizontal=True, index=None)
-    # Mantener mismo orden relativo pero 0-based: No->0, Sí->1
-    m[4] = 0 if resp5 == "No" else 1 if resp5 == "Sí" else None
+    # Sí=1, No=2
+    m[4] = 1 if resp5 == "Sí" else 2 if resp5 == "No" else None
 
     # Pregunta 6 (dolor)
     resp6 = st.radio("6. ¿Hasta qué punto el dolor le ha dificultado su trabajo habitual?", ["Nada", "Un poco", "Regular", "Bastante", "Mucho"], key="sf12_f_q6", horizontal=True, index=None)
-    m[5] = (["Nada", "Un poco", "Regular", "Bastante", "Mucho"].index(resp6)) if resp6 is not None else None
+    m[5] = (5 - ["Nada", "Un poco", "Regular", "Bastante", "Mucho"].index(resp6)) if resp6 is not None else None
 
     # Guardar parcial físico en session_state
     st.session_state['sf12_f_partial'] = m

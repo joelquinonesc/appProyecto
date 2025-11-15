@@ -270,6 +270,22 @@ def exportar_dataframe_csv():
     Exporta el DataFrame a CSV
     """
     df = obtener_dataframe()
+    # Renombrar columnas para exportación
+    rename_dict = {
+        'años_educacion': 'AEFGROUPS',
+        'lte12_puntaje': 'LTE12',
+        'sf12_fisica_cuartil_label': 'SF12F',
+        'sf12_mental_cuartil_label': 'SF12M',
+        'gen_prkca': 'PRKCA',
+        'gen_tcf4': 'TCF4',
+        'gen_cdh20': 'CDH20',
+        'grupo_edad': 'edad24',
+        'genero': 'genero',
+    }
+    df = df.rename(columns=rename_dict)
+    # Seleccionar solo las columnas finales
+    columnas_finales = ['timestamp', 'nombre', 'genero', 'edad24', 'AEFGROUPS', 'LTE12', 'SF12F', 'SF12M', 'PRKCA', 'TCF4', 'CDH20']
+    df = df[columnas_finales]
     return df.to_csv(index=False).encode('utf-8')
 
 
@@ -280,11 +296,29 @@ def mostrar_dataframe_actual():
     df = obtener_dataframe()
     
     if len(df) > 0:
+        # Renombrar columnas según los requerimientos finales
+        rename_dict = {
+            'años_educacion': 'AEFGROUPS',
+            'lte12_puntaje': 'LTE12',
+            'sf12_fisica_cuartil_label': 'SF12F',
+            'sf12_mental_cuartil_label': 'SF12M',
+            'gen_prkca': 'PRKCA',
+            'gen_tcf4': 'TCF4',
+            'gen_cdh20': 'CDH20',
+            'grupo_edad': 'edad24',
+            'genero': 'genero',  # Cambiar a genero
+        }
+        df = df.rename(columns=rename_dict)
+        
+        # Seleccionar solo las columnas finales deseadas
+        columnas_finales = ['timestamp', 'nombre', 'genero', 'edad24', 'AEFGROUPS', 'LTE12', 'SF12F', 'SF12M', 'PRKCA', 'TCF4', 'CDH20']
+        df = df[columnas_finales]
+        
         st.subheader("📊 Datos Recolectados")
         st.dataframe(df, width='stretch')
 
         # Botón de descarga
-        csv = exportar_dataframe_csv()
+        csv = df.to_csv(index=False).encode('utf-8')  # Usar df final para descarga
         st.download_button(
             label="⬇️ Descargar datos (CSV)",
             data=csv,

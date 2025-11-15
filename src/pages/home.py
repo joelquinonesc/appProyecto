@@ -59,7 +59,7 @@ def mostrar_home():
     with col1:
         st.markdown("""
         <div class="info-card">
-            <h4>📋 Evaluación Integral</h4>
+            <h4>Evaluación Integral</h4>
             <p>Cuestionarios clínicos validados</p>
         </div>
         """, unsafe_allow_html=True)
@@ -75,7 +75,7 @@ def mostrar_home():
     with col3:
         st.markdown("""
         <div class="info-card">
-            <h4>📊 Resultados Detallados</h4>
+            <h4>Resultados Detallados</h4>
             <p>Reporte personalizado con interpretación</p>
         </div>
         """, unsafe_allow_html=True)
@@ -87,7 +87,7 @@ def mostrar_home():
     # Nota final de confidencialidad
     st.markdown("""
     <div class="confidentiality-note">
-        <p>🔒 Sus datos son confidenciales y utilizados exclusivamente con fines investigativos.</p>
+        <p>Sus datos son confidenciales y utilizados exclusivamente con fines investigativos.</p>
         <p>Esta herramienta está destinada a la investigación y debe ser interpretada por profesionales de la salud.</p>
     </div>
     """, unsafe_allow_html=True)

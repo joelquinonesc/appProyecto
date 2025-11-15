@@ -7,7 +7,8 @@ from src.pages import (
     mostrar_sf12_fisica,
     mostrar_sf12_mental,
     mostrar_hads,
-    mostrar_zsas
+    mostrar_zsas,
+    resultados
 )
 
 # Configuración de la página
@@ -96,6 +97,11 @@ elif st.session_state.pagina_actual == "Datos Genéticos":
         st.session_state.pagina_actual = "Ansiedad (ZSAS)"
         st.rerun()
     datos_geneticos.mostrar_datos_geneticos()
+elif st.session_state.pagina_actual == "resultados":
+    if st.session_state.get('resultados', {}).get('datos_geneticos') is None:
+        st.session_state.pagina_actual = "Datos Genéticos"
+        st.rerun()
+    resultados.mostrar_resultados()
 
 # Mostrar barra de progreso en el sidebar solo si no estamos en Home
 if st.session_state.pagina_actual != "Home":
