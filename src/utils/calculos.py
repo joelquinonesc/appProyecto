@@ -47,24 +47,16 @@ def validar_años_educacion(edad, años_educacion):
     return es_valido, max_permitido, mensaje
 
 def calcular_nivel_hads(puntaje):
-    if puntaje <= 7:
-        return "Normal"
-    elif puntaje <= 10:
-        return "Ansiedad leve"
-    elif puntaje <= 14:
-        return "Ansiedad moderada"
+    if puntaje >= 8:
+        return "⚠️ Riesgo de Ansiedad"
     else:
-        return "Ansiedad severa"
+        return "✅ Riesgo Bajo"
 
 def calcular_nivel_zsas(puntaje_normalizado):
-    if puntaje_normalizado < 45:
-        return "Normal"
-    elif puntaje_normalizado < 60:
-        return "Ansiedad leve a moderada"
-    elif puntaje_normalizado < 75:
-        return "Ansiedad marcada a severa"
+    if puntaje_normalizado >= 36:
+        return "⚠️ Riesgo de Ansiedad"
     else:
-        return "Ansiedad extrema"
+        return "✅ Riesgo Bajo"
 
 def calcular_sf12(respuestas):
     """
@@ -77,26 +69,47 @@ def calcular_sf12(respuestas):
       - MCS (mental): ítems [5,6,8,9,10,11] (Q6, Q7, Q9, Q10, Q11, Q12)
 
     Args:
-        respuestas (list): lista de 12 valores numéricos (pueden ser ints/floats)
+        respuestas (list): lista de hasta 12 valores numéricos (pueden ser ints/floats)
 
     Returns:
-        dict: {'fisica': float, 'mental': float, 'total': float}
+        dict: {'fisica': float|None, 'mental': float|None, 'total': float|None}
     """
-    if not respuestas or len(respuestas) < 12:
-        # Si faltan respuestas, devolver None para cada componente
+    if not respuestas:
         return {'fisica': None, 'mental': None, 'total': None}
 
-    try:
-        vals = [float(x) if x is not None else 0.0 for x in respuestas]
-    except Exception:
-        vals = [0.0 for _ in range(12)]
+    # Normalizar longitud y convertir a float cuando sea posible
+    vals = []
+    for i in range(12):
+        try:
+            x = respuestas[i]
+        except IndexError:
+            vals.append(None)
+            continue
+        if x is None:
+            vals.append(None)
+        else:
+            try:
+                vals.append(float(x))
+            except Exception:
+                vals.append(None)
 
     pcs_indices = [0, 1, 2, 3, 4, 7]
     mcs_indices = [5, 6, 8, 9, 10, 11]
 
-    pcs = sum(vals[i] for i in pcs_indices)
-    mcs = sum(vals[i] for i in mcs_indices)
-    total = pcs + mcs
+    pcs_items = [vals[i] for i in pcs_indices]
+    mcs_items = [vals[i] for i in mcs_indices]
+
+    # Calcular cada componente de forma independiente si sus ítems están completos
+    pcs = None
+    mcs = None
+
+    if not any(v is None for v in pcs_items):
+        pcs = sum(pcs_items)
+
+    if not any(v is None for v in mcs_items):
+        mcs = sum(mcs_items)
+
+    total = pcs + mcs if (pcs is not None and mcs is not None) else None
 
     return {'fisica': pcs, 'mental': mcs, 'total': total}
 
@@ -148,11 +161,11 @@ def transformar_lte12_a_clasificacion(total_puntaje):
 
 def transformar_sf12_fisica_a_cuartil(puntaje):
     """
-    Clasifica el puntaje físico del SF-12 en cuartiles según el nuevo rango 6-30:
-    - Cuartil 1 (1) si puntaje <= 15
-    - Cuartil 2 (2) si puntaje <= 20
-    - Cuartil 3 (3) si puntaje <= 25
-    - Cuartil 4 (4) si puntaje >= 26
+    Clasifica el puntaje físico del SF-12 en cuartiles con umbrales:
+    - Q1 si puntaje <= 15
+    - Q2 si puntaje <= 17
+    - Q3 si puntaje <= 19
+    - Q4 si puntaje >= 20
 
     Args:
         puntaje (int|float): Puntaje físico calculado
@@ -167,9 +180,9 @@ def transformar_sf12_fisica_a_cuartil(puntaje):
 
     if p <= 15:
         return 1
-    if p <= 20:
+    if p <= 17:
         return 2
-    if p <= 25:
+    if p <= 19:
         return 3
     return 4
 
@@ -195,9 +208,9 @@ def transformar_sf12_mental_a_cuartil(puntaje):
     """
     Clasifica el puntaje mental del SF-12 en cuartiles según el rango 6-30:
     - Cuartil 1 (1) si puntaje <= 15
-    - Cuartil 2 (2) si puntaje <= 20
-    - Cuartil 3 (3) si puntaje <= 25
-    - Cuartil 4 (4) si puntaje >= 26
+    - Cuartil 2 (2) si puntaje <= 18
+    - Cuartil 3 (3) si puntaje <= 21
+    - Cuartil 4 (4) si puntaje >= 22
 
     Args:
         puntaje (int|float): Puntaje mental calculado
@@ -212,9 +225,9 @@ def transformar_sf12_mental_a_cuartil(puntaje):
 
     if p <= 15:
         return 1
-    if p <= 20:
+    if p <= 18:
         return 2
-    if p <= 25:
+    if p <= 21:
         return 3
     return 4
 
@@ -255,3 +268,51 @@ def transformar_genotipo_cdh20(genotipo):
     """
     mapping = {'G/G': 0, 'G/A': 1, 'A/A': 2}
     return mapping.get(genotipo, -1)
+def youden_threshold(y_true, probas):
+    """Calcula el umbral óptimo de Youden a partir de etiquetas verdaderas y probabilidades.
+
+    Args:
+        y_true (array-like): etiquetas 0/1
+        probas (array-like): probabilidades predichas para la clase positiva
+
+    Returns:
+        float|None: umbral óptimo (None si no se puede calcular)
+    """
+    try:
+        from sklearn.metrics import roc_curve
+        fpr, tpr, thr = roc_curve(y_true, probas)
+        j = [t - f for t, f in zip(tpr, fpr)]
+        if len(j) == 0:
+            return None
+        ix = max(range(len(j)), key=lambda i: j[i])
+        return float(thr[ix])
+    except Exception:
+        return None
+
+
+def clasificar_por_youden(proba, umbral, ancho=0.10):
+    """Clasifica probabilidad en tres categorías con umbrales fijos.
+
+    - Bajo: prob < 0.30
+    - Moderado: 0.30 <= prob < 0.60
+    - Alto: prob >= 0.60
+
+    Args:
+        proba (float): probabilidad estimada para la clase positiva
+        umbral (float|None): no se usa (mantenido por compatibilidad)
+        ancho (float): no se usa (mantenido por compatibilidad)
+
+    Returns:
+        str: 'Bajo', 'Moderado' o 'Alto'
+    """
+    try:
+        p = float(proba)
+    except Exception:
+        return 'No disponible'
+
+    if p < 0.30:
+        return 'Bajo'
+    elif p < 0.60:
+        return 'Moderado'
+    else:
+        return 'Alto'

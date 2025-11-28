@@ -41,7 +41,7 @@ def mostrar_datos_geneticos():
         <p style="color: #2E2E2E; font-size: 1rem; line-height: 1.7; text-align: justify; margin-bottom: 0.75rem;">
         Los <strong>factores genéticos</strong> juegan un papel importante en la predisposición a trastornos de ansiedad. 
         Estudios científicos han identificado varios genes asociados con una mayor vulnerabilidad a la ansiedad, incluyendo 
-        <strong>PRKCA, TCF4 y CDH20</strong>.
+        <strong><i>PRKCA</i>, <i>TCF4</i> y <i>CDH20</i></strong>.
         </p>
         <p style="color: #2E2E2E; font-size: 1rem; line-height: 1.7; text-align: justify; margin: 0;">
         Esta información genética, combinada con los cuestionarios clínicos, nos permite realizar una evaluación más 
@@ -57,8 +57,9 @@ def mostrar_datos_geneticos():
     st.markdown("<h3 style='color: #4CAF50; font-size: 1.5rem; font-weight: 700; margin: 2rem 0 1rem 0; border-bottom: 2px solid #E0E0E0; padding-bottom: 0.5rem;'>Selección de Genotipos</h3>", unsafe_allow_html=True)
     
     # PRKCA
-    st.markdown("<p style='color: #2E2E2E; font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem; margin-top: 1.5rem;'><span style='color: #4CAF50; font-weight: 700;'>Gen PRKCA</span></p>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #666666; font-size: 0.95rem; font-style: italic; margin-bottom: 0.75rem;'>Proteína quinasa C alfa - relacionada con la regulación del estrés</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #2E2E2E; font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem; margin-top: 1.5rem;'><span style='color: #4CAF50; font-weight: 700;'>Gen <i>PRKCA</i></span></p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #666666; font-size: 0.95rem; margin-bottom: 0.5rem;'><strong><i>PRKCA</i>:</strong> Proteína Quinasa C Alfa</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #666666; font-size: 0.95rem; font-style: italic; margin-bottom: 0.75rem;'>Relacionada con la regulación del estrés y la respuesta emocional</p>", unsafe_allow_html=True)
     prkca_genotipo = st.selectbox(
         "Seleccione el genotipo para PRKCA:",
         options=["Seleccione una opción", "T/T", "C/T", "C/C"],
@@ -68,8 +69,9 @@ def mostrar_datos_geneticos():
     
     # TCF4
     st.markdown("<div style='height: 1.5rem;'></div>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #2E2E2E; font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem;'><span style='color: #4CAF50; font-weight: 700;'>Gen TCF4</span></p>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #666666; font-size: 0.95rem; font-style: italic; margin-bottom: 0.75rem;'>Factor de transcripción 4 - implicado en el desarrollo neuronal</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #2E2E2E; font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem;'><span style='color: #4CAF50; font-weight: 700;'>Gen <i>TCF4</i></span></p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #666666; font-size: 0.95rem; margin-bottom: 0.5rem;'><strong><i>TCF4</i>:</strong> Factor de Transcripción 4</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #666666; font-size: 0.95rem; font-style: italic; margin-bottom: 0.75rem;'>Implicado en el desarrollo neuronal y predisposición a trastornos psiquiátricos</p>", unsafe_allow_html=True)
     tcf4_genotipo = st.selectbox(
         "Seleccione el genotipo para TCF4:",
         options=["Seleccione una opción", "A/A", "A/T", "T/T"],
@@ -79,8 +81,9 @@ def mostrar_datos_geneticos():
     
     # CDH20
     st.markdown("<div style='height: 1.5rem;'></div>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #2E2E2E; font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem;'><span style='color: #4CAF50; font-weight: 700;'>Gen CDH20</span></p>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #666666; font-size: 0.95rem; font-style: italic; margin-bottom: 0.75rem;'>Cadherina 20 - asociada con la conectividad neuronal</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #2E2E2E; font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem;'><span style='color: #4CAF50; font-weight: 700;'>Gen <i>CDH20</i></span></p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #666666; font-size: 0.95rem; margin-bottom: 0.5rem;'><strong><i>CDH20</i>:</strong> Cadherina 20</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #666666; font-size: 0.95rem; font-style: italic; margin-bottom: 0.75rem;'>Asociada con la conectividad neuronal y neurotransmisión</p>", unsafe_allow_html=True)
     cdh20_genotipo = st.selectbox(
         "Seleccione el genotipo para CDH20:",
         options=["Seleccione una opción", "G/G", "G/A", "A/A"],

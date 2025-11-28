@@ -68,8 +68,11 @@ def mostrar_eventos_vitales():
         Por eso, incorporamos la <strong>Lista de Experiencias Amenazantes (LTE-12)</strong>, que mide 12 eventos 
         comunes con impacto a largo plazo.
         </p>
-        <p style="color: #666666; font-style: italic; text-align: center;margin-top: 1rem; margin-bottom: 1.5rem; font-size: 1.05rem;">
+        <p style="color: #666666; font-style: italic; text-align: center;margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1.05rem;">
         <strong>⚠️ Todas las preguntas son obligatorias</strong><br>Seleccione 'Sí' para los eventos que haya experimentado recientemente
+        </p>
+        <p style="color: #888888; font-size: 0.9rem; text-align: center; margin: 0.5rem 0 0 0;">
+        <em>Brugha, T., Bebbington, P., Tennant, C., & Hurry, J. (1985). The List of Threatening Experiences: a subset of 12 life event categories with considerable long-term contextual threat. Psychological Medicine, 15(1), 189-194.</em>
         </p>
     </div>
     """, unsafe_allow_html=True)

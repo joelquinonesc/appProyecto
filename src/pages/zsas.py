@@ -52,8 +52,11 @@ def mostrar_zsas():
         Esta escala nos ayuda a identificar la severidad de sus síntomas ansiosos y a establecer un índice 
         cuantificable de ansiedad.
         </p>
-        <p style="color: #666666; font-style: italic; text-align: center; margin-top: 1rem; margin-bottom: 0; font-size: 1.05rem;">
+        <p style="color: #666666; font-style: italic; text-align: center; margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1.05rem;">
         <strong>⚠️ Todas las preguntas son obligatorias</strong><br>Responda pensando en la última semana
+        </p>
+        <p style="color: #888888; font-size: 0.9rem; text-align: center; margin: 0.5rem 0 0 0;">
+        <em>Zung, W. W. (1971). A rating instrument for anxiety disorders. Psychosomatics, 12(6), 371-379.</em>
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -107,25 +110,7 @@ def mostrar_zsas():
             st.markdown(
                 f"""
             <div style='margin-top: 1rem; padding: 1rem; background: #F0F0F0; border-radius: 8px; text-align: center;'>
-                <p style='color: #2E2E2E; margin: 0; font-size: 1.1rem;'><strong>Nivel de ansiedad:</strong> <span style='color: #4CAF50; font-weight: 700;'>{nivel}</span></p>
-            </div>
-            """,
-                unsafe_allow_html=True,
-            )
-
-            st.markdown(
-                """
-            <div style='margin-top: 1.5rem; padding: 1rem; background: #F5F8FB; border-radius: 8px; border-left: 4px solid #2B87D1;'>
-                <p style='color: #2E2E2E; margin: 0.5rem 0;'><strong>Interpretación del Índice de Ansiedad:</strong></p>
-                <ul style='color: #2E2E2E; margin: 0.5rem 0;'>
-                    <li><strong>Menos de 45:</strong> Ansiedad ausente o mínima</li>
-                    <li><strong>45-59:</strong> Ansiedad leve a moderada</li>
-                    <li><strong>60-74:</strong> Ansiedad marcada a severa</li>
-                    <li><strong>75 o más:</strong> Ansiedad extremadamente severa</li>
-                </ul>
-                <p style='color: #666666; font-style: italic; margin-top: 1rem; margin-bottom: 0;'>
-                Este es un resultado preliminar. Consulta con un profesional de la salud para una evaluación completa.
-                </p>
+                <p style='color: #2E2E2E; margin: 0; font-size: 1.1rem;'><strong>Resultado:</strong> <span style='color: #4CAF50; font-weight: 700;'>{nivel}</span></p>
             </div>
             """,
                 unsafe_allow_html=True,

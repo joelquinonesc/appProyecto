@@ -8,7 +8,8 @@ from src.pages import (
     mostrar_sf12_mental,
     mostrar_hads,
     mostrar_zsas,
-    resultados
+    resultados,
+    analisis_masivo
 )
 
 # Configuración de la página
@@ -66,6 +67,8 @@ if st.session_state.pagina_actual != "Home":
 # Mostrar el formulario según la página actual
 if st.session_state.pagina_actual == "Home":
     home.mostrar_home()
+elif st.session_state.pagina_actual == "Análisis Masivo":
+    analisis_masivo.mostrar_analisis_masivo()
 elif st.session_state.pagina_actual == "Datos demograficos":
     demograficos.mostrar_demograficos()
 elif st.session_state.pagina_actual == "LTE-12":
@@ -108,13 +111,27 @@ if st.session_state.pagina_actual != "Home":
     st.sidebar.markdown("---")
     progress = obtener_indice_pagina() / len(ORDEN_PAGINAS)
     st.sidebar.progress(progress)
-    completados = len([k for k, v in st.session_state.get('resultados', {}).items()])
-    st.sidebar.markdown(f"**Cuestionarios completados:** {completados} de {len(ORDEN_PAGINAS)}")
+    # Contar páginas completadas (no items en el diccionario)
+    resultado = st.session_state.get('resultados', {})
+    completados = 0
+    total_secciones = 6  # datos_demograficos, eventos_vitales, sf12, hads, zsas, datos_geneticos
+    if resultado.get('datos_demograficos'):
+        completados += 1
+    if resultado.get('eventos_vitales'):
+        completados += 1
+    if resultado.get('sf12'):
+        completados += 1
+    if resultado.get('hads'):
+        completados += 1
+    if resultado.get('zsas'):
+        completados += 1
+    if resultado.get('datos_geneticos'):
+        completados += 1
+    st.sidebar.markdown(f"**Cuestionarios completados:** {completados} de {total_secciones}")
 
 # Nota informativa en el sidebar
 st.sidebar.markdown("---")
 st.sidebar.info("""
-**Nota**: Esta es una herramienta de evaluación preliminar.
-Los resultados no constituyen un diagnóstico profesional.
-Consulta con un profesional de la salud mental para una evaluación completa.
+**Nota**: Esta herramienta proporciona un análisis preliminar basado en modelos de aprendizaje automático supervisado.
+Los resultados deben ser interpretados en el contexto clínico completo del paciente y utilizados como apoyo en la toma de decisiones.
 """)

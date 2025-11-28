@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Uso - ANXRISK</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2E2E2E;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 35px;
+        }
+        .section h2 {
+            color: #4CAF50;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #E0E0E0;
+        }
+        .section h3 {
+            color: #2E2E2E;
+            font-size: 1.3rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .step {
+            background: #F8F9FA;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+        }
+        .step-number {
+            background: #4CAF50;
+            color: white;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .info-box {
+            background: #E3F2FD;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .warning-box {
+            background: #FFF3E0;
+            border-left: 4px solid #FF9800;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .success-box {
+            background: #E8F5E9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        table th {
+            background: #4CAF50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+        table tr:hover {
+            background: #F8F9FA;
+        }
+        .footer {
+            background: #F8F9FA;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #E0E0E0;
+        }
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .close-btn:hover {
+            background: #45a049;
+        }
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="close-btn" onclick="window.close()">✕ Cerrar</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>📖 Guía de Uso - ANXRISK</h1>
+            <p>Instrucciones para evaluar tu riesgo de ansiedad</p>
+        </div>
+
+        <div class="content">
+            <!-- Sección 1 -->
+            <div class="section">
+                <h2>1. Introducción a la Aplicación</h2>
+                <p>ANXRISK es una herramienta integral que evalúa tu riesgo de ansiedad combinando múltiples fuentes de datos:</p>
+                <ul>
+                    <li><strong>Datos demográficos:</strong> Edad, género, educación</li>
+                    <li><strong>Datos psicosociales:</strong> Eventos vitales estresantes</li>
+                    <li><strong>Datos clínicos:</strong> Cuestionarios validados de ansiedad y salud</li>
+                    <li><strong>Datos genéticos:</strong> Marcadores genéticos asociados a la ansiedad</li>
+                </ul>
+                <div class="info-box">
+                    <strong>ℹ️ Nota:</strong> Esta herramienta proporciona un análisis preliminar y debe ser interpretada por profesionales de la salud mental.
+                </div>
+            </div>
+
+            <!-- Sección 2 -->
+            <div class="section">
+                <h2>2. Paso a Paso de la Evaluación</h2>
+                
+                <h3>Paso 1: Datos Demográficos</h3>
+                <div class="step">
+                    <span class="step-number">1</span> Ingresa tu nombre completo
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span> Proporciona tu edad (entre 1 y 120 años)
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span> Selecciona tu género (Masculino/Femenino)
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span> Indica tus años de educación formal
+                </div>
+                <div class="warning-box">
+                    <strong>⚠️ Restricción de Educación:</strong> El máximo de años de educación permitido es tu edad menos 5 años. Por ejemplo, a los 20 años, máximo 15 años de educación.
+                </div>
+
+                <h3>Paso 2: Eventos Vitales (LTE-12)</h3>
+                <p>Indica si has experimentado recientemente alguno de estos 12 eventos estresantes:</p>
+                <ul>
+                    <li>Muerte de un ser querido</li>
+                    <li>Ruptura de relación importante</li>
+                    <li>Pérdida o cambio de trabajo</li>
+                    <li>Problemas financieros serios</li>
+                    <li>Diagnóstico de enfermedad grave</li>
+                    <li>Y más...</li>
+                </ul>
+                <div class="success-box">
+                    <strong>✓ Tip:</strong> Piensa en los últimos 6-12 meses al responder estas preguntas.
+                </div>
+
+                <h3>Paso 3: SF-12 - Salud Física</h3>
+                <p>Evalúa tu percepción de salud física respondiendo sobre:</p>
+                <ul>
+                    <li>Estado general de salud</li>
+                    <li>Limitaciones en actividades físicas</li>
+                    <li>Problemas de salud en trabajo/actividades</li>
+                    <li>Dolor corporal y energía</li>
+                </ul>
+
+                <h3>Paso 4: SF-12 - Salud Mental</h3>
+                <p>Evalúa tu bienestar emocional respondiendo sobre:</p>
+                <ul>
+                    <li>Estado emocional general</li>
+                    <li>Vitalidad y energía mental</li>
+                    <li>Limitaciones emocionales en actividades</li>
+                    <li>Salud mental percibida</li>
+                </ul>
+
+                <h3>Paso 5: HADS - Escala de Ansiedad</h3>
+                <p>Responde 7 preguntas sobre síntomas de ansiedad de los últimos 7 días. La escala mide:</p>
+                <ul>
+                    <li>Tensión y nerviosismo</li>
+                    <li>Preocupaciones</li>
+                    <li>Miedo y pánico</li>
+                </ul>
+
+                <h3>Paso 6: ZSAS - Escala de Zung</h3>
+                <p>Contesta 20 preguntas sobre síntomas ansiosos. Esta escala evalúa:</p>
+                <ul>
+                    <li>Síntomas afectivos (emocionales)</li>
+                    <li>Síntomas somáticos (físicos)</li>
+                </ul>
+
+                <h3>Paso 7: Datos Genéticos</h3>
+                <p>Indica si tienes antecedentes genéticos en los siguientes marcadores asociados a ansiedad:</p>
+                <ul>
+                    <li><strong>Gen PRKCA:</strong> Relacionado con la regulación emocional</li>
+                    <li><strong>Gen TCF4:</strong> Asociado con predisposición a trastornos psiquiátricos</li>
+                    <li><strong>Gen CDH20:</strong> Vinculado con neurotransmisores y comportamiento</li>
+                </ul>
+            </div>
+
+            <!-- Sección 3 -->
+            <div class="section">
+                <h2>3. Interpretación de Resultados</h2>
+                
+                <h3>Escala de Riesgo del Modelo</h3>
+                <p>El modelo predice tu riesgo de ansiedad en tres categorías:</p>
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th>Nivel de Riesgo</th>
+                            <th>Rango de Puntuación</th>
+                            <th>Descripción</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Bajo</strong></td>
+                            <td>0.00 - 0.29</td>
+                            <td>Bajo riesgo de trastorno de ansiedad</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Moderado</strong></td>
+                            <td>0.30 - 0.59</td>
+                            <td>Riesgo moderado; se recomienda monitoreo</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Alto</strong></td>
+                            <td>0.60 - 1.00</td>
+                            <td>Riesgo alto; se recomienda evaluación profesional</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>HADS y ZSAS</h3>
+                <p>Estas escalas se interpretan así:</p>
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th>Escala</th>
+                            <th>Puntuación Bajo Riesgo</th>
+                            <th>Puntuación Alto Riesgo</th>
+                        </tr>
+                        <tr>
+                            <td>HADS</td>
+                            <td>&lt; 8</td>
+                            <td>≥ 8</td>
+                        </tr>
+                        <tr>
+                            <td>ZSAS</td>
+                            <td>&lt; 36</td>
+                            <td>≥ 36</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>SF-12</h3>
+                <p>El SF-12 se interpreta por cuartiles (Q1-Q4):</p>
+                <ul>
+                    <li><strong>Q1 (Muy Baja):</strong> Limitaciones significativas en salud</li>
+                    <li><strong>Q2 (Baja):</strong> Salud por debajo del promedio</li>
+                    <li><strong>Q3 (Moderada):</strong> Salud en nivel intermedio</li>
+                    <li><strong>Q4 (Excelente):</strong> Muy buen nivel de salud</li>
+                </ul>
+            </div>
+
+            <!-- Sección 4 -->
+            <div class="section">
+                <h2>4. Exportar Resultados</h2>
+                <p>Al finalizar la evaluación, puedes descargar un reporte HTML con todos tus resultados:</p>
+                <div class="step">
+                    <span class="step-number">1</span> Completa todos los cuestionarios
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span> Ve a la sección de Resultados
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span> Haz clic en "Descargar Reporte HTML"
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span> Opcionalmente, convierte el HTML a PDF usando tu navegador (Archivo → Imprimir → Guardar como PDF)
+                </div>
+            </div>
+
+            <!-- Sección 5 -->
+            <div class="section">
+                <h2>5. Privacidad y Confidencialidad</h2>
+                <div class="info-box">
+                    <strong>🔒 Seguridad de Datos:</strong> Todos tus datos son confidenciales y se utilizan exclusivamente con fines investigativos. Esta herramienta está destinada a la investigación y debe ser interpretada por profesionales de la salud.
+                </div>
+            </div>
+
+            <!-- Sección 6 -->
+            <div class="section">
+                <h2>6. Preguntas Frecuentes</h2>
+                
+                <h3>¿Cuánto tiempo toma completar la evaluación?</h3>
+                <p>Generalmente entre 20-30 minutos, dependiendo de la velocidad de lectura y respuesta.</p>
+                
+                <h3>¿Puedo pausar y continuar después?</h3>
+                <p>Sí, tus datos se guardan automáticamente al completar cada sección. Puedes volver a cualquier momento.</p>
+                
+                <h3>¿Qué significa "riesgo moderado"?</h3>
+                <p>Significa que existen factores presentes que sugieren un riesgo moderado de ansiedad. Se recomienda monitoreo continuo y posible consulta con un profesional de salud mental.</p>
+                
+                <h3>¿Los genes definen si tendré ansiedad?</h3>
+                <p>No. Los genes son solo un factor de riesgo. La ansiedad resulta de la interacción entre factores genéticos, ambientales, psicosociales y clínicos.</p>
+                
+                <h3>¿Puede reemplazar una evaluación profesional?</h3>
+                <p>No. Esta herramienta es de apoyo y debe complementarse con una evaluación profesional de un psicólogo o psiquiatra.</p>
+            </div>
+
+            <!-- Sección 7 -->
+            <div class="section">
+                <h2>7. Contacto y Soporte</h2>
+                <div class="success-box">
+                    <strong>✓ Necesitas ayuda?</strong> Si tienes dudas sobre cómo usar esta aplicación o necesitas soporte, contacta al equipo de investigación.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 ANXRISK - Herramienta de Evaluación del Riesgo de Ansiedad</p>
+            <p>Esta herramienta proporciona análisis preliminares y debe ser interpretada por profesionales de la salud mental.</p>
+        </div>
+    </div>
+</body>
+</html>

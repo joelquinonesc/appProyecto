@@ -1,23 +1,72 @@
-# Python
+# =============================================================================
+# .gitignore para ANXRISK
+# Sistema Profesional de Evaluación de Riesgo de Ansiedad
+# © 2025 Breyner Joel Quiñones Castro
+# =============================================================================
+
+# Archivos del sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Entornos virtuales de Python
+venv/
+.venv/
+env/
+.env/
+ENV/
+env.bak/
+venv.bak/
+
+# Archivos de Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-
-# Entorno virtual
-venv/
-env/
-ENV/
-.venv
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
 # Streamlit
-.streamlit/
+.streamlit/secrets.toml
+
+# Datos sensibles y temporales
+temp/
+tmp/
+*.tmp
+*.log
+logs/
+*.bak
+*.swp
+*.swo
+*~
 
 # IDEs
 .vscode/
 .idea/
-*.swp
+*.sublime-project
+*.sublime-workspace
 *.swo
 *~
 

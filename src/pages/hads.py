@@ -51,8 +51,11 @@ def mostrar_hads():
         <p style="color: #2E2E2E; font-size: 1rem; line-height: 1.7; text-align: justify; margin: 0;">
         Los resultados nos ayudan a comprender la intensidad de sus síntomas ansiosos y su impacto en su vida diaria.
         </p>
-        <p style="color: #666666; font-style: italic; text-align: center; margin-top: 1rem; margin-bottom: 0; font-size: 1.05rem;">
+        <p style="color: #666666; font-style: italic; text-align: center; margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1.05rem;">
         <strong>⚠️ Todas las preguntas son obligatorias</strong><br>Responda pensando en la última semana
+        </p>
+        <p style="color: #888888; font-size: 0.9rem; text-align: center; margin: 0.5rem 0 0 0;">
+        <em>Zigmond, A. S., & Snaith, R. P. (1983). The hospital anxiety and depression scale. Acta Psychiatrica Scandinavica, 67(6), 361-370.</em>
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -157,19 +160,14 @@ def mostrar_hads():
             with col2:
                 st.metric(label="Nivel de ansiedad", value=nivel)
 
+            # Determinar riesgo basado en umbral de 8
+            riesgo_text = "⚠️ Riesgo de Ansiedad" if total >= 8 else "✅ Riesgo Bajo"
+            riesgo_color = "#F44336" if total >= 8 else "#4CAF50"
+            
             st.markdown(
-                """
-            <div style='margin-top: 1.5rem; padding: 1rem; background: #F5F8FB; border-radius: 8px; border-left: 4px solid #2B87D1;'>
-                <p style='color: #2E2E2E; margin: 0.5rem 0;'><strong>Interpretación:</strong></p>
-                <ul style='color: #2E2E2E; margin: 0.5rem 0;'>
-                    <li><strong>0-7 puntos:</strong> Nivel normal de ansiedad</li>
-                    <li><strong>8-10 puntos:</strong> Ansiedad leve</li>
-                    <li><strong>11-14 puntos:</strong> Ansiedad moderada</li>
-                    <li><strong>15-21 puntos:</strong> Ansiedad severa</li>
-                </ul>
-                <p style='color: #666666; font-style: italic; margin-top: 1rem; margin-bottom: 0;'>
-                Este es un resultado preliminar. Consulta con un profesional de la salud para una evaluación completa.
-                </p>
+                f"""
+            <div style='margin-top: 1.5rem; padding: 1rem; background: #F5F8FB; border-radius: 8px; border-left: 4px solid {riesgo_color};'>
+                <p style='color: {riesgo_color}; margin: 0; font-weight: 700; font-size: 1.1rem;'>{riesgo_text}</p>
             </div>
             """,
                 unsafe_allow_html=True,

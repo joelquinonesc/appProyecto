@@ -22,7 +22,7 @@ def mostrar_demograficos():
 
     # Título de página
     st.markdown(
-        "<h1 style='text-align: center;'> Datos Demográficos del Paciente</h1>",
+        "<h1 style='text-align: center;'>Datos Demográficos</h1>",
         unsafe_allow_html=True
     )
 
@@ -80,6 +80,10 @@ def mostrar_demograficos():
             color: #2E2E2E !important;
             font-weight: 600 !important;
         }
+        /* Ocultar labels vacíos */
+        .stTextInput > label:empty, .stNumberInput > label:empty {
+            display: none !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -88,7 +92,7 @@ def mostrar_demograficos():
     st.markdown("#### Complete la información:")
 
     # Nombre (encabezando, ocupa full-width)
-    nombre = st.text_input("Nombre completo *", placeholder="Ingrese su nombre completo", key="nombre_completo")
+    nombre = st.text_input("", placeholder="Nombre completo *", key="nombre_completo")
 
     # Crear dos columnas para Edad / Género
     col1, col2 = st.columns(2)
@@ -96,9 +100,10 @@ def mostrar_demograficos():
     with col1:
         edad = st.number_input(
             "Edad *",
-            min_value=1,
+            min_value=0,
             max_value=120,
             step=1,
+            value=0,
             help="Debe ser mayor a 0",
             key="edad"
         )
@@ -108,18 +113,6 @@ def mostrar_demograficos():
 
     # Máximo permitido para años de educación
     max_educacion = max(0, edad - 5)
-
-    # Mensaje informativo en rojo
-    if edad > 0:
-        st.markdown(
-            f"<p style='color:#DC3545; font-weight:600;'>Según tu edad ({edad} años), puedes tener un máximo de <strong>{max_educacion}</strong> años de educación formal.</p>",
-            unsafe_allow_html=True,
-        )
-    else:
-        st.markdown(
-            "<p style='color:#DC3545; font-weight:600;'>Por favor, ingrese primero su edad para calcular los años de educación válidos.</p>",
-            unsafe_allow_html=True,
-        )
 
     # Años de educación (ocupa full-width debajo)
     if edad < 5:
@@ -151,14 +144,14 @@ def mostrar_demograficos():
     live_errores = []
     if not nombre.strip():
         live_errores.append("El nombre completo es obligatorio")
-    if edad <= 0:
-        live_errores.append("Debe ingresar una edad válida (mayor a 0)")
     if genero == "Seleccionar":
         live_errores.append("Debe seleccionar un género")
-    if años_educacion < 0:
-        live_errores.append("Los años de educación no pueden ser negativos")
-    elif años_educacion > max_educacion:
-        live_errores.append(f"Los años de educación ({años_educacion}) no pueden ser más de {max_educacion} años (edad - 5)")
+    # Solo validar educación si la edad es válida (mayor a 0)
+    if edad > 0:
+        if años_educacion < 0:
+            live_errores.append("Los años de educación no pueden ser negativos")
+        elif años_educacion > max_educacion:
+            live_errores.append(f"Los años de educación ({años_educacion}) no pueden ser más de {max_educacion} años (edad - 5)")
 
     if live_errores:
         st.error(" No se puede guardar. Corrija los siguientes errores:")

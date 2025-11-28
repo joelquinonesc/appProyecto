@@ -22,6 +22,25 @@ def mostrar_sf12_mental():
         unsafe_allow_html=True
     )
 
+    # Texto explicativo
+    st.markdown("""
+    <div style="background: #FFFFFF; padding: 1.25rem; margin: 0.75rem 0 1.5rem 0; border-radius: 8px; border: 1px solid #E0E0E0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <h4 style="color: #2E2E2E; font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">
+        Evaluación de la Salud Mental
+        </h4>
+        <p style="color: #2E2E2E; font-size: 1rem; line-height: 1.7; text-align: justify; margin-bottom: 0.75rem;">
+        El componente mental (MCS) del <strong>SF-12</strong> evalúa aspectos clave del bienestar emocional y mental, 
+        incluyendo el estado emocional, la vitalidad, las limitaciones en actividades por problemas emocionales y la salud mental percibida.
+        </p>
+        <p style="color: #666666; font-style: italic; text-align: center; margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1.05rem;">
+        <strong>⚠️ Todas las preguntas son obligatorias</strong>
+        </p>
+        <p style="color: #888888; font-size: 0.9rem; text-align: center; margin: 0.5rem 0 0 0;">
+        <em>Ware, J. E., Kosinski, M., & Keller, S. D. (1996). A 12-item short-form health survey: construction of scales and preliminary tests of reliability and validity. Medical Care, 34(3), 220-233.</em>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
     st.markdown("#### Responda las preguntas relacionadas con la salud mental:")
 
     # --- Ensure the form is NOT pre-filled ---
@@ -145,14 +164,17 @@ def mostrar_sf12_mental():
 
             if 'resultados' not in st.session_state:
                 st.session_state.resultados = {}
-            st.session_state.resultados['sf12'] = {
-                'puntaje_fisico': fisica,
+            # Mantener/merge si ya existe la estructura 'sf12' creada por la otra sección
+            sf12 = st.session_state.resultados.get('sf12', {})
+            # SOLO actualizar los valores relacionados con MENTAL
+            # NO sobrescribir puntaje_fisico que fue calculado en la página física
+            sf12.update({
                 'puntaje_mental': mental,
-                'total': total,
-                'cuartil': cuartil,
-                'cuartil_label': etiqueta,
+                'cuartil_mental': cuartil,
+                'cuartil_mental_label': etiqueta,
                 'respuestas': full_respuestas
-            }
+            })
+            st.session_state.resultados['sf12'] = sf12
 
             # Persistir en DataFrame
             # Persistir solo los puntajes y el cuartil correspondiente a la componente mental.

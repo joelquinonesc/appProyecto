@@ -350,8 +350,21 @@ Sustituya `<url-del-repositorio>` por la URL real del repositorio remoto (por ej
 
 ---
 
-**Versión**: 1.0.0  
-**Última actualización**: Octubre 2025  
-**Estado**: Producción
+## 📄 Derechos de Autor y Licencia
+
+**© 2025 Breyner Joel Quiñones Castro. Todos los derechos reservados.**
+
+Este software es propiedad intelectual protegida. Su uso, distribución o modificación requiere autorización expresa del autor. Ver [LICENSE](LICENSE) para términos completos.
+
+### Información del Proyecto
+- **Versión**: 1.0.0  
+- **Última actualización**: Noviembre 2025  
+- **Estado**: Producción
+- **Autor**: Breyner Joel Quiñones Castro
+- **Licencia**: Todos los Derechos Reservados
+
+---
+
+**Desarrollado con ❤️ para el avance de la salud mental digital**
 
 
