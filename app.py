@@ -14,7 +14,7 @@ from src.pages import (
 
 # Configuración de la página
 st.set_page_config(
-    page_title="Evaluación Psicológica Integral",
+    page_title="Evaluación Psicológica Integral.",
     layout="wide",
     initial_sidebar_state="expanded"
 )
