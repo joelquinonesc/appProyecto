@@ -118,8 +118,12 @@ def mostrar_analisis_masivo():
                     
                     progress_bar.progress((idx + 1) / len(df))
                 
-                # Crear DataFrame de resultados
-                df_resultados = pd.DataFrame(results)
+                # Crear DataFrame de resultados, filtrando errores
+                valid_results = [r for r in results if r is not None and r.get('categoria_riesgo') != 'Error']
+                df_resultados = pd.DataFrame(valid_results)
+                
+                if len(valid_results) < len(results):
+                    st.warning(f"⚠️ Se procesaron {len(valid_results)} de {len(results)} pacientes correctamente.")
                 
                 st.success("✅ ¡Procesamiento completado!")
                 st.markdown("---")
@@ -139,19 +143,19 @@ def mostrar_analisis_masivo():
                 # Crear tabla expandida con todos los 22 features
                 features_detallados = []
                 for _, row in df.iterrows():
-                    # 1-2. TRANSFORMAR EDAD Y EDUCACIÓN (BINARIOS, como en resultados.py)
-                    edad24 = 0 if int(row['edad']) <= 24 else 1  # BINARIO: 0 o 1
-                    aefgroups = transformar_educacion_a_binaria(int(row['años_educacion']))  # BINARIO: 0 o 1
+                    # 1-2. TRANSFORMAR EDAD Y EDUCACIÓN (BINARIOS, como en SHAP)
+                    edad24 = 1 if int(row['edad']) >= 24 else 0  # BINARIO: >= 24 = 1
+                    aefgroups = 1 if int(row['años_educacion']) >= 12 else 0  # BINARIO: >= 12 = 1 (como SHAP)
                     
                     # 3-6. SF-12 FÍSICA ONE-HOT de cuartiles (SOLO UNO es 1, resto 0)
-                    sf12f_cuartil = transformar_sf12_fisica_a_cuartil(int(row['sf12_fisica']))
+                    sf12f_cuartil = transformar_sf12_fisica_a_cuartil(float(row['sf12_fisica']))
                     sf12f_q1 = 1 if sf12f_cuartil == 1 else 0
                     sf12f_q2 = 1 if sf12f_cuartil == 2 else 0
                     sf12f_q3 = 1 if sf12f_cuartil == 3 else 0
                     sf12f_q4 = 1 if sf12f_cuartil == 4 else 0
                     
                     # 7-10. SF-12 MENTAL ONE-HOT de cuartiles (SOLO UNO es 1, resto 0)
-                    sf12m_cuartil = transformar_sf12_mental_a_cuartil(int(row['sf12_mental']))
+                    sf12m_cuartil = transformar_sf12_mental_a_cuartil(float(row['sf12_mental']))
                     sf12m_q1 = 1 if sf12m_cuartil == 1 else 0
                     sf12m_q2 = 1 if sf12m_cuartil == 2 else 0
                     sf12m_q3 = 1 if sf12m_cuartil == 3 else 0
@@ -172,21 +176,21 @@ def mostrar_analisis_masivo():
                     cdh20_ag = 1 if row['cdh20'] == 'G/A' else 0
                     cdh20_gg = 1 if row['cdh20'] == 'G/G' else 0
                     
-                    # 20-22. LTE12 ONE-HOT (binarios, usando transformar_lte12_a_clasificacion)
-                    lte12_clasif = transformar_lte12_a_clasificacion(int(row['lte12_count']))
-                    lte12_0 = 1 if lte12_clasif == 0 else 0
-                    lte12_1 = 1 if lte12_clasif == 1 else 0
-                    lte12_2 = 1 if lte12_clasif == 2 else 0
+                    # 20-22. LTE12 ONE-HOT (binarios, como en SHAP: 0-2, 3-5, 6+)
+                    lte12_count = int(row['lte12_count'])
+                    lte12_0 = 1 if lte12_count <= 2 else 0
+                    lte12_1 = 1 if 3 <= lte12_count <= 5 else 0
+                    lte12_2 = 1 if lte12_count >= 6 else 0
                     
                     feat = {
                         'Paciente': row['nombre'],
                         # 2 BINARIAS (transformadas)
                         '1-EDAD24': edad24,
                         '2-AEFGROUPS': aefgroups,
-                        # LTE12 ONE-HOT (3 features) - PRIMERO en el orden del modelo
+                        # LTE12 ONE-HOT (3 features) - DESPUÉS de edad y educación
                         '3-LTE12_0': lte12_0,
                         '4-LTE12_1': lte12_1,
-                        '5-LTE12_2+': lte12_2,
+                        '5-LTE12_2': lte12_2,
                         # SF-12 Física ONE-HOT (Q1-Q4, solo uno es 1)
                         '6-SF12F_Q1': sf12f_q1,
                         '7-SF12F_Q2': sf12f_q2,
@@ -219,37 +223,32 @@ def mostrar_analisis_masivo():
                 st.markdown("""
                 **Explicación de los 22 Features:**
                 
-                **Numéricas Directas (2):**
-                - 1: **EDAD24** - Edad directa (18-80 años)
-                - 2: **AEFGROUPS** - Años de educación directos (6-20 años)
+                **Binarias Transformadas (2):**
+                - 1: **EDAD24** - 1 si edad ≥ 24 años, 0 si edad < 24
+                - 2: **AEFGROUPS** - 1 si años educación ≥ 12, 0 si < 12
                 
-                **SF-12 Física (4 features)** - Rango 6-30, asignado a 4 cuartiles:
-                - 3-6: **SF12F_Q1 a Q4** - Mismo valor (6-30)
-                  - Q1: ≤15 | Q2: ≤17 | Q3: ≤19 | Q4: ≥20
+                **SF-12 Física (4 features)** - Rango variable, asignado a 4 cuartiles:
+                - 6-9: **SF12F_Q1 a Q4** - Cuartiles según SHAP
+                  - Q1: ≤15 | Q2: 15<x≤17 | Q3: 17<x≤19 | Q4: >19
                 
-                **SF-12 Mental (4 features)** - Rango 6-30, asignado a 4 cuartiles:
-                - 7-10: **SF12M_Q1 a Q4** - Mismo valor (6-30)
+                **SF-12 Mental (4 features)** - Rango variable, asignado a 4 cuartiles:
+                - 10-13: **SF12M_Q1 a Q4** - Cuartiles según definición original
                   - Q1: ≤15 | Q2: ≤18 | Q3: ≤21 | Q4: ≥22
                 
                 **PRKCA - One-Hot (3 features binarios):**
-                - 11: **PRKCA_C/C** - 1 si genotipo=C/C, 0 si no
-                - 12: **PRKCA_C/T** - 1 si genotipo=C/T, 0 si no
-                - 13: **PRKCA_T/T** - 1 si genotipo=T/T, 0 si no
+                - 14: **PRKCA_C/C** - 1 si genotipo=C/C, 0 si no
+                - 15: **PRKCA_C/T** - 1 si genotipo=C/T, 0 si no
+                - 16: **PRKCA_T/T** - 1 si genotipo=T/T, 0 si no
                 
                 **TCF4 - One-Hot (3 features binarios):**
-                - 14: **TCF4_A/A** - 1 si genotipo=A/A, 0 si no
-                - 15: **TCF4_A/T** - 1 si genotipo=A/T, 0 si no
-                - 16: **TCF4_T/T** - 1 si genotipo=T/T, 0 si no
+                - 17: **TCF4_A/A** - 1 si genotipo=A/A, 0 si no
+                - 18: **TCF4_A/T** - 1 si genotipo=A/T, 0 si no
+                - 19: **TCF4_T/T** - 1 si genotipo=T/T, 0 si no
                 
                 **CDH20 - One-Hot (3 features binarios):**
-                - 17: **CDH20_A/A** - 1 si genotipo=A/A, 0 si no
-                - 18: **CDH20_A/G** - 1 si genotipo=G/A, 0 si no
-                - 19: **CDH20_G/G** - 1 si genotipo=G/G, 0 si no
-                
-                **LTE12 - One-Hot (3 features binarios):**
-                - 20: **LTE12_0** - 1 si eventos=0, 0 si no
-                - 21: **LTE12_1** - 1 si eventos=1, 0 si no
-                - 22: **LTE12_2+** - 1 si eventos≥2, 0 si no
+                - 20: **CDH20_A/A** - 1 si genotipo=A/A, 0 si no
+                - 21: **CDH20_A/G** - 1 si genotipo=G/A, 0 si no
+                - 22: **CDH20_G/G** - 1 si genotipo=G/G, 0 si no
                 
                 **TOTAL: 22 Features** → Modelo MLP → Predicción de Riesgo
                 """)
@@ -276,7 +275,7 @@ def mostrar_analisis_masivo():
                     st.metric("Riesgo Promedio", f"{promedio_riesgo:.3f}", delta=None)
                 st.markdown("---")
                 
-                # Calcular valores SHAP para las top 5 características
+                # Calcular valores SHAP para las top 10 características
                 st.markdown("### 🔬 Calculando Análisis SHAP...")
                 shap_progress = st.progress(0)
                 
@@ -284,7 +283,7 @@ def mostrar_analisis_masivo():
                     # Importar función de integración SHAP
                     import sys
                     sys.path.insert(0, '/Users/breynerjoelquinonescastro/Documents/APP ANXRISK')
-                    from shap_integration_masivo import main_shap_integration
+                    from scripts.shap_integration_masivo import main_shap_integration
                     
                     # Calcular SHAP (pasando df con nombre para poder hacer merge)
                     shap_result = main_shap_integration(df[['nombre', 'edad', 'años_educacion', 'lte12_count', 'sf12_fisica', 'sf12_mental', 'prkca', 'tcf4', 'cdh20']])
@@ -325,9 +324,14 @@ def mostrar_analisis_masivo():
                         
                         cols_metrics = [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10]
                         
-                        for i, (feat_name, importance) in enumerate(zip(shap_result['top10_names'], shap_result['top10_importance'])):
-                            with cols_metrics[i]:
-                                st.metric(f"#{i+1}", feat_name, f"SHAP: {importance:.4f}")
+                        # Asegurarse de que tenemos las claves correctas
+                        top_names = shap_result.get('top10_names', [])
+                        top_importance = shap_result.get('top10_importance', [])
+                        
+                        for i, (feat_name, importance) in enumerate(zip(top_names, top_importance)):
+                            if i < len(cols_metrics):
+                                with cols_metrics[i]:
+                                    st.metric(f"#{i+1}", feat_name, f"SHAP: {importance:.4f}")
                     else:
                         st.warning("⚠️ No se pudo calcular SHAP. Mostrando resultados sin análisis SHAP...")
                         
@@ -363,6 +367,8 @@ def mostrar_analisis_masivo():
         
         except Exception as e:
             st.error(f"❌ Error al procesar el archivo: {str(e)}")
+            import traceback
+            st.error(f"Detalles del error: {traceback.format_exc()}")
 
 
 def calcular_riesgo_paciente(row):
@@ -380,19 +386,19 @@ def calcular_riesgo_paciente(row):
             transformar_lte12_a_clasificacion
         )
         
-        # 1-2. TRANSFORMACIONES BINARIAS
-        edad24 = 0 if int(row['edad']) <= 24 else 1
-        aefgroups = transformar_educacion_a_binaria(int(row['años_educacion']))
+        # 1-2. TRANSFORMACIONES BINARIAS (como en SHAP)
+        edad24 = 1 if int(row['edad']) >= 24 else 0  # >= 24 = 1
+        aefgroups = 1 if int(row['años_educacion']) >= 12 else 0  # Como en SHAP: >= 12 = 1
         
         # 3-6. SF-12 FÍSICA ONE-HOT (solo uno es 1)
-        sf12f_cuartil = transformar_sf12_fisica_a_cuartil(int(row['sf12_fisica']))
+        sf12f_cuartil = transformar_sf12_fisica_a_cuartil(float(row['sf12_fisica']))
         sf12f_q1 = 1 if sf12f_cuartil == 1 else 0
         sf12f_q2 = 1 if sf12f_cuartil == 2 else 0
         sf12f_q3 = 1 if sf12f_cuartil == 3 else 0
         sf12f_q4 = 1 if sf12f_cuartil == 4 else 0
         
         # 7-10. SF-12 MENTAL ONE-HOT (solo uno es 1)
-        sf12m_cuartil = transformar_sf12_mental_a_cuartil(int(row['sf12_mental']))
+        sf12m_cuartil = transformar_sf12_mental_a_cuartil(float(row['sf12_mental']))
         sf12m_q1 = 1 if sf12m_cuartil == 1 else 0
         sf12m_q2 = 1 if sf12m_cuartil == 2 else 0
         sf12m_q3 = 1 if sf12m_cuartil == 3 else 0
@@ -413,11 +419,11 @@ def calcular_riesgo_paciente(row):
         cdh20_ag = 1 if row['cdh20'] == 'G/A' else 0
         cdh20_gg = 1 if row['cdh20'] == 'G/G' else 0
         
-        # 20-22. LTE12 ONE-HOT
-        lte12_clasif = transformar_lte12_a_clasificacion(int(row['lte12_count']))
-        lte12_0 = 1 if lte12_clasif == 0 else 0
-        lte12_1 = 1 if lte12_clasif == 1 else 0
-        lte12_2 = 1 if lte12_clasif == 2 else 0
+        # 20-22. LTE12 ONE-HOT (como en SHAP: 0-2, 3-5, 6+)
+        lte12_count = int(row['lte12_count'])
+        lte12_0 = 1 if lte12_count <= 2 else 0
+        lte12_1 = 1 if 3 <= lte12_count <= 5 else 0
+        lte12_2 = 1 if lte12_count >= 6 else 0
         
         # VECTOR DE 22 FEATURES (ORDEN EXACTO DEL MODELO)
         features = np.array([[
@@ -465,8 +471,25 @@ def calcular_riesgo_paciente(row):
         }
     
     except Exception as e:
-        st.warning(f"⚠️ Error procesando {row['nombre']}: {str(e)}")
-        return None
+        # En lugar de usar st.warning (que puede no estar disponible), usar print
+        print(f"⚠️ Error procesando {row.get('nombre', 'paciente desconocido')}: {str(e)}")
+        # Retornar un resultado por defecto en caso de error
+        return {
+            'nombre': row.get('nombre', 'Error'),
+            'edad': row.get('edad', 0),
+            'genero': row.get('genero', 'Desconocido'),
+            'años_educacion': row.get('años_educacion', 0),
+            'hads_score': row.get('hads_score', 0),
+            'zsas_score': row.get('zsas_score', 0),
+            'sf12_fisica': row.get('sf12_fisica', 0),
+            'sf12_mental': row.get('sf12_mental', 0),
+            'lte12_count': row.get('lte12_count', 0),
+            'prkca': row.get('prkca', 'T/T'),
+            'tcf4': row.get('tcf4', 'A/A'),
+            'cdh20': row.get('cdh20', 'G/G'),
+            'riesgo_predicho': 0.0,
+            'categoria_riesgo': 'Error'
+        }
 
 
 def calcular_riesgo_simple(row):
