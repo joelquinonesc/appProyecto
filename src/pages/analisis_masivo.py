@@ -102,6 +102,25 @@ def mostrar_analisis_masivo():
 
     st.markdown("---")
 
+    # ── DATOS DEL PROFESIONAL EVALUADOR ──
+    st.markdown("""
+    <div class="anxrisk-card" style="border-left: 4px solid var(--primary);">
+        <h3>👨‍⚕️ Datos del Profesional Evaluador</h3>
+        <p style="font-size: 0.9375rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+            Complete estos datos para que aparezcan en los reportes generados.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    prof_col1, prof_col2 = st.columns(2)
+    with prof_col1:
+        st.text_input("Nombre del profesional", key="masivo_prof_nombre", placeholder="Dr(a). Nombre Apellido")
+        st.text_input("Cargo / Especialidad", key="masivo_prof_cargo", placeholder="Psiquiatra / Psicólogo clínico")
+    with prof_col2:
+        st.text_input("Institución", key="masivo_prof_institucion", placeholder="Hospital / Consultorio / IPS")
+        st.text_input("Registro profesional", key="masivo_prof_registro", placeholder="TP-XXXXX")
+
+    st.markdown("---")
+
     # ── Upload ──
     st.markdown("### Cargar Archivo CSV")
 

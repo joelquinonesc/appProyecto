@@ -94,23 +94,7 @@ def mostrar_resultados():
     
     registro = obtener_registro_actual()
 
-    # ── PROFESSIONAL DATA FOR REPORT ──
-    st.markdown("""
-    <div class="anxrisk-card" style="border-left: 4px solid var(--primary);">
-        <h3>👨‍⚕️ Datos del Profesional Evaluador</h3>
-        <p style="font-size: 0.9375rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
-            Complete estos datos para que aparezcan en el reporte PDF con espacio para su firma.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    prof_col1, prof_col2 = st.columns(2)
-    with prof_col1:
-        prof_nombre = st.text_input("Nombre del profesional", key="prof_nombre", placeholder="Dr(a). Nombre Apellido")
-        prof_cargo = st.text_input("Cargo / Especialidad", key="prof_cargo", placeholder="Psiquiatra / Psicólogo clínico")
-    with prof_col2:
-        prof_institucion = st.text_input("Institución", key="prof_institucion", placeholder="Hospital / Consultorio / IPS")
-        prof_registro = st.text_input("Registro profesional", key="prof_registro", placeholder="TP-XXXXX")
-
+    # ── PROFESSIONAL DATA (read from session state, set in demograficos) ──
     datos_profesional = {
         'nombre': st.session_state.get('prof_nombre', ''),
         'cargo': st.session_state.get('prof_cargo', ''),
@@ -118,8 +102,6 @@ def mostrar_resultados():
         'registro_profesional': st.session_state.get('prof_registro', ''),
     }
 
-    st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
-    
     # ── CLINICAL SUMMARY ──
     st.markdown("""
     <div class="anxrisk-section-header">
@@ -357,6 +339,7 @@ def mostrar_resultados():
             st.session_state.resultados['prediccion_calculada'] = True
 
             _mostrar_resultado_riesgo(nivel_triple, prob_alto, modo_label)
+            _mostrar_explicacion_modelo(modo_label)
             mostrar_shap_analysis(model, X_for_model, genero)
             
         except FileNotFoundError:
@@ -372,6 +355,7 @@ def mostrar_resultados():
 
         _mostrar_resultado_riesgo(nivel_triple, prob_alto, modo_label)
         st.caption("Resultado del cálculo anterior. Pulse el botón para recalcular con nuevos parámetros.")
+        _mostrar_explicacion_modelo(modo_label)
 
         cached_model = st.session_state.resultados.get('model')
         cached_X = st.session_state.resultados.get('X_for_model')
@@ -456,6 +440,72 @@ def _mostrar_resultado_riesgo(nivel_triple, prob_alto, modo_label):
         <div class="anxrisk-result-model">Modelo: {modo_label}</div>
     </div>
     """, unsafe_allow_html=True)
+
+
+def _mostrar_explicacion_modelo(modo_label):
+    """Muestra una sección explicativa sobre el modelo MLP y sus métricas."""
+    st.markdown("""
+    <div class="anxrisk-section-header">
+        <h2>Metodología del Modelo Predictivo</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col_modelo, col_roc = st.columns(2)
+
+    with col_modelo:
+        st.markdown("""
+        <div class="anxrisk-card">
+            <h4>🧠 Red Neuronal MLP (Perceptrón Multicapa)</h4>
+            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text);">
+                El modelo utilizado es una <b>Red Neuronal Artificial de tipo MLP</b> (Multi-Layer Perceptron),
+                un algoritmo de aprendizaje supervisado que procesa las variables clínicas, demográficas y
+                (opcionalmente) genéticas del paciente a través de múltiples capas de neuronas interconectadas.
+            </p>
+            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text);">
+                A diferencia de modelos lineales, la red neuronal MLP captura <b>relaciones no lineales complejas</b>
+                entre los factores de riesgo, lo que permite identificar interacciones sutiles entre variables
+                que podrían pasar desapercibidas con métodos estadísticos tradicionales.
+            </p>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                <b>Modo actual:</b> """ + modo_label + """
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col_roc:
+        st.markdown("""
+        <div class="anxrisk-card">
+            <h4>📈 Curva ROC y Validación</h4>
+            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text);">
+                La <b>Curva ROC</b> (Receiver Operating Characteristic) es la herramienta estándar para evaluar
+                la capacidad discriminativa de un modelo clasificador. Representa la relación entre la
+                <b>Sensibilidad</b> (tasa de verdaderos positivos) y <b>1 – Especificidad</b>
+                (tasa de falsos positivos) en todos los umbrales posibles.
+            </p>
+            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text);">
+                El <b>AUC-ROC</b> (Área Bajo la Curva) resume esta capacidad en un solo valor entre 0 y 1.
+                Un AUC de <b>0.5</b> equivale a clasificar al azar, mientras que un AUC cercano a <b>1.0</b>
+                indica discriminación perfecta entre pacientes con y sin riesgo elevado de ansiedad.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Metrics table
+    with st.expander("📊 Métricas de Rendimiento del Modelo", expanded=False):
+        st.markdown("""
+        | Métrica | Descripción | Interpretación |
+        |---------|-------------|----------------|
+        | **AUC-ROC** | Área bajo la curva ROC | Capacidad global de discriminación entre clases |
+        | **Sensibilidad (Recall)** | Proporción de casos positivos correctamente detectados | ¿Cuántos pacientes de alto riesgo identifica? |
+        | **Especificidad** | Proporción de casos negativos correctamente clasificados | ¿Cuántos pacientes sanos clasifica bien? |
+        | **Precisión (PPV)** | Proporción de predicciones positivas que son correctas | De los que marca como riesgo, ¿cuántos realmente lo son? |
+        | **F1-Score** | Media armónica de precisión y sensibilidad | Balance entre detectar riesgo y evitar falsas alarmas |
+        | **Índice de Youden** | Sensibilidad + Especificidad – 1 | Punto de corte óptimo en la curva ROC |
+
+        **Clasificación triclásica:** El modelo genera una probabilidad continua (0–1) que se clasifica en tres niveles
+        mediante umbrales fijos: **Bajo** (< 0.30), **Moderado** (0.30 – 0.59), **Alto** (≥ 0.60).
+        Estos umbrales priorizan la sensibilidad clínica para no dejar pasar casos de riesgo elevado.
+        """)
 
 
 def mostrar_shap_analysis(model, X, genero):
@@ -1054,21 +1104,126 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
         elements.append(PageBreak())
 
         # ═══════════════════════════════════════════════════════
-        # 7. PREDICCIÓN DE RIESGO
+        # 7. METODOLOGÍA DEL MODELO Y PREDICCIÓN DE RIESGO
         # ═══════════════════════════════════════════════════════
-        elements.append(Paragraph("7. Resultado de la Predicción de Riesgo", heading_style))
+        elements.append(Paragraph("7. Metodología del Modelo Predictivo y Resultado", heading_style))
+
+        # 7a. Model explanation
+        elements.append(Paragraph("7.1 Red Neuronal MLP (Perceptrón Multicapa)", subheading_style))
         elements.append(Paragraph(
-            "El modelo de aprendizaje automático (Red Neuronal MLP) integra todas las variables clínicas y "
-            "demográficas para estimar la probabilidad de riesgo alto de ansiedad. Se clasifica en tres niveles: "
-            "<b>Bajo</b> (probabilidad baja de ansiedad patológica), <b>Moderado</b> (zona de incertidumbre, "
-            "se sugiere seguimiento), y <b>Alto</b> (probabilidad elevada, se recomienda intervención clínica).",
+            "ANXRISK emplea una <b>Red Neuronal Artificial de tipo MLP</b> (Multi-Layer Perceptron), un algoritmo "
+            "de aprendizaje automático supervisado que pertenece a la familia de redes neuronales profundas. "
+            "El modelo procesa las variables clínicas, demográficas y (opcionalmente) genéticas del paciente "
+            "a través de múltiples capas de neuronas interconectadas.",
+            normal_style
+        ))
+        elements.append(Spacer(1, 0.08 * inch))
+        elements.append(Paragraph(
+            "<b>¿Cómo funciona?</b> Cada capa de la red neuronal aplica transformaciones no lineales a los datos "
+            "de entrada. La primera capa recibe las variables clínicas codificadas (edad, educación, escalas "
+            "psicométricas, eventos vitales, y opcionalmente marcadores genéticos). Las capas ocultas intermedias "
+            "aprenden representaciones cada vez más abstractas de los patrones de riesgo. Finalmente, la capa "
+            "de salida genera una <b>probabilidad continua</b> (0 a 1) que estima el riesgo de ansiedad patológica.",
+            normal_style
+        ))
+        elements.append(Spacer(1, 0.08 * inch))
+        elements.append(Paragraph(
+            "A diferencia de modelos lineales (como la regresión logística), la red neuronal MLP captura "
+            "<b>relaciones no lineales complejas</b> e interacciones entre variables que podrían pasar "
+            "desapercibidas con métodos estadísticos convencionales. Esto permite una estimación más precisa "
+            "del riesgo individual de cada paciente.",
             normal_style
         ))
 
-        prob_alto = resultados.get('prob_alto')
-        nivel_triple = resultados.get('nivel_triple', 'No calculado')
+        # Model architecture table
+        elements.append(Spacer(1, 0.12 * inch))
         modelo_usado = resultados.get('modelo_usado', 'No especificado')
         tiene_genetica = resultados.get('tiene_genetica', False)
+        modo_txt = 'Extendido (22 features)' if tiene_genetica else 'Estándar (13 features)'
+
+        arch_table_data = [
+            ['Componente', 'Descripción'],
+            ['Tipo de modelo', 'MLP (Multi-Layer Perceptron) — Red Neuronal Multicapa'],
+            ['Variables de entrada', modo_txt],
+            ['Capas ocultas', 'Múltiples capas con función de activación ReLU'],
+            ['Capa de salida', 'Sigmoide — probabilidad de riesgo alto (0 a 1)'],
+            ['Optimización', 'Backpropagation con optimizador Adam'],
+            ['Regularización', 'Early stopping y penalización L2 para evitar sobreajuste'],
+        ]
+        arch_table = Table(arch_table_data, colWidths=[140, 350])
+        arch_table.setStyle(table_style_base)
+        elements.append(arch_table)
+
+        # 7b. ROC Curve and metrics explanation
+        elements.append(Spacer(1, 0.2 * inch))
+        elements.append(Paragraph("7.2 Validación del Modelo: Curva ROC y Métricas Clave", subheading_style))
+        elements.append(Paragraph(
+            "La validación del modelo se realiza mediante la <b>Curva ROC</b> (Receiver Operating Characteristic), "
+            "el estándar de referencia en la evaluación de modelos de clasificación en ciencias de la salud. "
+            "La curva ROC representa gráficamente la relación entre la <b>Sensibilidad</b> (tasa de verdaderos "
+            "positivos: pacientes de alto riesgo correctamente identificados) y <b>1 – Especificidad</b> "
+            "(tasa de falsos positivos: pacientes sanos incorrectamente clasificados como riesgo) en todos "
+            "los umbrales de decisión posibles.",
+            normal_style
+        ))
+        elements.append(Spacer(1, 0.08 * inch))
+        elements.append(Paragraph(
+            "El <b>AUC-ROC</b> (Área Bajo la Curva ROC) resume la capacidad discriminativa del modelo en un "
+            "valor entre 0 y 1. Un AUC de 0.5 equivale a una clasificación al azar (sin capacidad predictiva), "
+            "mientras que un AUC cercano a 1.0 indica una discriminación perfecta entre pacientes con y sin "
+            "riesgo elevado de ansiedad. Valores superiores a 0.80 se consideran <b>excelentes</b> en contextos clínicos.",
+            normal_style
+        ))
+
+        # Metrics explanation table
+        elements.append(Spacer(1, 0.12 * inch))
+        metrics_table_data = [
+            ['Métrica', 'Definición', 'Relevancia Clínica'],
+            ['AUC-ROC', Paragraph('Área bajo la curva ROC (0–1)', small_style),
+             Paragraph('Capacidad global del modelo para distinguir entre pacientes con riesgo alto y bajo', small_style)],
+            ['Sensibilidad\n(Recall)', Paragraph('Proporción de pacientes de alto riesgo correctamente detectados', small_style),
+             Paragraph('Prioridad clínica: minimizar pacientes de riesgo no detectados', small_style)],
+            ['Especificidad', Paragraph('Proporción de pacientes sanos correctamente clasificados', small_style),
+             Paragraph('Reducir falsas alarmas que generen intervenciones innecesarias', small_style)],
+            ['Precisión\n(PPV)', Paragraph('De los clasificados como riesgo, cuántos realmente lo son', small_style),
+             Paragraph('Confianza en la predicción positiva del modelo', small_style)],
+            ['F1-Score', Paragraph('Media armónica de precisión y sensibilidad', small_style),
+             Paragraph('Balance entre detectar riesgo y evitar falsos positivos', small_style)],
+            ['Índice de\nYouden', Paragraph('Sensibilidad + Especificidad – 1', small_style),
+             Paragraph('Determina el punto de corte óptimo en la curva ROC', small_style)],
+        ]
+        metrics_table = Table(metrics_table_data, colWidths=[75, 175, 240])
+        metrics_table.setStyle(table_style_base)
+        elements.append(metrics_table)
+
+        # 7c. Classification thresholds
+        elements.append(Spacer(1, 0.15 * inch))
+        elements.append(Paragraph("7.3 Clasificación Triclásica del Riesgo", subheading_style))
+        elements.append(Paragraph(
+            "El modelo genera una probabilidad continua (0 a 1) que se clasifica en tres niveles de riesgo "
+            "mediante umbrales clínicamente definidos. Estos umbrales fueron establecidos priorizando la "
+            "<b>sensibilidad clínica</b> para minimizar el riesgo de no detectar pacientes con ansiedad patológica:",
+            normal_style
+        ))
+        elements.append(Spacer(1, 0.08 * inch))
+
+        thresh_table_data = [
+            ['Nivel', 'Rango de Probabilidad', 'Interpretación Clínica'],
+            ['BAJO', '< 0.30 (< 30%)', Paragraph('Perfil de bajo riesgo. Mantener estrategias preventivas y reevaluar ante nuevos factores de riesgo.', small_style)],
+            ['MODERADO', '0.30 – 0.59 (30–59%)', Paragraph('Zona de incertidumbre. Se recomienda monitoreo activo, psicoeducación y reevaluación en 4–6 semanas.', small_style)],
+            ['ALTO', '≥ 0.60 (≥ 60%)', Paragraph('Riesgo elevado. Se sugiere evaluación clínica completa, intervención psicoterapéutica y/o farmacológica.', small_style)],
+        ]
+        thresh_table = Table(thresh_table_data, colWidths=[65, 130, 295])
+        thresh_table.setStyle(table_style_base)
+        elements.append(thresh_table)
+
+        elements.append(PageBreak())
+
+        # 7d. Prediction result
+        elements.append(Paragraph("7.4 Resultado de la Predicción", subheading_style))
+
+        prob_alto = resultados.get('prob_alto')
+        nivel_triple = resultados.get('nivel_triple', 'No calculado')
 
         if prob_alto is not None:
             # Risk level with color

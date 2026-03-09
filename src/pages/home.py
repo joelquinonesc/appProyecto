@@ -86,24 +86,24 @@ def mostrar_home():
                 </svg>
             </div>
             <h4>Interpretabilidad</h4>
-            <p>Análisis SHAP individual con reportes exportables en HTML y PDF</p>
+            <p>Análisis SHAP individual con reportes exportables en PDF</p>
         </div>
         """, unsafe_allow_html=True)
 
-    # Stats bar
+    # Stats bar — Model description
     st.markdown("""
     <div class="anxrisk-stats-bar animate-slide-up">
         <div class="anxrisk-stat">
-            <div class="anxrisk-stat-value">0.954</div>
-            <div class="anxrisk-stat-label">AUC Modelo</div>
+            <div class="anxrisk-stat-value">MLP</div>
+            <div class="anxrisk-stat-label">Red Neuronal Multicapa</div>
         </div>
         <div class="anxrisk-stat">
-            <div class="anxrisk-stat-value">N = 234</div>
-            <div class="anxrisk-stat-label">Muestra Calibración</div>
+            <div class="anxrisk-stat-value">SHAP</div>
+            <div class="anxrisk-stat-label">Interpretabilidad Individual</div>
         </div>
         <div class="anxrisk-stat">
-            <div class="anxrisk-stat-value">3</div>
-            <div class="anxrisk-stat-label">Niveles de Riesgo</div>
+            <div class="anxrisk-stat-value">ROC</div>
+            <div class="anxrisk-stat-label">Validación Clínica</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
