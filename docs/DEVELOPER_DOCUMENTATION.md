@@ -219,6 +219,8 @@ shap>=0.42.0
 reportlab>=4.0.0
 matplotlib>=3.7.0
 openpyxl>=3.1.0
+python-docx>=1.1.0
+scipy>=1.11.0
 ```
 
 ---

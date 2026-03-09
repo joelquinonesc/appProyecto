@@ -25,6 +25,12 @@ matplotlib>=3.7.0
 # Soporte para archivos Excel
 openpyxl>=3.1.0
 
+# Generación de documentos DOCX
+python-docx>=1.1.0
+
+# Análisis estadístico (scripts de generación de datos)
+scipy>=1.11.0
+
 # Librerías estándar de Python (incluidas por defecto)
 # - base64 (para codificación de imágenes)
 # - os (operaciones del sistema)
