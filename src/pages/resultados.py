@@ -459,12 +459,14 @@ def _mostrar_explicacion_modelo(modo_label):
             <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text);">
                 El modelo utilizado es una <b>Red Neuronal Artificial de tipo MLP</b> (Multi-Layer Perceptron),
                 un algoritmo de aprendizaje supervisado que procesa las variables clínicas, demográficas y
-                (opcionalmente) genéticas del paciente a través de múltiples capas de neuronas interconectadas.
+                (opcionalmente) genéticas del paciente a través de una capa oculta de 100 neuronas con
+                función de activación tangente hiperbólica (tanh).
             </p>
             <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text);">
                 A diferencia de modelos lineales, la red neuronal MLP captura <b>relaciones no lineales complejas</b>
                 entre los factores de riesgo, lo que permite identificar interacciones sutiles entre variables
-                que podrían pasar desapercibidas con métodos estadísticos tradicionales.
+                que podrían pasar desapercibidas con métodos estadísticos tradicionales. El entrenamiento se
+                realiza mediante descenso de gradiente estocástico (SGD) con tasa de aprendizaje adaptativa.
             </p>
             <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">
                 <b>Modo actual:</b> """ + modo_label + """
@@ -530,7 +532,11 @@ def mostrar_shap_analysis(model, X, genero):
         matplotlib.use('Agg')
         import matplotlib.pyplot as plt
         from sklearn.neural_network import MLPClassifier
-        import lightgbm as lgb
+        try:
+            import lightgbm as lgb
+            has_lgb = True
+        except ImportError:
+            has_lgb = False
         
         feature_names = list(X.columns)
         X_array = X.values
@@ -540,7 +546,7 @@ def mostrar_shap_analysis(model, X, genero):
         else:
             background_data = X_array
         
-        if isinstance(model, lgb.LGBMClassifier):
+        if has_lgb and isinstance(model, lgb.LGBMClassifier):
             explainer = shap.TreeExplainer(model)
             shap_values = explainer.shap_values(X_array)
             if isinstance(shap_values, list):
@@ -1091,9 +1097,9 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
         if gen:
             gen_table_data = [
                 ['Gen / Polimorfismo', 'Genotipo', 'Función'],
-                ['PRKCA (rs2076349)', gen.get('prkca', '-'), 'Regulación de la respuesta al estrés'],
-                ['TCF4 (rs9960767)', gen.get('tcf4', '-'), 'Factor de transcripción neuronal'],
-                ['CDH20 (rs6078059)', gen.get('cdh20', '-'), 'Conectividad neuronal (cadherinas)'],
+                ['PRKCA (rs2244497)', gen.get('prkca', '-'), 'Regulación de la respuesta al estrés'],
+                ['TCF4 (rs1452789)', gen.get('tcf4', '-'), 'Factor de transcripción neuronal'],
+                ['CDH20 (rs7243203)', gen.get('cdh20', '-'), 'Conectividad neuronal (cadherinas)'],
             ]
             gen_table = Table(gen_table_data, colWidths=[150, 80, 260])
             gen_table.setStyle(table_style_base)
@@ -1112,18 +1118,19 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
         elements.append(Paragraph("7.1 Red Neuronal MLP (Perceptrón Multicapa)", subheading_style))
         elements.append(Paragraph(
             "ANXRISK emplea una <b>Red Neuronal Artificial de tipo MLP</b> (Multi-Layer Perceptron), un algoritmo "
-            "de aprendizaje automático supervisado que pertenece a la familia de redes neuronales profundas. "
+            "de aprendizaje automático supervisado que pertenece a la familia de redes neuronales artificiales. "
             "El modelo procesa las variables clínicas, demográficas y (opcionalmente) genéticas del paciente "
-            "a través de múltiples capas de neuronas interconectadas.",
+            "a través de una capa oculta de 100 neuronas con función de activación tangente hiperbólica (tanh).",
             normal_style
         ))
         elements.append(Spacer(1, 0.08 * inch))
         elements.append(Paragraph(
-            "<b>¿Cómo funciona?</b> Cada capa de la red neuronal aplica transformaciones no lineales a los datos "
-            "de entrada. La primera capa recibe las variables clínicas codificadas (edad, educación, escalas "
-            "psicométricas, eventos vitales, y opcionalmente marcadores genéticos). Las capas ocultas intermedias "
-            "aprenden representaciones cada vez más abstractas de los patrones de riesgo. Finalmente, la capa "
-            "de salida genera una <b>probabilidad continua</b> (0 a 1) que estima el riesgo de ansiedad patológica.",
+            "<b>¿Cómo funciona?</b> La capa de entrada recibe las variables clínicas codificadas (edad, educación, "
+            "escalas psicométricas, eventos vitales, y opcionalmente marcadores genéticos). La capa oculta "
+            "aplica transformaciones no lineales mediante la función tanh, aprendiendo representaciones abstractas "
+            "de los patrones de riesgo. Finalmente, la capa de salida genera una <b>probabilidad continua</b> "
+            "(0 a 1) que estima el riesgo de ansiedad patológica. El entrenamiento se realiza mediante descenso "
+            "de gradiente estocástico (SGD) con tasa de aprendizaje adaptativa.",
             normal_style
         ))
         elements.append(Spacer(1, 0.08 * inch))
@@ -1145,10 +1152,10 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
             ['Componente', 'Descripción'],
             ['Tipo de modelo', 'MLP (Multi-Layer Perceptron) — Red Neuronal Multicapa'],
             ['Variables de entrada', modo_txt],
-            ['Capas ocultas', 'Múltiples capas con función de activación ReLU'],
+            ['Capa oculta', '1 capa de 100 neuronas con función de activación tanh'],
             ['Capa de salida', 'Sigmoide — probabilidad de riesgo alto (0 a 1)'],
-            ['Optimización', 'Backpropagation con optimizador Adam'],
-            ['Regularización', 'Early stopping y penalización L2 para evitar sobreajuste'],
+            ['Optimización', 'Backpropagation con SGD (Stochastic Gradient Descent), learning rate adaptativo'],
+            ['Regularización', 'Penalización L2 (alpha=0.001), max_iter=2000'],
         ]
         arch_table = Table(arch_table_data, colWidths=[140, 350])
         arch_table.setStyle(table_style_base)

@@ -208,20 +208,22 @@ El archivo `src/assets/styles/main.css` (~1100 líneas) define:
 
 ## Dependencias
 
+Versiones fijadas para reproducibilidad de métricas del modelo (Patente §0022):
+
 ```
-streamlit>=1.28.0
-pandas>=2.0.0
-numpy>=1.24.0
-scikit-learn>=1.3.0
-lightgbm>=4.0.0
-joblib>=1.3.0
-shap>=0.42.0
-reportlab>=4.0.0
-matplotlib>=3.7.0
-openpyxl>=3.1.0
-python-docx>=1.1.0
-scipy>=1.11.0
+streamlit==1.29.0
+pandas==2.1.4
+numpy==1.26.2
+scikit-learn==1.3.2
+joblib==1.3.2
+shap==0.44.1
+reportlab==4.0.9
+matplotlib==3.8.2
+openpyxl==3.1.2
+scipy==1.11.4
 ```
+
+> **Nota:** `lightgbm`, `xgboost` y `catboost` NO se incluyen en producción. La app solo usa el modelo MLP pre-entrenado (`.joblib`). Estas librerías solo se necesitan en el pipeline de entrenamiento (Colab).
 
 ---
 
