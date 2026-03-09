@@ -208,7 +208,7 @@ Los datos personales y de salud recopilados se utilizan exclusivamente para:
 - Los datos se procesan **exclusivamente en la sesión del navegador** del usuario
 - **No se almacenan** datos personales en servidores externos ni bases de datos permanentes
 - Al cerrar la sesión del navegador, todos los datos se eliminan automáticamente
-- Los reportes descargados (HTML/PDF) quedan bajo la custodia del profesional responsable
+- Los reportes descargados (PDF) quedan bajo la custodia del profesional responsable
 
 #### 5. Derechos del Titular
 De acuerdo con la Ley 1581 de 2012, el titular de los datos tiene derecho a:
