@@ -59,18 +59,18 @@ def mostrar_demograficos():
 
     col1, col2 = st.columns(2)
     with col1:
-        edad = st.number_input("Edad *", min_value=0, max_value=120, step=1, value=0, help="Debe ser mayor a 0", key="edad")
+        edad = st.number_input("Edad *", min_value=0, max_value=120, step=1, value=None, placeholder="Ingrese la edad", help="Debe ser mayor a 0", key="edad")
     with col2:
         genero = st.selectbox("Género *", ["Seleccionar", "Masculino", "Femenino"], key="genero")
 
-    max_educacion = max(0, edad - 5)
+    max_educacion = max(0, (edad or 0) - 5)
 
-    if edad < 5:
-        años_educacion = st.number_input("Años de educación formal *", min_value=0, max_value=0, value=0, disabled=True, help="No aplica educación formal a esta edad", key="educacion")
+    if edad is None or edad < 5:
+        años_educacion = st.number_input("Años de educación formal *", min_value=0, max_value=0, value=None, disabled=True, placeholder="Ingrese los años", help="Ingrese primero la edad del paciente", key="educacion")
     else:
         if "educacion" in st.session_state and st.session_state.get("educacion", 0) > max_educacion:
             st.session_state["educacion"] = max_educacion
-        años_educacion = st.number_input("Años de educación formal *", min_value=0, max_value=max_educacion, value=st.session_state.get("educacion", 0), step=1, help=f"Máximo permitido: {max_educacion} años (edad - 5)", key="educacion")
+        años_educacion = st.number_input("Años de educación formal *", min_value=0, max_value=max_educacion, value=None, step=1, placeholder="Ingrese los años", help=f"Máximo permitido: {max_educacion} años (edad - 5)", key="educacion")
 
     # Validación solo al intentar guardar
     guardar = st.button("Guardar datos", type="primary")
@@ -81,9 +81,11 @@ def mostrar_demograficos():
             errores.append("El nombre completo es obligatorio.")
         if genero == "Seleccionar":
             errores.append("Debe seleccionar un género.")
-        if edad <= 0:
+        if edad is None or edad <= 0:
             errores.append("La edad debe ser mayor a 0.")
-        if años_educacion > max_educacion:
+        if años_educacion is None:
+            errores.append("Los años de educación formal son obligatorios.")
+        elif años_educacion > max_educacion:
             errores.append(f"Los años de educación no pueden ser mayores a {max_educacion}.")
 
         if errores:
