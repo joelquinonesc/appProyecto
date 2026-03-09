@@ -1,343 +1,259 @@
-# Documentación del Modelo de Predicción de Riesgo de Ansiedad - ANXRISK
+# Documentación del Modelo — ANXRISK
 
-## 📋 Descripción General
+## Descripción General
 
-ANXRISK es una aplicación web desarrollada con Streamlit que evalúa el riesgo de ansiedad en pacientes mediante la integración de datos clínicos, demográficos, genéticos y de eventos vitales. Utiliza modelos de machine learning (LightGBM para hombres, MLP para mujeres) entrenados con técnicas de SHAP para explicabilidad.
+ANXRISK utiliza un **Perceptrón Multicapa (MLP)** de la librería scikit-learn para predecir el riesgo de desarrollar trastornos de ansiedad. El sistema opera con dos variantes del modelo según la disponibilidad de datos genéticos.
 
-## 📊 Fuentes de Datos
+---
 
-La aplicación recopila información de los siguientes cuestionarios y fuentes:
+## Variantes del Modelo
 
-### 1. Datos Demográficos
+| Variante | Archivo | Features | Uso |
+|----------|---------|----------|-----|
+| **Estándar** | `anxrisk_mlp_model_standard.joblib` | 13 | Sin datos genéticos |
+| **Extendido** | `anxrisk_mlp_model_extended.joblib` | 22 | Con panel genético (3 SNPs) |
 
-- **Edad**: En años
-- **Género**: Masculino (0) o Femenino (1)
-- **Años de Educación**: Educación formal completada
+Ambos modelos se almacenan en `src/models/` y se cargan con `joblib.load()`.
 
-### 2. Cuestionario HADS (Hospital Anxiety and Depression Scale)
+---
 
-- 14 preguntas sobre síntomas de ansiedad y depresión
-- Puntaje total: 0-21
-- Niveles: Normal (≤7), Leve (8-10), Moderada (11-14), Severa (≥15)
+## Arquitectura MLP
 
-### 3. Cuestionario ZSAS (Zung Self-Rating Anxiety Scale)
+El MLP (Multi-Layer Perceptron) es una red neuronal artificial compuesta por capas de neuronas interconectadas:
 
-- 20 preguntas sobre síntomas de ansiedad
-- Puntaje bruto: 20-80
-- Puntaje normalizado: (bruto × 100) / 80
-- Niveles: Normal (<45), Leve-Moderada (45-59), Marcada-Severa (60-74), Extrema (≥75)
+- **Capa de entrada:** 13 ó 22 neuronas (según variante)
+- **Capas ocultas:** Configuración optimizada durante el entrenamiento con búsqueda de hiperparámetros
+- **Capa de salida:** 1 neurona con función sigmoide (probabilidad 0–1)
+- **Función de activación:** ReLU en capas ocultas
+- **Optimizador:** Adam
+- **Implementación:** `sklearn.neural_network.MLPClassifier`
 
-### 4. Cuestionario SF-12 (Short Form Health Survey)
+### ¿Por qué MLP?
 
-- 12 preguntas sobre calidad de vida relacionada con la salud
-- Componentes: Física (PCS) y Mental (MCS)
-- Cálculo simplificado:
-  - **PCS**: Suma de ítems Q1,Q2,Q3,Q4,Q5,Q8
-  - **MCS**: Suma de ítems Q6,Q7,Q9,Q10,Q11,Q12
+- Captura relaciones no lineales entre factores de riesgo
+- Maneja eficientemente combinaciones de variables categóricas y continuas
+- Produce probabilidades calibradas útiles para clasificación triclásica
+- Balance óptimo entre complejidad y rendimiento para el tamaño del dataset
 
-### 5. Cuestionario LTE-12 (Life Time Events)
+---
 
-- 12 eventos vitales estresantes
-- Puntaje: Número de eventos experimentados (0-12)
+## Features de Entrada
 
-### 6. Datos Genéticos
+### Modelo Estándar (13 features)
 
-- **PRKCA**: Gen relacionado con regulación del estrés (T/T, C/T, C/C)
-- **TCF4**: Gen relacionado con desarrollo neuronal (A/A, A/T, T/T)
-- **CDH20**: Gen relacionado con conectividad neuronal (G/G, G/A, A/A)
+| # | Feature | Tipo | Origen | Descripción |
+|---|---------|------|--------|-------------|
+| 1 | `EDAD24` | Binaria | Demográficos | 0 = ≤ 24 años, 1 = > 24 años |
+| 2 | `AEFGROUPS` | Binaria | Demográficos | 0 = ≤ 14 años educación, 1 = ≥ 15 años |
+| 3 | `LTE12_0` | One-hot | LTE-12 | 0 eventos vitales estresantes |
+| 4 | `LTE12_1` | One-hot | LTE-12 | 1 evento vital estresante |
+| 5 | `LTE12_2` | One-hot | LTE-12 | 2 o más eventos vitales estresantes |
+| 6 | `SF12F_Q1` | One-hot | SF-12 Física | Cuartil 1 (puntaje ≤ 15) |
+| 7 | `SF12F_Q2` | One-hot | SF-12 Física | Cuartil 2 (puntaje 16–17) |
+| 8 | `SF12F_Q3` | One-hot | SF-12 Física | Cuartil 3 (puntaje 18–19) |
+| 9 | `SF12F_Q4` | One-hot | SF-12 Física | Cuartil 4 (puntaje ≥ 20) |
+| 10 | `SF12M_Q1` | One-hot | SF-12 Mental | Cuartil 1 (puntaje ≤ 15) |
+| 11 | `SF12M_Q2` | One-hot | SF-12 Mental | Cuartil 2 (puntaje 16–18) |
+| 12 | `SF12M_Q3` | One-hot | SF-12 Mental | Cuartil 3 (puntaje 19–21) |
+| 13 | `SF12M_Q4` | One-hot | SF-12 Mental | Cuartil 4 (puntaje ≥ 22) |
 
-## 🔢 Cálculos Detallados por Respuesta
+### Features Adicionales del Modelo Extendido (+9)
 
-### HADS (Escala de Ansiedad y Depresión Hospitalaria)
+| # | Feature | Tipo | Gen | Descripción |
+|---|---------|------|-----|-------------|
+| 14 | `PRKCA_C/C` | One-hot | PRKCA | Genotipo homocigoto C/C |
+| 15 | `PRKCA_C/T` | One-hot | PRKCA | Genotipo heterocigoto C/T |
+| 16 | `PRKCA_T/T` | One-hot | PRKCA | Genotipo homocigoto T/T |
+| 17 | `TCF4_A/A` | One-hot | TCF4 | Genotipo homocigoto A/A |
+| 18 | `TCF4_A/T` | One-hot | TCF4 | Genotipo heterocigoto A/T |
+| 19 | `TCF4_T/T` | One-hot | TCF4 | Genotipo homocigoto T/T |
+| 20 | `CDH20_A/A` | One-hot | CDH20 | Genotipo homocigoto A/A |
+| 21 | `CDH20_A/G` | One-hot | CDH20 | Genotipo heterocigoto A/G |
+| 22 | `CDH20_G/G` | One-hot | CDH20 | Genotipo homocigoto G/G |
 
-**7 preguntas**, cada una con 4 opciones (0-3 puntos):
+---
 
-1. Me siento tenso(a) o nervioso(a): Nunca(0), A veces(1), Muchas veces(2), Todos los días(3)
-2. Todavía disfruto con lo que me ha gustado hacer: Nada(0), Sólo un poco(1), No mucho(2), Como siempre(3)
-3. Tengo una sensación de miedo, como si algo horrible fuera a suceder: Nada(0), Un poco(1), Si pero no fuerte(2), Definitivamente(3)
-4. Puedo estar sentado(a) tranquilamente y sentirme relajado(a): Nunca(0), No muy seguido(1), Generalmente(2), Siempre(3)
-5. Tengo una sensación extraña, como de aleteo o vacío en el estómago: Nunca(0), En ciertas ocasiones(1), Con bastante frecuencia(2), Muy seguido(3)
-6. Me siento inquieto(a), como si no pudiera parar de moverme: Nunca(0), No mucho(1), Mucho(2), Bastante(3)
-7. Presento una sensación de miedo muy intenso de un momento a otro: Nunca(0), No muy seguido(1), Muy frecuentemente(2), Bastante seguido(3)
+## Transformación de Variables
 
-**Cálculo total**: Suma de todas las respuestas (0-21)
+### Edad → `EDAD24`
 
-### ZSAS (Escala de Ansiedad de Zung)
-
-**20 preguntas**, cada una con 4 opciones (1-4 puntos):
-
-**Preguntas directas** (puntuación normal):
-
-- Nunca o casi nunca (1), A veces (2), Con bastante frecuencia (3), Siempre o casi siempre (4)
-
-**Preguntas invertidas** (puntuación invertida):
-
-- Nunca o casi nunca (4), A veces (3), Con bastante frecuencia (2), Siempre o casi siempre (1)
-
-Preguntas invertidas: 5,9,13,17,19
-
-**Cálculo**:
-
-- Puntaje bruto = Suma de todas las respuestas (20-80)
-- Puntaje normalizado = Puntaje bruto × 1.25 (25-100)
-
-### SF-12 (Short Form Health Survey)
-
-**12 preguntas**, puntuación estándar SF-12 (mayor puntuación = mejor salud):
-
-#### Componente Física (PCS)
-
-**Preguntas**: 1,2,3,4,5,8
-
-1. **En general, ¿diría que su salud es?**
-
-   - Excelente (5), Muy buena (4), Buena (3), Regular (2), Mala (1)
-
-2. **Esfuerzos moderados (mover una mesa, caminar más de 1 hora)**
-
-   - Sí, limitado mucho (1), Sí, limitado un poco (2), No, no limitado (3)
-
-3. **Subir varios pisos por la escalera**
-
-   - Sí, limitado mucho (1), Sí, limitado un poco (2), No, no limitado (3)
-
-4. **¿Hizo menos de lo que hubiera querido hacer?** (por salud física)
-
-   - Sí (1), No (2)
-
-5. **¿Tuvo que dejar de hacer algunas tareas?** (por salud física)
-
-   - Sí (1), No (2)
-
-6. **¿Hasta qué punto el dolor le ha dificultado su trabajo habitual?**
-   - Nada (5), Un poco (4), Regular (3), Bastante (2), Mucho (1)
-
-**PCS = Q1 + Q2 + Q3 + Q4 + Q5 + Q8** (rango: 6-30)
-
-#### Componente Mental (MCS)
-
-**Preguntas**: 6,7,9,10,11,12
-
-6. **¿Hizo menos de lo que hubiera querido hacer, por algún problema emocional?**
-
-   - Sí (1), No (2)
-
-7. **¿No hizo su trabajo o sus actividades cotidianas tan cuidadosamente como de costumbre, por algún problema emocional?**
-
-   - Sí (1), No (2)
-
-8. **¿Con qué frecuencia la salud física o los problemas emocionales le han dificultado sus actividades sociales (como visitar a los amigos o familiares)?**
-
-   - Siempre (1), Casi siempre (2), Algunas veces (3), Sólo alguna vez (4), Nunca (5)10. **¿Se sintió calmado y tranquilo? ¿Cuánto tiempo?**
-   - Siempre (6), Casi siempre (5), Muchas veces (4), Algunas veces (3), Sólo una vez (2), Nunca (1)
-
-9. **¿Tuvo mucha energía? ¿Cuánto tiempo?**
-
-   - Siempre (6), Casi siempre (5), Muchas veces (4), Algunas veces (3), Sólo una vez (2), Nunca (1)
-
-10. **¿Se ha sentido desanimado(a) y triste? ¿Cuánto tiempo?**
-    - Siempre (1), Casi siempre (2), Muchas veces (3), Algunas veces (4), Sólo una vez (5), Nunca (6)
-
-**MCS = Q6 + Q7 + Q9 + Q10 + Q11 + Q12** (rango: 6-27)### LTE-12 (Lista de Experiencias Amenazantes)
-
-**12 preguntas** de Sí/No:
-
-Cada "Sí" cuenta como 1 punto, "No" como 0.
-
-**Total = Número de "Sí" (0-12)**
-
-## 🔄 Transformaciones de Datos
-
-### Variables Binarias
-
-#### EDAD24 (Grupo de Edad)
-
-```python
-if 24 <= edad <= 34:
-    EDAD24 = 1  # Grupo joven
-else:
-    EDAD24 = 0  # Otros grupos
+```
+edad ≤ 24 → 0
+edad > 24 → 1
 ```
 
-#### AEFGROUPS (Grupo de Educación)
+### Educación → `AEFGROUPS`
 
-```python
-if años_educación >= 15:
-    AEFGROUPS = 1  # Educación superior
-else:
-    AEFGROUPS = 0  # Educación básica/secundaria
+```
+años_educacion ≤ 14 → 0
+años_educacion ≥ 15 → 1
 ```
 
-### Cuartiles SF-12
+### LTE-12 → `LTE12_0`, `LTE12_1`, `LTE12_2`
 
-Los puntajes de SF-12 se clasifican en cuartiles para capturar niveles relativos de salud:
+El total de eventos vitales (0–12) se clasifica:
 
-#### Componente Física (SF12F)
+| Total eventos | Clase | LTE12_0 | LTE12_1 | LTE12_2 |
+|---------------|-------|---------|---------|---------|
+| 0 | 0 | 1 | 0 | 0 |
+| 1 | 1 | 0 | 1 | 0 |
+| 2+ | 2 | 0 | 0 | 1 |
 
-- **Q1**: puntaje ≤ 15 (peor salud física)
-- **Q2**: 16-20
-- **Q3**: 21-25
-- **Q4**: ≥ 26 (mejor salud física)
+### SF-12 Física → Cuartiles `SF12F_Q1`–`SF12F_Q4`
 
-#### Componente Mental (SF12M)
+| Puntaje | Cuartil | Q1 | Q2 | Q3 | Q4 |
+|---------|---------|----|----|----|----|
+| ≤ 15 | 1 | 1 | 0 | 0 | 0 |
+| 16–17 | 2 | 0 | 1 | 0 | 0 |
+| 18–19 | 3 | 0 | 0 | 1 | 0 |
+| ≥ 20 | 4 | 0 | 0 | 0 | 1 |
 
-- **Q1**: puntaje ≤ 15 (peor salud mental)
-- **Q2**: 16-20
-- **Q3**: 21-25
-- **Q4**: ≥ 26 (mejor salud mental)
+### SF-12 Mental → Cuartiles `SF12M_Q1`–`SF12M_Q4`
 
-### Clasificación LTE-12
+| Puntaje | Cuartil | Q1 | Q2 | Q3 | Q4 |
+|---------|---------|----|----|----|----|
+| ≤ 15 | 1 | 1 | 0 | 0 | 0 |
+| 16–18 | 2 | 0 | 1 | 0 | 0 |
+| 19–21 | 3 | 0 | 0 | 1 | 0 |
+| ≥ 22 | 4 | 0 | 0 | 0 | 1 |
+
+### Genotipos → One-Hot
+
+Cada gen (PRKCA, TCF4, CDH20) tiene 3 alelos posibles, codificados en 3 columnas one-hot (solo una es 1, las demás 0).
+
+---
+
+## Clasificación Triclásica
+
+La salida del MLP es una probabilidad continua entre 0 y 1. Se clasifica en tres niveles usando umbrales fijos:
+
+| Nivel | Rango de probabilidad | Color en la app |
+|-------|----------------------|-----------------|
+| **Bajo** | p < 0.30 | Verde |
+| **Moderado** | 0.30 ≤ p < 0.60 | Ámbar/Naranja |
+| **Alto** | p ≥ 0.60 | Rojo |
+
+Estos umbrales están definidos en `src/config.py`:
 
 ```python
-if total_eventos == 0:
-    LTE12 = 0
-elif total_eventos == 1:
-    LTE12 = 1
-else:  # >= 2
-    LTE12 = 2
+THRESHOLD_LOW = 0.30
+THRESHOLD_HIGH = 0.60
 ```
 
-### Codificación One-Hot
+---
 
-Todas las variables categóricas se convierten a variables dummy binarias:
+## Curva ROC y Métricas
 
-#### SF-12 Física
+### Curva ROC (Receiver Operating Characteristic)
 
-- SF12F_Q1: 1 si cuartil 1, 0 otherwise
-- SF12F_Q2: 1 si cuartil 2, 0 otherwise
-- SF12F_Q3: 1 si cuartil 3, 0 otherwise
-- SF12F_Q4: 1 si cuartil 4, 0 otherwise
+La curva ROC representa la capacidad discriminativa del modelo graficando la **Sensibilidad** (tasa de verdaderos positivos) contra **1 – Especificidad** (tasa de falsos positivos) para todos los umbrales de decisión.
 
-#### SF-12 Mental
+- **AUC = 1.0:** Discriminación perfecta
+- **AUC = 0.5:** Sin capacidad discriminativa (azar)
+- **AUC ≥ 0.90:** Considerado excelente en contexto clínico
 
-- SF12M_Q1: 1 si cuartil 1, 0 otherwise
-- SF12M_Q2: 1 si cuartil 2, 0 otherwise
-- SF12M_Q3: 1 si cuartil 3, 0 otherwise
-- SF12M_Q4: 1 si cuartil 4, 0 otherwise
+### Métricas de Rendimiento
 
-#### Genotipo PRKCA
+| Métrica | Definición |
+|---------|------------|
+| **Exactitud (Accuracy)** | Proporción de predicciones correctas sobre el total |
+| **Precisión** | Proporción de verdaderos positivos entre todas las predicciones positivas |
+| **Sensibilidad (Recall)** | Proporción de positivos correctamente identificados (minimiza falsos negativos) |
+| **Especificidad** | Proporción de negativos correctamente identificados (minimiza falsos positivos) |
+| **F1-Score** | Media armónica entre Precisión y Sensibilidad |
+| **AUC** | Área Bajo la Curva ROC (capacidad discriminativa global) |
+| **Índice de Youden** | Sensibilidad + Especificidad – 1 (umbral óptimo para clasificación binaria) |
 
-- PRKCA_C/C: 1 si C/C, 0 otherwise
-- PRKCA_C/T: 1 si C/T, 0 otherwise
-- PRKCA_T/T: 1 si T/T, 0 otherwise
+---
 
-#### Genotipo TCF4
+## Interpretabilidad con SHAP
 
-- TCF4_A/A: 1 si A/A, 0 otherwise
-- TCF4_A/T: 1 si A/T, 0 otherwise
-- TCF4_T/T: 1 si T/T, 0 otherwise
+### ¿Qué es SHAP?
 
-#### Genotipo CDH20
+SHAP (SHapley Additive exPlanations) es un método basado en la teoría de juegos cooperativos que asigna a cada feature una **contribución marginal** a la predicción individual.
 
-- CDH20_A/A: 1 si A/A, 0 otherwise
-- CDH20_A/G: 1 si G/A, 0 otherwise
-- CDH20_G/G: 1 si G/G, 0 otherwise
+### Implementación en ANXRISK
 
-#### LTE-12
+- **Método:** `shap.KernelExplainer` (compatible con cualquier modelo, incluido MLP)
+- **Datos de referencia:** Muestra de background generada a partir de los datos de entrenamiento
+- **Salida:** Valor SHAP para cada feature, indicando dirección e intensidad de su efecto
 
-- LTE12_0: 1 si clasificación 0, 0 otherwise
-- LTE12_1: 1 si clasificación 1, 0 otherwise
-- LTE12_2: 1 si clasificación 2, 0 otherwise
+### Interpretación
 
-## 🎯 Features del Modelo
+| Valor SHAP | Significado |
+|------------|-------------|
+| Positivo alto | La feature **aumenta** significativamente el riesgo predicho |
+| Positivo bajo | La feature tiene un efecto **leve** de aumento del riesgo |
+| Cercano a 0 | La feature tiene **poco impacto** en esta predicción |
+| Negativo bajo | La feature **reduce levemente** el riesgo predicho |
+| Negativo alto | La feature **reduce significativamente** el riesgo predicho |
 
-El modelo recibe exactamente **22 features** en el siguiente orden:
+### Visualización
 
-1. **EDAD24**: Grupo de edad binario
-2. **AEFGROUPS**: Grupo de educación binario
-3. **SF12F_Q1**: Salud física cuartil 1
-4. **SF12F_Q2**: Salud física cuartil 2
-5. **SF12F_Q3**: Salud física cuartil 3
-6. **SF12F_Q4**: Salud física cuartil 4
-7. **SF12M_Q1**: Salud mental cuartil 1
-8. **SF12M_Q2**: Salud mental cuartil 2
-9. **SF12M_Q3**: Salud mental cuartil 3
-10. **SF12M_Q4**: Salud mental cuartil 4
-11. **PRKCA_C/C**: Genotipo PRKCA C/C
-12. **PRKCA_C/T**: Genotipo PRKCA C/T
-13. **PRKCA_T/T**: Genotipo PRKCA T/T
-14. **TCF4_A/A**: Genotipo TCF4 A/A
-15. **TCF4_A/T**: Genotipo TCF4 A/T
-16. **TCF4_T/T**: Genotipo TCF4 T/T
-17. **CDH20_A/A**: Genotipo CDH20 A/A
-18. **CDH20_A/G**: Genotipo CDH20 G/A
-19. **CDH20_G/G**: Genotipo CDH20 G/G
-20. **LTE12_0**: Eventos vitales clasificación 0
-21. **LTE12_1**: Eventos vitales clasificación 1
-22. **LTE12_2**: Eventos vitales clasificación 2
+El sistema genera un gráfico de barras horizontales ordenado por magnitud absoluta del valor SHAP, con colores que indican dirección (rojo = aumenta riesgo, verde = reduce riesgo). Este gráfico se incluye tanto en la interfaz web como en el PDF de resultados.
 
-## 🤖 Modelos de Machine Learning
+---
 
-### Selección por Género
+## Instrumentos Clínicos Integrados
 
-- **Masculino (GENERO=0)**: LightGBM Classifier
-- **Femenino (GENERO=1)**: MLP Classifier
+### LTE-12 (List of Threatening Experiences)
 
-### Arquitectura
+- 12 preguntas Sí/No sobre eventos vitales estresantes
+- Evalúa: enfermedad grave, duelo, divorcio, desempleo, etc.
+- Rango: 0–12 eventos
 
-- **LightGBM**: Modelo basado en árboles de decisión, eficiente para datos tabulares
-- **MLP**: Red neuronal con capas ocultas, captura relaciones no lineales complejas
+### SF-12 (Short Form Health Survey – 12 ítems)
 
-### Entrenamiento
+- **Componente físico (PCS):** 5 preguntas sobre salud física general
+- **Componente mental (MCS):** 2 preguntas sobre bienestar emocional
+- Ambos componentes se transforman a cuartiles para el modelo
 
-- Datos balanceados por género
-- Validación cruzada
-- Optimización de hiperparámetros
-- Métricas: AUC, precisión, recall, F1-score
+### HADS (Hospital Anxiety and Depression Scale)
 
-## 📈 Salida del Modelo
+- 7 preguntas enfocadas en ansiedad
+- Escala: 0–3 por ítem, total 0–21
+- Clasificación: Normal (0–7), Leve (8–10), Moderada (11–14), Severa (15–21)
+- **No se usa como feature del MLP**, pero complementa el informe clínico
 
-### Predicción Binaria
+### ZSAS (Zung Self-Rating Anxiety Scale)
 
-- **0**: Bajo riesgo de ansiedad
-- **1**: Alto riesgo de ansiedad
+- 20 preguntas con 4 opciones (1–4 puntos)
+- Ítems invertidos: 5, 9, 13, 17, 19
+- Puntaje bruto: 20–80
+- **No se usa como feature del MLP**, pero complementa el informe clínico
 
-### Probabilidades
+---
 
-- Probabilidad de bajo riesgo (clase 0)
-- Probabilidad de alto riesgo (clase 1)
+## Pipeline de Predicción
 
-### Explicabilidad SHAP
+```
+1. Recolectar datos del paciente (st.session_state)
+2. Transformar variables:
+   - edad → EDAD24 (binaria)
+   - educación → AEFGROUPS (binaria)
+   - LTE-12 total → clasificación → one-hot (3 columnas)
+   - SF-12 física → cuartil → one-hot (4 columnas)
+   - SF-12 mental → cuartil → one-hot (4 columnas)
+   - [Opcional] Genotipos → one-hot (9 columnas)
+3. Construir vector de features en orden canónico (config.py)
+4. Crear DataFrame con nombres de columnas exactos
+5. Cargar modelo (.joblib) con joblib.load()
+6. Ejecutar model.predict_proba(X)[:, 1] → probabilidad
+7. Clasificar: Bajo / Moderado / Alto según umbrales
+8. Ejecutar SHAP KernelExplainer para interpretabilidad
+9. Generar PDF con todos los resultados
+```
 
-- **Importancia global**: Mean Absolute SHAP values por feature
-- **Contribuciones locales**: SHAP values por instancia
-- **Gráfico de resumen**: Visualización dot plot de contribuciones
+---
 
-## 🔍 Interpretación de Resultados
+## Notas Importantes
 
-### Alto Riesgo (1)
+- **HADS y ZSAS** no alimentan al modelo MLP directamente; se incluyen en el informe como contexto clínico complementario.
+- Las features del modelo están codificadas en **one-hot**, lo que significa que cada variable categórica se descompone en columnas binarias mutuamente excluyentes.
+- El orden de las features en el vector de entrada debe coincidir **exactamente** con el orden definido en `src/config.py` (`FEATURES_STANDARD` o `FEATURES_EXTENDED`).
+- Los modelos fueron entrenados con un dataset de 234 participantes.
+- La selección del modelo (estándar vs. extendido) se hace automáticamente según la disponibilidad de datos genéticos.
 
-- HADS ≥ 8 Y ZSAS ≥ 36
-- O puntaje alto en cuestionarios clínicos
-- Factores genéticos de riesgo presentes
-- Baja salud física/mental (cuartiles bajos)
-- Alto número de eventos vitales estresantes
+---
 
-### Bajo Riesgo (0)
-
-- HADS < 8 O ZSAS < 36
-- Buena salud autopercibida
-- Factores protectores genéticos
-- Bajo estrés vital
-
-### SHAP Values
-
-- **Positivo**: Aumenta probabilidad de alto riesgo
-- **Negativo**: Disminuye probabilidad de alto riesgo
-- **Magnitud**: Importancia relativa de la feature
-
-## 📝 Notas Técnicas
-
-- Todos los datos son anonimizados y confidenciales
-- Los modelos están validados clínicamente
-- Los resultados son preliminares y requieren evaluación profesional
-- La aplicación cumple con estándares éticos de IA en salud
-
-## 🛠️ Desarrollo
-
-Para modificaciones o actualizaciones, consultar:
-
-- `src/utils/calculos.py`: Funciones de transformación
-- `src/pages/datos_geneticos.py`: Lógica de predicción
-- `src/models/`: Archivos de modelos entrenados</content>
-  <parameter name="filePath">c:/xampp/htdocs/ANXRISK/appProyecto/MODEL_DOCUMENTATION.md
+**© 2025 Breyner Joel Quiñones Castro. Todos los derechos reservados.**

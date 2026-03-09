@@ -1,257 +1,216 @@
-# 📖 Manual de Usuario - ANXRISK
+# Manual de Usuario — ANXRISK
 
-## Bienvenido a ANXRISK
+## ¿Qué es ANXRISK?
 
-ANXRISK es una herramienta profesional de evaluación psicológica diseñada para evaluar el riesgo de trastornos de ansiedad mediante cuestionarios clínicos validados y análisis de factores genéticos.
+ANXRISK es una herramienta profesional de evaluación psicológica que evalúa el riesgo de trastornos de ansiedad mediante cuestionarios clínicos validados, datos demográficos y análisis genético opcional. Genera predicciones de riesgo utilizando una Red Neuronal MLP con interpretabilidad SHAP.
 
-## 🎯 Objetivo de la Evaluación
+> **Importante:** Esta herramienta es de apoyo a la decisión clínica. Los resultados no constituyen un diagnóstico definitivo y deben ser interpretados por un profesional de salud mental.
 
-Esta evaluación tiene como propósito:
-- Identificar factores de riesgo para trastornos de ansiedad
-- Proporcionar una evaluación integral basada en evidencia científica
-- Generar reportes profesionales para uso clínico o de investigación
+---
 
-## 🚀 Primeros Pasos
+## Acceso a la Aplicación
 
-### Acceso a la Aplicación
-1. **Ejecutar la aplicación** usando el script proporcionado
-2. **Abrir navegador** en http://localhost:8501
-3. **Leer la información** en la página de inicio
-4. **Comenzar la evaluación** haciendo clic en "Comenzar Evaluación"
+### En línea (producción)
+Acceda directamente desde: [appproyecto.streamlit.app](https://appproyecto.streamlit.app)
 
-### Navegación
-- Use la **barra lateral izquierda** para navegar entre secciones
-- La **barra de progreso** muestra su avance
-- Los **botones de navegación** están disponibles en cada página
+### Local (desarrollo)
+```bash
+streamlit run app.py
+```
+Se abrirá en su navegador en `http://localhost:8501`.
 
-## 📋 Proceso de Evaluación
+---
+
+## Proceso de Evaluación Paso a Paso
 
 ### 1. Página de Inicio
-- **Información general** sobre la evaluación
-- **Instrucciones importantes**
-- **Consentimiento informado** (si aplica)
-- **Botón de inicio** de la evaluación
+
+Al abrir ANXRISK verá la página de bienvenida con:
+- Descripción del sistema
+- Características principales
+- Botón **"Comenzar Evaluación"** para iniciar
+- Botón **"Análisis Masivo"** para procesar múltiples pacientes
 
 ### 2. Datos Demográficos
-**Información requerida:**
-- Nombre completo
-- Edad (debe ser mayor de 18 años)
-- Género (Masculino/Femenino)
-- Nivel educativo
 
-**Instrucciones:**
-- Complete todos los campos obligatorios
-- Verifique que la información sea correcta
-- Use el botón "Siguiente" para continuar
+Complete la información obligatoria del paciente:
+- **Nombre completo** (campo de texto)
+- **Edad** (sin valor por defecto, ingrese manualmente)
+- **Género** (Masculino / Femenino)
+- **Años de educación formal** (máximo calculado automáticamente: edad – 5)
 
-### 3. LTE-12 (Eventos Vitales)
-**Propósito:** Evaluar eventos estresantes recientes
+En esta misma página, complete los **datos del profesional evaluador**:
+- Nombre del profesional
+- Cargo / Especialidad
+- Institución
+- Registro profesional
 
-**Instrucciones:**
-- Marque **SÍ** si experimentó el evento en los últimos 6 meses
-- Marque **NO** si no experimentó el evento
-- Sea honesto en sus respuestas
-- No hay respuestas correctas o incorrectas
+Estos datos aparecerán en el reporte PDF con espacio para firma.
 
-**Eventos evaluados:**
-- Enfermedad grave personal o familiar
-- Muerte de familiar cercano
-- Separación/divorcio
-- Problemas laborales
-- Dificultades financieras
+Presione **"Guardar datos"** para continuar.
+
+### 3. Eventos Vitales — LTE-12
+
+Responda **Sí** o **No** a 12 eventos vitales estresantes experimentados recientemente:
+- Enfermedad grave personal o de familiar cercano
+- Muerte de un familiar o amigo cercano
+- Separación o divorcio
+- Problemas laborales serios
+- Dificultades financieras graves
 - Y otros eventos significativos
 
-### 4. SF-12 Salud Física
-**Propósito:** Evaluar percepción de salud física
+Los radio buttons están centrados en la pantalla para facilitar la lectura.
 
-**Instrucciones:**
-- Responda basándose en las **últimas 4 semanas**
-- Seleccione la opción que mejor describa su situación
-- Considere tanto limitaciones físicas como dolor
+### 4. Salud Física — SF-12
 
-**Áreas evaluadas:**
-- Actividades físicas vigorosas
-- Actividades físicas moderadas
-- Subir escaleras
-- Trabajo y actividades diarias
+5 preguntas sobre su salud física en las últimas 4 semanas:
+- Percepción general de salud
+- Limitaciones en actividades moderadas
+- Limitaciones subiendo escaleras
+- Interferencia con trabajo por problemas físicos
+- Dolor corporal
 
-### 5. SF-12 Salud Mental
-**Propósito:** Evaluar bienestar emocional y mental
+### 5. Salud Mental — SF-12
 
-**Instrucciones:**
-- Base sus respuestas en las **últimas 4 semanas**
-- Sea honesto sobre su estado emocional
-- Considere tanto aspectos positivos como negativos
-
-**Áreas evaluadas:**
-- Estado de ánimo
+2 preguntas sobre su bienestar emocional:
 - Energía y vitalidad
-- Funcionamiento social
-- Bienestar emocional
+- Estado de ánimo (tranquilidad vs. desánimo)
 
-### 6. HADS (Ansiedad y Depresión)
-**Propósito:** Detectar síntomas de ansiedad y depresión
+### 6. HADS — Escala de Ansiedad Hospitalaria
 
-**Instrucciones:**
-- Responda sobre **la semana pasada**
-- Elija la respuesta que mejor refleje cómo se sintió
-- No piense demasiado en cada respuesta
+7 preguntas sobre síntomas de ansiedad en la última semana:
+- Tensión y nerviosismo
+- Sensación de miedo
+- Inquietud
+- Malestar estomacal
+- Y otros síntomas
 
-**Escala de respuestas:**
-- 0 = Nunca/Para nada
-- 1 = A veces/Un poco
-- 2 = Bastante a menudo/Moderadamente
-- 3 = Muy a menudo/Muchísimo
+Cada pregunta tiene 4 opciones de respuesta (0–3 puntos).
 
-### 7. ZSAS (Ansiedad - Zung)
-**Propósito:** Evaluación complementaria de ansiedad
+**Interpretación del puntaje total (0–21):**
+| Rango | Nivel |
+|-------|-------|
+| 0–7 | Normal |
+| 8–10 | Ansiedad leve |
+| 11–14 | Ansiedad moderada |
+| 15–21 | Ansiedad severa |
 
-**Instrucciones:**
-- Responda sobre su estado **actual o reciente**
-- Use la escala de frecuencia proporcionada
-- Sea consistente con sus respuestas anteriores
+### 7. ZSAS — Escala de Ansiedad de Zung
 
-**Escala de respuestas:**
+20 preguntas sobre síntomas de ansiedad con escala de frecuencia:
 - Nunca o casi nunca
 - A veces
 - Con bastante frecuencia
 - Siempre o casi siempre
 
-### 8. Datos Genéticos
-**Propósito:** Evaluar factores de riesgo genético
-
-**Información requerida:**
-- Variantes genéticas conocidas (si disponibles)
-- Historial familiar de trastornos de ansiedad
-- Información genética opcional
-
-**Nota importante:** Esta sección es opcional si no cuenta con información genética.
-
-## 📊 Interpretación de Resultados
-
-### Tipos de Resultados
-1. **Puntuación de Riesgo Global** (0-100%)
-2. **Análisis por Dimensiones**
-3. **Factores Contribuyentes**
-4. **Recomendaciones Personalizadas**
-
-### Niveles de Riesgo
-- **Bajo (0-30%)**: Riesgo mínimo
-- **Moderado (31-60%)**: Riesgo medio, seguimiento recomendado
-- **Alto (61-80%)**: Riesgo elevado, evaluación profesional sugerida
-- **Muy Alto (81-100%)**: Riesgo significativo, atención profesional recomendada
-
-### Componentes del Análisis
-- **Gráfico de Barras**: Puntuaciones por cuestionario
-- **Análisis SHAP**: Contribución de cada factor
-- **Reporte Técnico**: Detalles estadísticos
-
-## 📄 Reportes y Documentación
-
-### Tipos de Reportes Disponibles
-1. **Reporte Básico**: Resumen de resultados
-2. **Reporte Detallado**: Análisis completo con gráficos
-3. **Reporte Técnico**: Información estadística detallada
-
-### Descarga de Reportes
-1. Vaya a la página "Resultados"
-2. Seleccione el tipo de reporte deseado
-3. Haga clic en "Descargar Reporte"
-4. El archivo se descargará automáticamente
-
-## 🔒 Privacidad y Confidencialidad
-
-### Protección de Datos
-- Los datos se procesan localmente
-- No se almacenan en servidores externos
-- Información anonimizada para análisis
-- Cumplimiento con normativas de privacidad
-
-### Consentimiento
-- Su participación es voluntaria
-- Puede abandonar en cualquier momento
-- Los datos son para fines de evaluación únicamente
-- Puede solicitar eliminación de datos
-
-## ⚠️ Limitaciones Importantes
-
-### Esta herramienta NO es:
-- Un diagnóstico clínico definitivo
-- Un reemplazo de evaluación profesional
-- Una herramienta de autodiagnóstico
-- Adecuada para situaciones de emergencia
-
-### Esta herramienta SÍ es:
-- Una herramienta de screening
-- Un apoyo para profesionales
-- Útil para investigación
-- Basada en evidencia científica
-
-## 🆘 Situaciones de Crisis
-
-Si durante la evaluación experimenta:
-- Pensamientos de autolesión
-- Crisis de ansiedad severa
-- Síntomas que requieren atención inmediata
-
-**Contacte inmediatamente:**
-- Su médico de cabecera
-- Servicio de emergencias (911)
-- Línea de crisis de salud mental
-- Profesional de salud mental de confianza
-
-## ❓ Preguntas Frecuentes
-
-### ¿Cuánto tiempo toma la evaluación?
-Aproximadamente 15-20 minutos para completar todos los cuestionarios.
-
-### ¿Puedo guardar mi progreso?
-Sí, el progreso se guarda automáticamente mientras mantiene la sesión abierta.
-
-### ¿Qué pasa si no tengo información genética?
-Puede omitir esta sección. El análisis se adaptará automáticamente.
-
-### ¿Los resultados son confidenciales?
-Sí, todos los datos se procesan de forma segura y confidencial.
-
-### ¿Puedo repetir la evaluación?
-Sí, puede realizar evaluaciones múltiples en diferentes momentos.
-
-## 🛠️ Soporte Técnico
-
-### Problemas Comunes
-- **Página no carga**: Verifique conexión a internet y puerto
-- **Formulario no responde**: Actualice la página
-- **Errores de descarga**: Verifique permisos de descarga
-
-### Contacto para Soporte
-- **Email**: [email de soporte]
-- **Documentación**: Consulte docs/README.md
-- **Reportar problemas**: GitHub Issues
-
-## 📚 Recursos Adicionales
-
-### Información Científica
-- Artículos sobre modelo diátesis-estrés
-- Validación de instrumentos psicométricos
-- Guías clínicas de trastornos de ansiedad
-
-### Herramientas Complementarias
-- Técnicas de relajación
-- Recursos de autocuidado
-- Información sobre tratamientos disponibles
+**Nota:** Los ítems 5, 9, 13, 17 y 19 tienen puntuación invertida (son preguntas formuladas en sentido positivo).
 
 ---
 
-## 📝 Notas Importantes
+## Resultados
 
-1. **Uso responsable**: Esta herramienta debe usarse de manera responsable y ética
-2. **Supervisión profesional**: Se recomienda supervisión profesional para interpretación clínica
-3. **Actualización**: La herramienta se actualiza periódicamente para mejorar precisión
-4. **Feedback**: Sus comentarios son valiosos para mejorar la herramienta
+### Predicción de Riesgo
+
+Después de completar todos los cuestionarios, la página de Resultados muestra:
+
+1. **Resumen clínico** con todos los puntajes
+2. **Panel genético** (opcional) — active el toggle para incluir genotipos
+3. **Botón "Calcular Predicción"** — ejecuta el modelo MLP
+
+El resultado muestra:
+- **Nivel de riesgo** (Bajo / Moderado / Alto) con código de color
+- **Probabilidad** expresada como porcentaje
+- **Barra de riesgo** visual
+
+### Metodología del Modelo
+
+Después del resultado aparece una sección explicativa con:
+- **Qué es la Red Neuronal MLP** y cómo funciona
+- **Qué es la Curva ROC** y el AUC-ROC
+- **Tabla de métricas** con definiciones y relevancia clínica
+- **Umbrales de clasificación** (Bajo < 0.30, Moderado 0.30–0.59, Alto ≥ 0.60)
+
+### Análisis SHAP
+
+Debajo del resultado se genera automáticamente:
+- **Gráfico de barras** con las características más influyentes
+  - 🔴 Barras rojas: factores que **aumentan** el riesgo
+  - 🟢 Barras verdes: factores que **disminuyen** el riesgo
+- **Tabla detallada** con valores SHAP, efecto e interpretación
+
+### Descargar Reporte PDF
+
+Una vez calculada la predicción, aparece el botón **"Descargar Reporte PDF Completo"**.
+
+El PDF incluye 9 secciones:
+1. Datos Demográficos
+2. Eventos Vitales (LTE-12)
+3. Salud Física y Mental (SF-12)
+4. Ansiedad HADS
+5. Ansiedad ZSAS
+6. Perfil Genético
+7. Metodología del Modelo y Predicción (MLP, ROC, métricas, umbrales, resultado)
+8. Análisis SHAP (gráfico + tabla)
+9. Resumen Clínico Integrado + firma del profesional
+
+El nombre del archivo incluye el nombre del paciente.
+
+---
+
+## Análisis Masivo
+
+Para procesar múltiples pacientes simultáneamente:
+
+1. Desde la página de inicio, presione **"Análisis Masivo"**
+2. Complete los **datos del profesional evaluador**
+3. Descargue la **plantilla CSV** como referencia
+4. Cargue su archivo CSV con las columnas requeridas:
+
+| Columna | Descripción |
+|---------|-------------|
+| `nombre` | Nombre completo |
+| `edad` | Edad en años |
+| `genero` | Masculino o Femenino |
+| `años_educacion` | Años de educación formal |
+| `hads_score` | Puntuación HADS (0–42) |
+| `zsas_score` | Puntuación ZSAS (20–80) |
+| `sf12_fisica` | Puntuación SF-12 Física |
+| `sf12_mental` | Puntuación SF-12 Mental |
+| `lte12_count` | Número de eventos vitales (0–12) |
+| `prkca` | *(opcional)* Genotipo PRKCA |
+| `tcf4` | *(opcional)* Genotipo TCF4 |
+| `cdh20` | *(opcional)* Genotipo CDH20 |
+
+5. Presione **"Procesar y Generar Reportes"**
+6. Descargue los resultados en CSV o Excel
+
+---
+
+## Privacidad y Seguridad
+
+- Los datos se procesan localmente en su navegador/servidor
+- No se almacenan en bases de datos externas
+- La sesión se elimina al cerrar el navegador
+- Cumple con principios de Habeas Data
+
+---
+
+## Solución de Problemas
+
+| Problema | Solución |
+|----------|----------|
+| La aplicación no carga | Verifique que el servidor Streamlit esté ejecutándose |
+| Error "módulo no encontrado" | Ejecute `pip install -r requirements.txt` |
+| Puerto 8501 en uso | Use `streamlit run app.py --server.port 8502` |
+| PDF no se genera | Verifique que calculó la predicción primero |
+| Radio buttons no aparecen | Actualice el navegador o limpie la caché |
+
+---
+
+## Situaciones de Crisis
+
+Si durante la evaluación el paciente experimenta crisis de ansiedad severa o pensamientos de autolesión, contacte inmediatamente los servicios de emergencia o la línea de crisis de salud mental de su localidad.
 
 ---
 
 **© 2025 Breyner Joel Quiñones Castro. Todos los derechos reservados.**
-
-*Para más información técnica, consulte la documentación completa en el directorio `docs/`*

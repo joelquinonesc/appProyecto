@@ -1,309 +1,249 @@
-# 🔧 Documentación Técnica para Desarrolladores
+# Documentación Técnica para Desarrolladores — ANXRISK
 
-## Estructura del Proyecto
+## Arquitectura General
 
-### Organización de Directorios
+ANXRISK es una aplicación web construida con **Streamlit** que sigue un patrón de navegación por páginas con estado persistente en `st.session_state`.
+
+### Flujo de datos
 
 ```
-ANXRISK/
-├── app.py                     # Aplicación principal Streamlit
-├── requirements.txt           # Dependencias del proyecto
-├── README.md                 # Documentación principal
-├── LICENSE                   # Términos de licencia
-│
-├── src/                      # Código fuente principal
-│   ├── pages/               # Páginas de la aplicación
-│   │   ├── __init__.py
-│   │   ├── home.py          # Página de inicio
-│   │   ├── demograficos.py  # Datos demográficos
-│   │   ├── datos_geneticos.py # Información genética
-│   │   ├── eventos_vitales.py # Cuestionario LTE-12
-│   │   ├── sf12_fisica.py   # SF-12 Componente Físico
-│   │   ├── sf12_mental.py   # SF-12 Componente Mental
-│   │   ├── hads.py          # Escala HADS
-│   │   ├── zsas.py          # Escala ZSAS
-│   │   ├── resultados.py    # Página de resultados
-│   │   └── analisis_masivo.py # Análisis masivo
-│   │
-│   ├── utils/               # Utilidades y funciones auxiliares
-│   │   ├── __init__.py
-│   │   ├── calculos.py      # Cálculos y algoritmos
-│   │   └── dataframe_manager.py # Gestión de datos
-│   │
-│   ├── models/              # Modelos de machine learning
-│   │   ├── lightgbm_male_model_tuned.joblib
-│   │   ├── mlp_female_model_tuned.joblib
-│   │   ├── mlp_full_model_tuned.joblib
-│   │   └── mlp_no_gender_model_tuned.joblib
-│   │
-│   └── assets/              # Recursos estáticos
-│       ├── img/             # Imágenes y logos
-│       ├── styles/          # Hojas de estilo CSS
-│       └── guia_uso.html    # Guía de uso
-│
-├── docs/                    # Documentación completa
-│   ├── README.md           # Documentación principal (copia)
-│   ├── MODEL_DOCUMENTATION.md
-│   ├── DOCUMENTACION_BASE_DATOS_DETALLADA.md
-│   ├── DOCUMENTACION_SHAP_MASIVO.md
-│   └── [otros documentos .md y .docx]
-│
-├── data/                    # Bases de datos y archivos
-│   ├── datos_simulados_100_participantes.csv
-│   ├── datos_simulados_100_participantes.xlsx
-│   ├── base_datos_respuestas_textuales_20_participantes.csv
-│   └── base_datos_respuestas_textuales_20_participantes.xlsx
-│
-├── scripts/                 # Scripts de utilidad
-│   ├── generar_base_datos_detallada.py
-│   ├── generar_base_datos_respuestas_textuales.py
-│   ├── crear_documento_profesional.py
-│   ├── analisis_shap_masivo.py
-│   └── [otros scripts de utilidad]
-│
-├── config/                  # Archivos de configuración
-│   ├── run.py              # Script de ejecución Python
-│   ├── run.bat             # Script de ejecución Windows
-│   └── run_streamlit.sh    # Script de ejecución Unix/Linux
-│
-└── tests/                   # Pruebas automatizadas
-    └── [archivos de prueba futuros]
+Formularios (páginas) → st.session_state → Modelo MLP → Predicción + SHAP → PDF
 ```
 
-## Arquitectura de la Aplicación
-
-### Flujo de Datos
-
-1. **Entrada de Datos** → Formularios en páginas específicas
-2. **Validación** → Funciones en `utils/calculos.py`
-3. **Procesamiento** → Modelos ML en `src/models/`
-4. **Análisis** → Integración SHAP y métricas
-5. **Salida** → Visualizaciones y reportes
-
-### Componentes Principales
-
-#### 1. Aplicación Principal (`app.py`)
-```python
-# Configuración Streamlit
-st.set_page_config(
-    page_title="Evaluación Psicológica Integral",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
-# Sistema de navegación por páginas
-ORDEN_PAGINAS = [
-    "Datos demograficos", "LTE-12", "SF-12 Física", 
-    "SF-12 Mental", "Ansiedad (HADS)", "Ansiedad (ZSAS)", 
-    "Datos Genéticos"
-]
-```
-
-#### 2. Gestión de Estado
-- Utiliza `st.session_state` para persistencia
-- Variables de navegación y datos de formularios
-- Sistema de progreso y validación
-
-#### 3. Sistema de Páginas
-Cada página implementa:
-- Función principal de renderizado
-- Validación de datos específica
-- Integración con el estado global
-
-## Modelos de Machine Learning
-
-### Tipos de Modelos
-1. **MLP (Multi-Layer Perceptron)**
-   - Modelo principal para predicción
-   - Versiones por género y completa
-   - Alta precisión y robustez
-
-2. **LightGBM**
-   - Modelo alternativo para validación
-   - Eficiente para datasets grandes
-   - Interpretabilidad integrada
-
-### Carga de Modelos
-```python
-import joblib
-import os
-
-def cargar_modelo(nombre_modelo):
-    ruta_modelo = os.path.join("src", "models", f"{nombre_modelo}.joblib")
-    return joblib.load(ruta_modelo)
-```
-
-### Análisis SHAP
-- Integración completa para interpretabilidad
-- Visualizaciones automáticas
-- Reportes técnicos detallados
-
-## Sistema de Formularios
-
-### Estructura de Datos
-```python
-# Ejemplo de estructura para datos demográficos
-datos_demograficos = {
-    'nombre': str,
-    'edad': int,
-    'genero': str,  # 'Masculino'/'Femenino'
-    'nivel_educativo': str
-}
-```
-
-### Validación
-- Validación en tiempo real
-- Mensajes de error específicos
-- Prevención de datos inconsistentes
-
-## Sistema de Análisis Masivo
-
-### Procesamiento por Lotes
-1. **Carga de Archivo** → CSV/Excel
-2. **Validación de Estructura** → Columnas requeridas
-3. **Procesamiento** → Aplicación de modelos
-4. **Generación de Reportes** → Múltiples formatos
-
-### Formato de Entrada
-```csv
-nombre,edad,genero,nivel_educativo,LTE_1,...,HADS_1,...
-Participante_1,25,Femenino,Universitario,1,...,2,...
-```
-
-## Personalización y Configuración
-
-### Estilos CSS
-- Archivo principal: `src/assets/styles/main.css`
-- Tema profesional y accesible
-- Responsive design integrado
-
-### Configuración de Modelos
-- Parámetros ajustables en scripts
-- Múltiples configuraciones disponibles
-- Validación cruzada configurable
-
-## Herramientas de Desarrollo
-
-### Dependencias Principales
-```
-streamlit>=1.28.0
-pandas>=1.5.0
-numpy>=1.24.0
-scikit-learn>=1.3.0
-lightgbm>=3.3.0
-shap>=0.42.0
-plotly>=5.15.0
-joblib>=1.3.0
-openpyxl>=3.1.0
-```
-
-### Scripts de Utilidad
-
-#### Ejecución de la Aplicación
-```bash
-# Unix/Linux/macOS
-./config/run_streamlit.sh
-
-# Windows
-config\run.bat
-
-# Python directo
-python config/run.py
-```
-
-#### Generación de Datos
-```bash
-# Generar base de datos detallada
-python scripts/generar_base_datos_detallada.py
-
-# Análisis SHAP masivo
-python scripts/analisis_shap_masivo.py
-```
-
-## Procedimientos de Mantenimiento
-
-### Actualización de Modelos
-1. Entrenar nuevos modelos con datos actualizados
-2. Guardar en formato joblib en `src/models/`
-3. Actualizar referencias en el código
-4. Validar funcionamiento completo
-
-### Backup de Datos
-- Configurar respaldos automáticos de `data/`
-- Versionado de modelos en `src/models/`
-- Documentación de cambios
-
-### Monitoreo de Performance
-- Logs automáticos de errores
-- Métricas de uso de la aplicación
-- Validación periódica de modelos
-
-## Estándares de Código
-
-### Convenciones de Nomenclatura
-```python
-# Variables y funciones: snake_case
-nombre_variable = "valor"
-def calcular_riesgo_ansiedad():
-    pass
-
-# Clases: PascalCase
-class AnalizadorRiesgo:
-    pass
-
-# Constantes: UPPER_CASE
-ORDEN_PAGINAS = ["Home", "Demograficos"]
-```
-
-### Documentación de Funciones
-```python
-def calcular_puntuacion_hads(respuestas):
-    """
-    Calcula la puntuación total de la escala HADS.
-    
-    Args:
-        respuestas (dict): Diccionario con respuestas HADS
-        
-    Returns:
-        tuple: (puntuacion_ansiedad, puntuacion_depresion)
-        
-    Raises:
-        ValueError: Si las respuestas son inválidas
-    """
-    pass
-```
-
-## Resolución de Problemas Comunes
-
-### Error de Modelos No Encontrados
-1. Verificar rutas en `src/models/`
-2. Confirmar formato joblib
-3. Revisar permisos de archivo
-
-### Problemas de Dependencias
-1. Actualizar `requirements.txt`
-2. Recrear entorno virtual
-3. Verificar compatibilidad de versiones
-
-### Errores de Streamlit
-1. Reiniciar servidor de desarrollo
-2. Limpiar caché del navegador
-3. Verificar configuración de puerto
-
-## Próximas Mejoras Planificadas
-
-### Funcionalidades
-- [ ] API REST para integración externa
-- [ ] Dashboard administrativo
-- [ ] Análisis longitudinal
-- [ ] Integración con bases de datos externas
-
-### Técnicas
-- [ ] Containerización con Docker
-- [ ] CI/CD automatizado
-- [ ] Testing automatizado completo
-- [ ] Monitoreo en tiempo real
+1. Cada página recopila datos y los almacena en `st.session_state`
+2. La página de Resultados construye el vector de features desde `st.session_state`
+3. El modelo MLP genera la probabilidad de riesgo
+4. SHAP calcula las contribuciones individuales
+5. ReportLab genera el PDF con todos los datos
 
 ---
 
-**Nota**: Esta documentación debe mantenerse actualizada con cada versión del software.
+## Estructura del Código Fuente
+
+```
+src/
+├── config.py                   # Configuración centralizada
+├── pages/                      # Módulos de interfaz
+│   ├── __init__.py             # Exporta funciones de cada página
+│   ├── home.py                 # Página de inicio (logo SVG, guía de uso)
+│   ├── demograficos.py         # Datos del paciente + profesional evaluador
+│   ├── eventos_vitales.py      # LTE-12 (12 radios centrados con st.columns)
+│   ├── sf12_fisica.py          # SF-12 físico (5 preguntas)
+│   ├── sf12_mental.py          # SF-12 mental (2 preguntas)
+│   ├── hads.py                 # HADS (7 preguntas)
+│   ├── zsas.py                 # ZSAS (20 preguntas)
+│   ├── resultados.py           # Predicción MLP, SHAP, generación PDF
+│   └── analisis_masivo.py      # Procesamiento por lotes CSV
+├── utils/
+│   ├── calculos.py             # Transformaciones de features
+│   └── dataframe_manager.py    # Gestión del registro en session_state
+├── models/                     # Archivos .joblib de modelos entrenados
+└── assets/
+    ├── img/logo.png
+    ├── styles/main.css         # ~1100 líneas de CSS personalizado
+    └── guia_uso.html           # Guía de uso embebida
+```
+
+---
+
+## Configuración Centralizada (`src/config.py`)
+
+```python
+# Rutas de modelos
+MODEL_STANDARD_PATH = "src/models/anxrisk_mlp_model_standard.joblib"
+MODEL_EXTENDED_PATH = "src/models/anxrisk_mlp_model_extended.joblib"
+
+# Orden canónico de features
+FEATURES_STANDARD = [  # 13 features
+    'EDAD24', 'AEFGROUPS',
+    'LTE12_0', 'LTE12_1', 'LTE12_2',
+    'SF12F_Q1', 'SF12F_Q2', 'SF12F_Q3', 'SF12F_Q4',
+    'SF12M_Q1', 'SF12M_Q2', 'SF12M_Q3', 'SF12M_Q4',
+]
+
+FEATURES_EXTENDED = FEATURES_STANDARD + [  # 22 features
+    'PRKCA_C/C', 'PRKCA_C/T', 'PRKCA_T/T',
+    'TCF4_A/A', 'TCF4_A/T', 'TCF4_T/T',
+    'CDH20_A/A', 'CDH20_A/G', 'CDH20_G/G',
+]
+
+# Umbrales triclásicos
+THRESHOLD_LOW = 0.30
+THRESHOLD_HIGH = 0.60
+```
+
+---
+
+## Aplicación Principal (`app.py`)
+
+### Responsabilidades
+- Configura `st.set_page_config()` con `layout="wide"`
+- Carga CSS desde `src/assets/styles/main.css`
+- Inyecta CSS inline para centrado de radio buttons
+- Gestiona la navegación mediante `st.session_state.pagina_actual`
+- Renderiza la barra lateral con progreso y botones de navegación
+
+### CSS para radio buttons
+
+El centrado de radio buttons en Streamlit 1.51 **no funciona con CSS externo** (los estilos emotion de Streamlit no se pueden sobreescribir). La solución es usar `st.columns([1, 2, 1])` o `[1, 3, 1]` en Python para envolver cada `st.radio()` en la columna central.
+
+---
+
+## Páginas del Sistema
+
+### `demograficos.py`
+
+- **Campos del paciente:** nombre (text_input), edad (number_input, value=None), género (selectbox), educación (number_input, value=None)
+- **Campos del profesional:** nombre, cargo, institución, registro profesional
+- **Validaciones:** campos obligatorios, edad > 0, educación ≤ edad – 5
+- **Estado:** guarda en `st.session_state["datos_demograficos"]`
+- Los datos del profesional se guardan en claves individuales de session_state (`prof_nombre`, `prof_cargo`, etc.)
+
+### `eventos_vitales.py`
+
+- 12 preguntas Sí/No centradas con `st.columns([1, 2, 1])`
+- Guarda total y detalle en `st.session_state.resultados['eventos_vitales']`
+
+### `sf12_fisica.py` y `sf12_mental.py`
+
+- Preguntas con opciones Likert centradas con `st.columns([1, 3, 1])`
+- Calcula puntaje bruto y cuartil
+- SF-12 físico: 5 preguntas, SF-12 mental: 2 preguntas
+
+### `hads.py`
+
+- 7 preguntas con 4 opciones (0–3 puntos) centradas con `st.columns([1, 3, 1])`
+- Puntaje total: 0–21
+- Clasifica en: Normal, Leve, Moderada, Severa
+
+### `zsas.py`
+
+- 20 preguntas con 4 opciones (1–4 puntos) centradas con `st.columns([1, 3, 1])`
+- Ítems invertidos: 5, 9, 13, 17, 19
+- Puntaje bruto: 20–80
+
+### `resultados.py`
+
+Archivo más extenso (~1400 líneas). Contiene:
+
+1. **`mostrar_resultados()`** — Función principal
+   - Lee datos profesionales desde session_state
+   - Muestra resumen clínico con métricas
+   - Toggle para panel genético (modelo extendido)
+   - Botón de cálculo de predicción
+   - Llama a `_mostrar_resultado_riesgo()`, `_mostrar_explicacion_modelo()`, `mostrar_shap_analysis()`
+   - Botón de descarga PDF
+
+2. **`_mostrar_resultado_riesgo()`** — Barra visual de riesgo con CSS
+
+3. **`_mostrar_explicacion_modelo()`** — Sección de metodología MLP y ROC con tabla de métricas
+
+4. **`mostrar_shap_analysis()`** — Gráfico SHAP + tabla de contribuciones
+
+5. **`generar_pdf_resultados()`** — Genera PDF con ReportLab (9 secciones + firma)
+
+### `analisis_masivo.py`
+
+- Descarga de plantilla CSV
+- Campos del profesional evaluador (claves `masivo_prof_*`)
+- Carga y validación de CSV
+- Procesamiento con `calcular_riesgo_paciente()` por fila
+- Tabla de features one-hot
+- Integración SHAP masiva (si disponible)
+- Descarga de resultados en CSV/Excel
+
+---
+
+## Funciones de Cálculo (`src/utils/calculos.py`)
+
+| Función | Descripción |
+|---------|-------------|
+| `transformar_edad_a_grupo(edad)` | 0 si edad ≤ 24, 1 si > 24 |
+| `transformar_educacion_a_binaria(años)` | 0 si ≤ 14 años, 1 si ≥ 15 |
+| `transformar_genero_a_binario(genero)` | 0 = Masculino, 1 = Femenino |
+| `transformar_lte12_a_clasificacion(total)` | 0, 1, o 2 (≥2 eventos) |
+| `transformar_sf12_fisica_a_cuartil(puntaje)` | Cuartil 1–4 según umbrales |
+| `transformar_sf12_mental_a_cuartil(puntaje)` | Cuartil 1–4 según umbrales |
+| `clasificar_por_youden(proba, umbral)` | Bajo/Moderado/Alto con umbrales fijos |
+
+---
+
+## Generación del PDF
+
+El PDF se genera con **ReportLab** en la función `generar_pdf_resultados()`:
+
+- **Tamaño:** Letter
+- **Fuentes:** Helvetica / Helvetica-Bold
+- **Colores:** Alineados con la paleta de la app (#D4911D, #2D2D2D, etc.)
+- **Tablas:** `Table` con estilos personalizados
+- **Texto largo:** Usa `Paragraph()` para evitar desbordamiento
+- **Gráfico SHAP:** Generado con matplotlib, embebido como imagen PNG
+- **Firma:** Bloque con línea, nombre del profesional, cargo, institución y registro
+
+### Secciones del PDF
+
+1. Datos Demográficos (tabla)
+2. Eventos Vitales LTE-12 (viñetas con explicación)
+3. SF-12 Física y Mental (tabla + cuartiles + interpretación)
+4. HADS (tabla + nivel + explicación clínica)
+5. ZSAS (tabla + nivel + explicación clínica)
+6. Perfil Genético (tabla de genotipos)
+7. Metodología y Predicción (subsecciones 7.1–7.4: MLP, ROC, umbrales, resultado + recomendación)
+8. Análisis SHAP (gráfico + tabla detallada)
+9. Resumen Clínico Integrado + Nota clínica + Firma
+
+---
+
+## Sistema de Estilos CSS
+
+El archivo `src/assets/styles/main.css` (~1100 líneas) define:
+
+- **Variables CSS:** `--primary`, `--surface`, `--text`, `--border`, etc.
+- **Tipografía:** Figtree importada de Google Fonts
+- **Componentes:** `.anxrisk-card`, `.anxrisk-result-header`, `.anxrisk-risk-gauge`, `.anxrisk-stats-bar`, etc.
+- **Responsive:** Adaptado a diferentes tamaños de pantalla
+- **Radio buttons:** Selectores con `data-testid` (efecto limitado, centrado real con st.columns)
+
+---
+
+## Dependencias
+
+```
+streamlit>=1.28.0
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+lightgbm>=4.0.0
+joblib>=1.3.0
+shap>=0.42.0
+reportlab>=4.0.0
+matplotlib>=3.7.0
+openpyxl>=3.1.0
+```
+
+---
+
+## Despliegue
+
+### Streamlit Community Cloud
+
+El proyecto se despliega desde la rama `main` del repositorio GitHub:
+- Repositorio: `github.com/joelquinonesc/appProyecto`
+- Rama: `main`
+- Archivo principal: `app.py`
+
+Para desplegar cambios: `git push origin main` — Streamlit Cloud reconstruye automáticamente.
+
+---
+
+## Convenciones de Código
+
+- **Variables y funciones:** `snake_case`
+- **Clases:** `PascalCase`
+- **Constantes:** `UPPER_CASE`
+- **Docstrings:** En español, formato Google
+- **Session state keys:** descriptivos, sin prefijo (ej. `prof_nombre`, `datos_demograficos`)
+
+---
+
+**© 2025 Breyner Joel Quiñones Castro. Todos los derechos reservados.**
