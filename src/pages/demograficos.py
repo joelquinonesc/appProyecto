@@ -68,7 +68,7 @@ def mostrar_demograficos():
     if edad is None or edad < 5:
         años_educacion = st.number_input("Años de educación formal *", min_value=0, max_value=0, value=None, disabled=True, placeholder="Ingrese los años", help="Ingrese primero la edad del paciente", key="educacion")
     else:
-        if "educacion" in st.session_state and st.session_state.get("educacion", 0) > max_educacion:
+        if "educacion" in st.session_state and (st.session_state.get("educacion") or 0) > max_educacion:
             st.session_state["educacion"] = max_educacion
         años_educacion = st.number_input("Años de educación formal *", min_value=0, max_value=max_educacion, value=None, step=1, placeholder="Ingrese los años", help=f"Máximo permitido: {max_educacion} años (edad - 5)", key="educacion")
 
