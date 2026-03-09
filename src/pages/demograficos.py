@@ -39,10 +39,10 @@ def mostrar_demograficos():
             st.metric(label="Educación", value=f"{datos['años_educacion']} años")
 
         # Show professional evaluator data if entered
-        prof_nombre = st.session_state.get('prof_nombre', '')
-        prof_cargo = st.session_state.get('prof_cargo', '')
-        prof_institucion = st.session_state.get('prof_institucion', '')
-        prof_registro = st.session_state.get('prof_registro', '')
+        prof_nombre = st.session_state.get('_prof_nombre', '') or st.session_state.get('prof_nombre', '')
+        prof_cargo = st.session_state.get('_prof_cargo', '') or st.session_state.get('prof_cargo', '')
+        prof_institucion = st.session_state.get('_prof_institucion', '') or st.session_state.get('prof_institucion', '')
+        prof_registro = st.session_state.get('_prof_registro', '') or st.session_state.get('prof_registro', '')
         if any([prof_nombre, prof_cargo, prof_institucion, prof_registro]):
             st.markdown("##### 👨‍⚕️ Profesional Evaluador")
             pcol1, pcol2 = st.columns(2)
@@ -63,6 +63,11 @@ def mostrar_demograficos():
         with col_edit:
             if st.button("Editar datos"):
                 st.session_state["datos_demograficos"] = None
+                # Restaurar datos del profesional a las keys de widget para que aparezcan pre-llenados
+                st.session_state["prof_nombre"] = st.session_state.get("_prof_nombre", "")
+                st.session_state["prof_cargo"] = st.session_state.get("_prof_cargo", "")
+                st.session_state["prof_institucion"] = st.session_state.get("_prof_institucion", "")
+                st.session_state["prof_registro"] = st.session_state.get("_prof_registro", "")
                 st.rerun()
         with col_next:
             if st.button("Siguiente", key="demo_next", type="primary"):
@@ -141,6 +146,14 @@ def mostrar_demograficos():
         }
 
         st.session_state["datos_demograficos"] = datos
+
+        # Guardar datos del profesional en claves persistentes
+        # (las keys de widget se eliminan cuando el widget deja de renderizarse)
+        st.session_state["_prof_nombre"] = st.session_state.get("prof_nombre", "")
+        st.session_state["_prof_cargo"] = st.session_state.get("prof_cargo", "")
+        st.session_state["_prof_institucion"] = st.session_state.get("prof_institucion", "")
+        st.session_state["_prof_registro"] = st.session_state.get("prof_registro", "")
+
         agregar_o_actualizar_registro(datos, tipo_datos="demograficos")
         st.success("Datos guardados correctamente")
         st.rerun()

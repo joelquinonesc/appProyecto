@@ -94,12 +94,12 @@ def mostrar_resultados():
     
     registro = obtener_registro_actual()
 
-    # ── PROFESSIONAL DATA (read from session state, set in demograficos) ──
+    # ── PROFESSIONAL DATA (read from persistent keys, set in demograficos) ──
     datos_profesional = {
-        'nombre': st.session_state.get('prof_nombre', ''),
-        'cargo': st.session_state.get('prof_cargo', ''),
-        'institucion': st.session_state.get('prof_institucion', ''),
-        'registro_profesional': st.session_state.get('prof_registro', ''),
+        'nombre': st.session_state.get('_prof_nombre', '') or st.session_state.get('prof_nombre', ''),
+        'cargo': st.session_state.get('_prof_cargo', '') or st.session_state.get('prof_cargo', ''),
+        'institucion': st.session_state.get('_prof_institucion', '') or st.session_state.get('prof_institucion', ''),
+        'registro_profesional': st.session_state.get('_prof_registro', '') or st.session_state.get('prof_registro', ''),
     }
 
     # ── CLINICAL SUMMARY ──
