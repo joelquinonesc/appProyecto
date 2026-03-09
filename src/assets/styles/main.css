@@ -1,2350 +1,1135 @@
 /* =========================================================
-   🧬 ANXRISK - Sistema de Diseño CSS
-   Aplicación Médica para Evaluación de Riesgo de Ansiedad
-   Versión: 2.1 - Fondo Gris Profesional
+   ANXRISK — Professional Design System
+   Medical SaaS for Anxiety Risk Stratification
+   Version: 3.0 — Clinical Professional
    ========================================================= */
 
 /* ============================================
-   1. VARIABLES CSS - Sistema de Diseño
+   1. GOOGLE FONTS
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ============================================
+   2. CSS CUSTOM PROPERTIES — Design Tokens
    ============================================ */
 :root {
-    /* Colores Principales */
-    --color-primary: #2B87D1;
-    --color-primary-dark: #1F6DB5;
-    --color-primary-light: #64B5F6;
-    
-    /* Colores de Fondo */
-    --color-background: #E8E8E8;
-    --color-surface: #FFFFFF;
-    --color-surface-variant: #F5F8FB;
-    
-    /* Colores de Texto */
-    --color-text-primary: #2E2E2E;
-    --color-text-secondary: #666666;
-    --color-text-disabled: #9E9E9E;
-    
-    /* Colores de Acento */
-    --color-success: #4CAF50;
-    --color-warning: #FF9800;
-    --color-error: #F44336;
-    --color-info: #2196F3;
-    
-    /* Bordes y Divisores */
-    --color-border: #D1D1D1;
-    --color-divider: #E0E0E0;
-    
-    /* Sombras */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 3px 12px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 6px 20px rgba(0, 0, 0, 0.12);
-    --shadow-xl: 0 10px 40px rgba(0, 0, 0, 0.15);
-    
-    /* Radios de Borde */
-    --radius-sm: 6px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
+    /* Primary Palette — Illumina-inspired: dark amber/gold + charcoal */
+    --primary:        #D4911D;
+    --primary-light:  #E8A832;
+    --primary-soft:   #FDE8C4;
+    --primary-hover:  #B87A14;
+
+    /* Surfaces — Warm neutral tones */
+    --surface:        #F0EDEA;
+    --surface-card:   #FFFFFF;
+
+    /* Text — Charcoal grays */
+    --text-primary:   #2D2D2D;
+    --text-secondary: #6B6B6B;
+
+    /* Borders & Dividers */
+    --border:         #D4D0CC;
+    --border-focus:   #D4911D;
+
+    /* Semantic Colors */
+    --success:        #059669;
+    --success-bg:     rgba(5, 150, 105, 0.10);
+    --warning:        #D97706;
+    --warning-bg:     rgba(217, 119, 6, 0.10);
+    --danger:         #DC2626;
+    --danger-bg:      rgba(220, 38, 38, 0.10);
+    --info:           #4A90C4;
+    --info-bg:        rgba(74, 144, 196, 0.10);
+
+    /* Accent — Genetics Module */
+    --accent-genetic: #7C3AED;
+    --accent-genetic-bg: rgba(124, 58, 237, 0.08);
+
+    /* Shadows */
+    --shadow-xs:  0 1px 2px rgba(0,0,0,0.04);
+    --shadow-sm:  0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md:  0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.06);
+    --shadow-lg:  0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.05);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,0.08);
+
+    /* Border Radius */
+    --radius-sm:   8px;
+    --radius-md:   12px;
+    --radius-lg:   16px;
     --radius-full: 9999px;
-    
-    /* Sistema de Espaciado */
-    --space-xs: 0.5rem;    /* 8px */
-    --space-sm: 1rem;      /* 16px */
-    --space-md: 1.5rem;    /* 24px */
-    --space-lg: 2rem;      /* 32px */
-    --space-xl: 3rem;      /* 48px */
-    --space-2xl: 4rem;     /* 64px */
-    
-    /* Tipografía */
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    --font-size-xs: 0.75rem;   /* 12px */
-    --font-size-sm: 0.875rem;  /* 14px */
-    --font-size-base: 1rem;    /* 16px */
-    --font-size-lg: 1.125rem;  /* 18px */
-    --font-size-xl: 1.25rem;   /* 20px */
-    --font-size-2xl: 1.5rem;   /* 24px */
-    --font-size-3xl: 2rem;     /* 32px */
-    --font-size-4xl: 2.5rem;   /* 40px */
-    
-    /* Transiciones */
-    --transition-fast: 150ms ease-in-out;
-    --transition-base: 250ms ease-in-out;
-    --transition-slow: 350ms ease-in-out;
+
+    /* Spacing (4px grid) */
+    --space-1:  0.25rem;
+    --space-2:  0.5rem;
+    --space-3:  0.75rem;
+    --space-4:  1rem;
+    --space-5:  1.25rem;
+    --space-6:  1.5rem;
+    --space-8:  2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+
+    /* Typography */
+    --font-sans:  'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono:  'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+    /* Transitions */
+    --ease:       0.2s ease;
+    --ease-slow:  0.35s ease;
 }
 
 /* ============================================
-   2. RESET Y ESTILOS BASE
+   3. RESET & BASE
    ============================================ */
 *, *::before, *::after {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
-html {
-    background-color: #E8E8E8 !important;
-}
-
-body {
-    font-family: var(--font-family);
+html, body {
+    font-family: var(--font-sans) !important;
     font-size: 16px;
-    line-height: 1.6;
-    color: var(--color-text-primary);
-    background-color: #E8E8E8 !important;
+    line-height: 1.65;
+    color: var(--text-primary);
+    background-color: var(--surface) !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ASEGURAR TEXTO NEGRO EN AUTOCOMPLETADO DEL NAVEGADOR */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-text-fill-color: #2E2E2E !important;
-    -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
-    color: #2E2E2E !important;
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans) !important;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
 }
 
-/* Labels en negro */
+h1 { font-size: 2rem !important; font-weight: 700 !important; }
+h2 { font-size: 1.5rem !important; font-weight: 600 !important; }
+h3 { font-size: 1.25rem !important; font-weight: 600 !important; }
+
+p {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+}
+
+/* ============================================
+   4. STREAMLIT APP OVERRIDES
+   ============================================ */
+.stApp {
+    background-color: var(--surface) !important;
+}
+
+.main, section.main {
+    background-color: var(--surface) !important;
+    padding-top: 0 !important;
+}
+
+.block-container {
+    padding-top: var(--space-6) !important;
+    padding-bottom: var(--space-8) !important;
+    max-width: 960px !important;
+    margin: 0 auto !important;
+    background-color: var(--surface) !important;
+}
+
+/* Hide Streamlit branding */
+header[data-testid="stHeader"],
+div[data-testid="stToolbar"],
+.stDeployButton,
+#MainMenu,
+footer {
+    display: none !important;
+    height: 0 !important;
+    visibility: hidden !important;
+}
+
+/* ============================================
+   5. SIDEBAR — Professional Stepper
+   ============================================ */
+section[data-testid="stSidebar"] {
+    background: var(--surface-card) !important;
+    border-right: 1px solid var(--border) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+section[data-testid="stSidebar"] > div {
+    background: var(--surface-card) !important;
+    padding: var(--space-6) var(--space-4) !important;
+}
+
+section[data-testid="stSidebar"] .stMarkdown p,
+section[data-testid="stSidebar"] .stMarkdown span {
+    color: var(--text-primary) !important;
+}
+
+/* Sidebar headings */
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3 {
+    color: var(--primary) !important;
+    font-weight: 600 !important;
+}
+
+/* Sidebar progress bar */
+section[data-testid="stSidebar"] .stProgress > div > div > div {
+    background: linear-gradient(90deg, var(--primary), var(--primary-light)) !important;
+    border-radius: var(--radius-full) !important;
+}
+
+section[data-testid="stSidebar"] .stProgress > div > div {
+    background: var(--border) !important;
+    border-radius: var(--radius-full) !important;
+}
+
+/* ============================================
+   6. BUTTONS
+   ============================================ */
+.stButton > button {
+    font-family: var(--font-sans) !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 0.75rem 1.75rem !important;
+    transition: all var(--ease) !important;
+    cursor: pointer !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    border: none !important;
+    box-shadow: var(--shadow-xs) !important;
+    width: 100% !important;
+    min-height: 48px !important;
+}
+
+/* Primary button */
+.stButton > button[kind="primary"],
+.stButton > button[data-testid="stBaseButton-primary"] {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%) !important;
+    color: #FFFFFF !important;
+}
+
+.stButton > button[kind="primary"]:hover,
+.stButton > button[data-testid="stBaseButton-primary"]:hover {
+    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%) !important;
+    box-shadow: 0 4px 14px rgba(212, 145, 29, 0.35) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Secondary/default button */
+.stButton > button[kind="secondary"],
+.stButton > button:not([kind="primary"]):not([data-testid="stBaseButton-primary"]) {
+    background: var(--surface-card) !important;
+    color: var(--primary) !important;
+    border: 1px solid var(--border) !important;
+}
+
+.stButton > button[kind="secondary"]:hover,
+.stButton > button:not([kind="primary"]):not([data-testid="stBaseButton-primary"]):hover {
+    border-color: var(--primary) !important;
+    background: var(--surface) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Focus ring (accessibility) */
+.stButton > button:focus-visible {
+    outline: 2px solid var(--primary-light) !important;
+    outline-offset: 2px !important;
+}
+
+/* Download buttons */
+.stDownloadButton > button {
+    font-family: var(--font-sans) !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 0.75rem 1.75rem !important;
+    transition: all var(--ease) !important;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: var(--shadow-xs) !important;
+    min-height: 48px !important;
+}
+
+.stDownloadButton > button:hover {
+    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%) !important;
+    box-shadow: 0 4px 14px rgba(212, 145, 29, 0.35) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ============================================
+   7. FORM INPUTS
+   ============================================ */
+
+/* Labels */
 label,
 .stTextInput label,
 .stNumberInput label,
-.stSelectbox label {
-    color: #2E2E2E !important;
+.stSelectbox label,
+.stRadio label {
+    color: var(--text-primary) !important;
     font-weight: 500 !important;
+    font-size: 1rem !important;
+    font-family: var(--font-sans) !important;
 }
 
-/* ============================================
-   3. FONDO GRIS EN STREAMLIT
-   ============================================ */
-.stApp {
-    background-color: #E8E8E8 !important;
-}
-
-.main {
-    background-color: #E8E8E8 !important;
-}
-
-/* Eliminar todos los espacios superiores */
-.block-container {
-    padding-top: 0 !important;
-    padding-bottom: var(--space-lg) !important;
-    margin-top: 0 !important;
-    max-width: 1400px !important;
-    background-color: #E8E8E8 !important;
-}
-
-section.main {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-    background-color: #E8E8E8 !important;
-}
-
-section.main > div,
-section.main > div:first-child {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-    background-color: #E8E8E8 !important;
-}
-
-div[data-testid="stVerticalBlock"],
-div[data-testid="stVerticalBlock"] > div:first-child {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-}
-
-/* Ocultar header y toolbar de Streamlit */
-header[data-testid="stHeader"],
-div[data-testid="stToolbar"],
-.stDeployButton {
-    display: none !important;
-    height: 0 !important;
-}
-
-/* ============================================
-   4. ESTRUCTURA PRINCIPAL
-   ============================================ */
-.main-content {
-    background-color: #E8E8E8;
-    min-height: 100vh;
-    padding: 0 var(--space-lg) var(--space-2xl);
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* ============================================
-   5. LOGO Y BRANDING
-   ============================================ */
-.logo-section {
-    text-align: center !important;
-    padding: 0 !important;
-    margin: 0 0 var(--space-sm) 0 !important;
-    line-height: 0 !important;
-    animation: fadeInDown 0.6s ease-out;
-    background-color: transparent !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-}
-
-.logo-section img {
-    max-width: 50% !important;
-    height: auto !important;
-    filter: drop-shadow(var(--shadow-sm));
-    transition: transform var(--transition-base);
-    margin: 0 auto !important;
-    padding: 0 !important;
-    display: block !important;
-}
-
-.logo-section img:hover {
-    transform: scale(1.02);
-}
-
-/* ============================================
-   6. TIPOGRAFÍA
-   ============================================ */
-.big-title {
-    font-size: var(--font-size-4xl) !important;
-    font-weight: 700 !important;
-    color: var(--color-primary) !important;
-    text-align: center;
-    margin: var(--space-lg) 0 var(--space-md) 0 !important;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    animation: fadeIn 0.8s ease-out;
-}
-
-.subtitle {
-    font-size: var(--font-size-xl) !important;
-    color: var(--color-text-secondary) !important;
-    text-align: center;
-    margin: var(--space-sm) auto var(--space-md) auto !important;
-    font-weight: 400 !important;
-    max-width: 800px;
-    line-height: 1.6;
-    padding: 0 var(--space-md);
-    animation: fadeIn 1s ease-out;
-}
-
-.welcome-title {
-    font-size: var(--font-size-2xl) !important;
-    font-weight: 600 !important;
-    color: var(--color-text-primary) !important;
-    text-align: center;
-    margin: var(--space-lg) auto var(--space-md) auto !important;
-    max-width: 900px;
-    line-height: 1.4;
-    padding: 0 var(--space-md);
-    animation: fadeIn 0.9s ease-out;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--color-text-primary);
-}
-
-p {
-    margin-bottom: var(--space-md);
-    line-height: 1.7;
-}
-
-/* ============================================
-   7. SECCIÓN DE BIENVENIDA
-   ============================================ */
-.welcome-text {
-    background: var(--color-surface);
-    padding: var(--space-xl);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    margin: 0 auto var(--space-xl) auto;
-    max-width: 900px;
-    border: 1px solid var(--color-border);
-    position: relative;
-    overflow: hidden;
-    animation: slideUp 0.8s ease-out;
-}
-
-.welcome-text::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-}
-
-.welcome-text p {
-    color: var(--color-text-primary);
-    line-height: 1.8;
-    margin-bottom: var(--space-md);
-    font-size: var(--font-size-lg);
-    text-align: justify;
-}
-
-.welcome-text p:last-child {
-    margin-bottom: 0;
-}
-
-.welcome-text p:first-of-type {
-    font-weight: 500;
-}
-
-/* ============================================
-   8. TARJETAS INFORMATIVAS
-   ============================================ */
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-lg);
-    margin: var(--space-xl) 0;
-    animation: fadeIn 1s ease-out;
-}
-
-.info-card {
-    background: var(--color-surface);
-    padding: var(--space-xl);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-border);
-    transition: all var(--transition-base);
-    height: 100%;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.info-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
-    transform: scaleX(0);
-    transition: transform var(--transition-base);
-}
-
-.info-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-primary-light);
-}
-
-.info-card:hover::before {
-    transform: scaleX(1);
-}
-
-.info-card h4 {
-    font-size: var(--font-size-xl);
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-sm);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-xs);
-}
-
-.info-card p {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-base);
-    line-height: 1.6;
-    margin: 0;
-}
-
-/* ============================================
-   9. BOTONES
-   ============================================ */
-.center-button {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    margin: var(--space-xl) 0 !important;
-    text-align: center !important;
-}
-
-.center-button .stButton {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-}
-
-div[data-testid="column"] .stButton {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-}
-
-.stButton > button {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%) !important;
-    color: white !important;
-    padding: 1rem 2.5rem !important;
-    border-radius: var(--radius-full) !important;
-    border: none !important;
-    font-weight: 600 !important;
-    font-size: var(--font-size-lg) !important;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: all var(--transition-base);
-    box-shadow: var(--shadow-md);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    width: 100% !important;
-}
-
-.stButton > button::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
-
-.stButton > button:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-}
-
-.stButton > button:hover::before {
-    width: 300px;
-    height: 300px;
-}
-
-.stButton > button:active {
-    transform: translateY(-1px);
-}
-
-.stButton > button:focus {
-    outline: 3px solid rgba(43, 135, 209, 0.3);
-    outline-offset: 2px;
-}
-
-/* ============================================
-   10. NOTA DE CONFIDENCIALIDAD
-   ============================================ */
-.confidentiality-note {
-    background: linear-gradient(135deg, var(--color-surface-variant) 0%, #E9ECEF 100%);
-    padding: var(--space-lg);
-    border-radius: var(--radius-md);
-    text-align: center;
-    border: 1px solid var(--color-border);
-    margin-top: var(--space-xl);
-    box-shadow: var(--shadow-sm);
-    animation: fadeIn 1.2s ease-out;
-    color: var(--color-text-primary);
-}
-
-.confidentiality-note::before {
-    content: '🔒';
-    display: block;
-    font-size: var(--font-size-2xl);
-    margin-bottom: var(--space-sm);
-}
-
-.confidentiality-note p {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    margin: var(--space-xs) 0;
-    line-height: 1.6;
-}
-
-/* ============================================
-   11. FORMULARIOS Y CONTROLES
-   ============================================ */
-
-/* Títulos de páginas */
-h1[class*="st-"] {
-    color: #2E2E2E !important;
-    font-size: var(--font-size-3xl) !important;
-    font-weight: 700 !important;
-    text-align: center;
-    margin-bottom: var(--space-lg) !important;
-}
-
-/* Subtítulos de secciones */
-h3[class*="st-"] {
-    color: #2E2E2E !important;
-    font-size: var(--font-size-xl) !important;
-    font-weight: 600 !important;
-    margin-top: var(--space-lg) !important;
-    margin-bottom: var(--space-md) !important;
-}
-
-/* Contenedor de formulario */
-div[data-testid="stForm"] {
-    background: var(--color-surface) !important;
-    padding: var(--space-xl) !important;
-    border-radius: var(--radius-lg) !important;
-    box-shadow: var(--shadow-md) !important;
-    border: 1px solid var(--color-border) !important;
-    margin: var(--space-md) 0 !important;
-}
-
-/* Inputs de texto y selectores */
+/* Text & Number inputs */
 .stTextInput > div > div > input,
 .stNumberInput > div > div > input,
-.stNumberInput input {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
+.stNumberInput input,
+input[type="text"],
+input[type="number"] {
+    background: var(--surface-card) !important;
+    border: 1px solid var(--border) !important;
     border-radius: var(--radius-sm) !important;
-    border: 1px solid var(--color-border) !important;
-    transition: all var(--transition-fast) !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-sans) !important;
+    font-size: 1rem !important;
     padding: 0.75rem 1rem !important;
-    font-size: var(--font-size-base) !important;
-    color: #2E2E2E !important;
-}
-
-.stTextInput > div > div > input:hover,
-.stNumberInput > div > div > input:hover,
-.stNumberInput input:hover {
-    border-color: var(--color-primary) !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
+    transition: border-color var(--ease), box-shadow var(--ease) !important;
 }
 
 .stTextInput > div > div > input:focus,
 .stNumberInput > div > div > input:focus,
 .stNumberInput input:focus {
-    border-color: var(--color-primary) !important;
-    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(212, 145, 29, 0.12) !important;
     outline: none !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* FORZAR FONDO BLANCO Y TEXTO NEGRO EN TODOS LOS INPUTS */
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
-input {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Inputs dentro de contenedores de Streamlit */
-.stTextInput input,
-.stNumberInput input,
-div[data-testid="stTextInput"] input,
-div[data-testid="stNumberInput"] input {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Todos los divs que contienen inputs */
-.stTextInput > div,
-.stNumberInput > div,
-.stTextInput > div > div,
-.stNumberInput > div > div,
-.stTextInput > div > div > div,
-.stNumberInput > div > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Placeholder text */
-.stTextInput input::placeholder,
-.stNumberInput input::placeholder {
-    color: #999999 !important;
-    opacity: 0.7 !important;
-}
-
-/* Input en focus */
-.stTextInput input:focus,
-.stNumberInput input:focus {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Selectbox con fondo blanco y texto negro */
-.stSelectbox select,
-.stSelectbox div[role="button"] {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Contenedores de number input con fondo blanco */
-.stNumberInput > div,
-.stNumberInput > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Botones de incremento/decremento del number input */
-.stNumberInput button {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-    border: none !important;
-}
-
-.stNumberInput button:hover {
-    background: #F5F5F5 !important;
-    background-color: #F5F5F5 !important;
-}
-
-/* Forzar todos los elementos dentro de stNumberInput */
-.stNumberInput * {
-    background-color: transparent !important;
-}
-
-.stNumberInput > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Selectbox */
-.stSelectbox > div > div,
-.stSelectbox > div > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    border-radius: var(--radius-sm) !important;
-    border: 1px solid var(--color-border) !important;
-    transition: all var(--transition-fast) !important;
-    color: #2E2E2E !important;
-}
-
-.stSelectbox > div > div:hover {
-    border-color: var(--color-primary) !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-.stSelectbox > div > div:focus-within {
-    border-color: var(--color-primary) !important;
-    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Texto dentro del selectbox */
-.stSelectbox div[data-baseweb="select"] > div,
-.stSelectbox div[data-baseweb="select"] span {
-    color: #2E2E2E !important;
-    background: #FFFFFF !important;
-}
-
-/* Opciones del dropdown del selectbox */
-div[role="listbox"] {
-    background: #FFFFFF !important;
-    border: 1px solid var(--color-border) !important;
-    border-radius: var(--radius-sm) !important;
-    box-shadow: var(--shadow-md) !important;
-}
-
-div[role="option"] {
-    color: #2E2E2E !important;
-    background: #FFFFFF !important;
-    padding: 0.75rem 1rem !important;
-    transition: background-color var(--transition-fast) !important;
-}
-
-div[role="option"]:hover {
-    background: #F5F8FB !important;
-    background-color: #F5F8FB !important;
-}
-
-div[role="option"][aria-selected="true"] {
-    background: #E3F2FD !important;
-    background-color: #E3F2FD !important;
-    font-weight: 600 !important;
-}
-
-/* Radio buttons y checkboxes */
-.stRadio > label {
-    color: var(--color-text-primary) !important;
-    font-weight: 500 !important;
-    font-size: var(--font-size-base) !important;
-    margin-bottom: var(--space-sm) !important;
-}
-
-.stRadio > div {
-    background: #FFFFFF !important;
-    padding: 0.5rem !important;
-    border-radius: var(--radius-sm) !important;
-}
-
-.stRadio > div[role="radiogroup"] {
-    gap: 1rem !important;
-    display: flex !important;
-    flex-direction: row !important;
-}
-
-.stRadio > div[role="radiogroup"] > label {
-    background: #FFFFFF !important;
-    padding: 0.75rem 1.5rem !important;
-    border: 2px solid #D1D1D1 !important;
-    border-radius: var(--radius-sm) !important;
-    cursor: pointer !important;
-    transition: all var(--transition-fast) !important;
-    color: #2E2E2E !important;
-    font-weight: 500 !important;
-    min-width: 80px !important;
-    text-align: center !important;
-}
-
-.stRadio > div[role="radiogroup"] > label:hover {
-    border-color: #4CAF50 !important;
-    background: #F5F5F5 !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
-}
-
-.stRadio > div[role="radiogroup"] > label[data-checked="true"] {
-    background: #4CAF50 !important;
-    border-color: #4CAF50 !important;
-    color: #FFFFFF !important;
-    font-weight: 600 !important;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3) !important;
-}
-
-/* Ocultar el círculo de radio nativo */
-.stRadio input[type="radio"] {
-    display: none !important;
-}
-
-/* Contenedor de preguntas */
-.question-container {
-    background: #FFFFFF !important;
-    padding: 1rem 1.5rem !important;
-    margin: 0.75rem 0 !important;
-    border-radius: 8px !important;
-    border: 1px solid #E0E0E0 !important;
-    transition: all var(--transition-fast) !important;
-}
-
-.question-container:hover {
-    border-color: #4CAF50 !important;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1) !important;
-}
-
-/* ============================================
-   10. NOTA DE CONFIDENCIALIDAD
-   ============================================ */
-.confidentiality-note {
-    background: linear-gradient(135deg, var(--color-surface-variant) 0%, #E9ECEF 100%);
-    padding: var(--space-lg);
-    border-radius: var(--radius-md);
-    text-align: center;
-    border: 1px solid var(--color-border);
-    margin-top: var(--space-xl);
-    box-shadow: var(--shadow-sm);
-    animation: fadeIn 1.2s ease-out;
-    color: var(--color-text-primary);
-}
-
-.confidentiality-note::before {
-    content: '🔒';
-    display: block;
-    font-size: var(--font-size-2xl);
-    margin-bottom: var(--space-sm);
-}
-
-.confidentiality-note p {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    margin: var(--space-xs) 0;
-    line-height: 1.6;
-}
-
-/* ============================================
-   11. FORMULARIOS Y CONTROLES
-   ============================================ */
-
-/* Títulos de páginas */
-h1[class*="st-"] {
-    color: #2E2E2E !important;
-    font-size: var(--font-size-3xl) !important;
-    font-weight: 700 !important;
-    text-align: center;
-    margin-bottom: var(--space-lg) !important;
-}
-
-/* Subtítulos de secciones */
-h3[class*="st-"] {
-    color: #2E2E2E !important;
-    font-size: var(--font-size-xl) !important;
-    font-weight: 600 !important;
-    margin-top: var(--space-lg) !important;
-    margin-bottom: var(--space-md) !important;
-}
-
-/* Contenedor de formulario */
-div[data-testid="stForm"] {
-    background: var(--color-surface) !important;
-    padding: var(--space-xl) !important;
-    border-radius: var(--radius-lg) !important;
-    box-shadow: var(--shadow-md) !important;
-    border: 1px solid var(--color-border) !important;
-    margin: var(--space-md) 0 !important;
-}
-
-/* Inputs de texto y selectores */
-.stTextInput > div > div > input,
-.stNumberInput > div > div > input,
-.stNumberInput input {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    border-radius: var(--radius-sm) !important;
-    border: 1px solid var(--color-border) !important;
-    transition: all var(--transition-fast) !important;
-    padding: 0.75rem 1rem !important;
-    font-size: var(--font-size-base) !important;
-    color: #2E2E2E !important;
 }
 
 .stTextInput > div > div > input:hover,
 .stNumberInput > div > div > input:hover,
 .stNumberInput input:hover {
-    border-color: var(--color-primary) !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
+    border-color: var(--primary-light) !important;
 }
 
-.stTextInput > div > div > input:focus,
-.stNumberInput > div > div > input:focus,
-.stNumberInput input:focus {
-    border-color: var(--color-primary) !important;
-    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
-    outline: none !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* FORZAR FONDO BLANCO Y TEXTO NEGRO EN TODOS LOS INPUTS */
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
-input {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Inputs dentro de contenedores de Streamlit */
-.stTextInput input,
-.stNumberInput input,
-div[data-testid="stTextInput"] input,
-div[data-testid="stNumberInput"] input {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Todos los divs que contienen inputs */
-.stTextInput > div,
-.stNumberInput > div,
-.stTextInput > div > div,
-.stNumberInput > div > div,
-.stTextInput > div > div > div,
-.stNumberInput > div > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Placeholder text */
+/* Placeholder */
 .stTextInput input::placeholder,
 .stNumberInput input::placeholder {
-    color: #999999 !important;
-    opacity: 0.7 !important;
+    color: var(--text-secondary) !important;
+    opacity: 0.6 !important;
 }
 
-/* Input en focus */
-.stTextInput input:focus,
-.stNumberInput input:focus {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Selectbox con fondo blanco y texto negro */
-.stSelectbox select,
-.stSelectbox div[role="button"] {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Contenedores de number input con fondo blanco */
-.stNumberInput > div,
-.stNumberInput > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Botones de incremento/decremento del number input */
-.stNumberInput button {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-    border: none !important;
-}
-
-.stNumberInput button:hover {
-    background: #F5F5F5 !important;
-    background-color: #F5F5F5 !important;
-}
-
-/* Forzar todos los elementos dentro de stNumberInput */
-.stNumberInput * {
-    background-color: transparent !important;
-}
-
-.stNumberInput > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Selectbox */
-.stSelectbox > div > div,
-.stSelectbox > div > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    border-radius: var(--radius-sm) !important;
-    border: 1px solid var(--color-border) !important;
-    transition: all var(--transition-fast) !important;
-    color: #2E2E2E !important;
-}
-
-.stSelectbox > div > div:hover {
-    border-color: var(--color-primary) !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-.stSelectbox > div > div:focus-within {
-    border-color: var(--color-primary) !important;
-    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Texto dentro del selectbox */
-.stSelectbox div[data-baseweb="select"] > div,
-.stSelectbox div[data-baseweb="select"] span {
-    color: #2E2E2E !important;
-    background: #FFFFFF !important;
-}
-
-/* Opciones del dropdown del selectbox */
-div[role="listbox"] {
-    background: #FFFFFF !important;
-    border: 1px solid var(--color-border) !important;
-    border-radius: var(--radius-sm) !important;
-    box-shadow: var(--shadow-md) !important;
-}
-
-div[role="option"] {
-    color: #2E2E2E !important;
-    background: #FFFFFF !important;
-    padding: 0.75rem 1rem !important;
-    transition: background-color var(--transition-fast) !important;
-}
-
-div[role="option"]:hover {
-    background: #F5F8FB !important;
-    background-color: #F5F8FB !important;
-}
-
-div[role="option"][aria-selected="true"] {
-    background: #E3F2FD !important;
-    background-color: #E3F2FD !important;
-    font-weight: 600 !important;
-}
-
-/* Radio buttons y checkboxes */
-.stRadio > label {
-    color: var(--color-text-primary) !important;
-    font-weight: 500 !important;
-    font-size: var(--font-size-base) !important;
-    margin-bottom: var(--space-sm) !important;
-}
-
-.stRadio > div {
-    background: #FFFFFF !important;
-    padding: 0.5rem !important;
-    border-radius: var(--radius-sm) !important;
-}
-
-.stRadio > div[role="radiogroup"] {
-    gap: 1rem !important;
-    display: flex !important;
-    flex-direction: row !important;
-}
-
-.stRadio > div[role="radiogroup"] > label {
-    background: #FFFFFF !important;
-    padding: 0.75rem 1.5rem !important;
-    border: 2px solid #D1D1D1 !important;
-    border-radius: var(--radius-sm) !important;
-    cursor: pointer !important;
-    transition: all var(--transition-fast) !important;
-    color: #2E2E2E !important;
-    font-weight: 500 !important;
-    min-width: 80px !important;
-    text-align: center !important;
-}
-
-.stRadio > div[role="radiogroup"] > label:hover {
-    border-color: #4CAF50 !important;
-    background: #F5F5F5 !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
-}
-
-.stRadio > div[role="radiogroup"] > label[data-checked="true"] {
-    background: #4CAF50 !important;
-    border-color: #4CAF50 !important;
-    color: #FFFFFF !important;
-    font-weight: 600 !important;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3) !important;
-}
-
-/* Ocultar el círculo de radio nativo */
-.stRadio input[type="radio"] {
-    display: none !important;
-}
-
-/* Contenedor de preguntas */
-.question-container {
-    background: #FFFFFF !important;
-    padding: 1rem 1.5rem !important;
-    margin: 0.75rem 0 !important;
-    border-radius: 8px !important;
-    border: 1px solid #E0E0E0 !important;
-    transition: all var(--transition-fast) !important;
-}
-
-.question-container:hover {
-    border-color: #4CAF50 !important;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1) !important;
-}
-
-/* ============================================
-   13. ANIMACIONES
-   ============================================ */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-}
-
-.animate-fade-in {
-    animation: fadeIn 0.6s ease-out;
-}
-
-/* ============================================
-   14. UTILIDADES
-   ============================================ */
-.text-center {
-    text-align: center !important;
-}
-
-.text-primary {
-    color: var(--color-primary) !important;
-}
-
-.bg-surface {
-    background-color: var(--color-surface) !important;
-}
-
-.shadow-md {
-    box-shadow: var(--shadow-md);
-}
-
-/* ============================================
-   15. DISEÑO RESPONSIVO
-   ============================================ */
-@media (max-width: 1024px) {
-    .main-content {
-        padding: 0 var(--space-md) var(--space-xl);
-    }
-    
-    .features-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-}
-
-@media (max-width: 768px) {
-    :root {
-        --font-size-4xl: 2rem;
-        --font-size-3xl: 1.75rem;
-        --font-size-2xl: 1.5rem;
-    }
-    
-    .main-content {
-        padding: 0 var(--space-sm) var(--space-lg);
-    }
-    
-    .logo-section img {
-        max-width: 70% !important;
-    }
-    
-    .subtitle {
-        font-size: var(--font-size-lg) !important;
-        padding: 0 var(--space-sm);
-    }
-    
-    .welcome-text {
-        padding: var(--space-lg);
-        margin: 0 auto var(--space-lg) auto;
-    }
-    
-    .welcome-text p {
-        font-size: var(--font-size-base);
-    }
-    
-    .features-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
-    }
-    
-    .info-card {
-        padding: var(--space-lg);
-    }
-    
-    .stButton > button {
-        padding: 0.9rem 2.5rem !important;
-        font-size: var(--font-size-base) !important;
-    }
-    
-    .confidentiality-note {
-        padding: var(--space-md);
-    }
-}
-
-@media (max-width: 480px) {
-    .main-content {
-        padding: 0 var(--space-xs) var(--space-md);
-    }
-    
-    .logo-section img {
-        max-width: 85% !important;
-    }
-    
-    .welcome-text {
-        padding: var(--space-md);
-        border-radius: var(--radius-sm);
-    }
-    
-    .info-card {
-        padding: var(--space-md);
-    }
-    
-    .stButton > button {
-        padding: 0.8rem 2rem !important;
-        font-size: var(--font-size-sm) !important;
-    }
-}
-
-/* ============================================
-   16. MODO IMPRESIÓN
-   ============================================ */
-@media print {
-    .stButton,
-    [data-testid="stSidebar"],
-    .confidentiality-note {
-        display: none !important;
-    }
-    
-    .main-content {
-        max-width: 100%;
-        padding: 0;
-    }
-    
-    .welcome-text,
-    .info-card {
-        box-shadow: none;
-        border: 1px solid #ccc;
-    }
-}
-
-/* ============================================
-   17. ACCESIBILIDAD
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* Mejorar contraste para lectores de pantalla */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-/* Focus visible mejorado */
-*:focus-visible {
-    outline: 3px solid var(--color-primary);
-    outline-offset: 2px;
-}
-
-/* Iconos y flechas del selectbox en negro */
-.stSelectbox svg {
-    color: #2E2E2E !important;
-    fill: #2E2E2E !important;
-}
-
-.stSelectbox div[data-baseweb="select"] svg {
-    color: #2E2E2E !important;
-    fill: #2E2E2E !important;
-}
-
-/* Icono de dropdown cuando está abierto/cerrado */
-.stSelectbox button svg,
-.stSelectbox span svg {
-    color: #2E2E2E !important;
-    fill: #2E2E2E !important;
-}
-
-/* Asegurar que todos los elementos SVG dentro del select sean negros */
-.stSelectbox path {
-    fill: #2E2E2E !important;
-}
-
-/* ============================================
-   CLASES REUTILIZABLES - Estilos Generales
-   ============================================ */
-
-/* FORZAR COLOR NEGRO EN TODOS LOS INPUTS - MÁXIMA PRIORIDAD */
-input,
-input[type="text"],
-input[type="number"],
-.stTextInput input,
-.stNumberInput input,
-.stTextInput > div > div > input,
-.stNumberInput > div > div > input,
-div[data-testid="stTextInput"] input,
-div[data-testid="stNumberInput"] input {
-    color: #2E2E2E !important;
-    -webkit-text-fill-color: #2E2E2E !important;
-}
-
-/* Instrucciones y Descripciones */
-.form-instruction {
-    color: #666666;
-    font-size: 1.75rem;
-    font-weight: 600;
-    text-align: left;
-    margin-bottom: 1rem;
-    font-style: italic;
-    padding: 0.5rem 0;
-}
-
-.form-instruction-centered {
-    color: #666666;
-    font-size: 1rem;
-    font-weight: 500;
-    text-align: center;
-    margin-bottom: 1rem;
-    font-style: italic;
-    padding: 0.5rem 0;
-}
-
-.form-instruction-highlight {
-    color: #2E2E2E;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-left: 4px solid #4CAF50;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.form-instruction-alert {
-    color: #2E2E2E;
-    font-size: 1.05rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: #FFF9E6;
-    border-left: 4px solid #FF9800;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-/* Contenedores de Formulario */
-.form-container {
-    background: #FFFFFF;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    border: 1px solid #D1D1D1;
-    margin: 1.5rem 0;
-}
-
-.form-container-light {
-    background: #F5F8FB;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    border: 1px solid #D1D1D1;
-    margin: 1.5rem 0;
-}
-
-/* Secciones de Preguntas */
-.question-box {
-    background: #FFFFFF;
-    padding: 1.25rem;
-    margin: 0.75rem 0;
-    border-radius: 8px;
-    border: 1px solid #E0E0E0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.question-box:hover {
-    border-color: #4CAF50;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
-    transition: all 0.2s ease;
-}
-
-/* Texto de Pregunta */
-.question-text {
-    color: #2E2E2E;
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 0.75rem;
-    line-height: 1.6;
-}
-
-.question-number {
-    color: #4CAF50;
-    font-weight: 700;
-    margin-right: 0.5rem;
-}
-
-/* Tarjetas de Información */
-.info-box {
-    background: #E3F2FD;
-    border-left: 4px solid #2196F3;
-    padding: 1rem;
-    border-radius: 8px;
-    margin: 1rem 0;
-}
-
-.success-box {
-    background: #E8F5E9;
-    border-left: 4px solid #4CAF50;
-    padding: 1rem;
-    border-radius: 8px;
-    margin: 1rem 0;
-}
-
-.warning-box {
-    background: #FFF9E6;
-    border-left: 4px solid #FF9800;
-    padding: 1rem;
-    border-radius: 8px;
-    margin: 1rem 0;
-}
-
-.error-box {
-    background: #FFEBEE;
-    border-left: 4px solid #F44336;
-    padding: 1rem;
-    border-radius: 8px;
-    margin: 1rem 0;
-}
-
-/* Títulos de Sección */
-.section-title {
-    color: #2E2E2E;
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.section-subtitle {
-    color: #666666;
-    font-size: 1.1rem;
-    font-weight: 500;
-    text-align: center;
-    margin-bottom: 1.5rem;
-}
-
-/* Divisores y Espaciadores */
-.spacer-sm {
-    height: 0.5rem;
-}
-
-.spacer-md {
-    height: 1rem;
-}
-
-.spacer-lg {
-    height: 2rem;
-}
-
-.divider {
-    height: 1px;
-    background: #E0E0E0;
-    margin: 1.5rem 0;
-}
-
-/* Badges y Etiquetas */
-.badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-size: 0.875rem;
-    font-weight: 600;
-}
-
-.badge-success {
-    background: #E8F5E9;
-    color: #2E7D32;
-}
-
-.badge-warning {
-    background: #FFF9E6;
-    color: #F57C00;
-}
-
-.badge-info {
-    background: #E3F2FD;
-    color: #1976D2;
-}
-
-.badge-error {
-    background: #FFEBEE;
-    color: #C62828;
-}
-
-/* ============================================
-   2. RESET Y ESTILOS BASE
-   ============================================ */
-
-/* FORZAR COLOR NEGRO EN TODOS LOS INPUTS - PRIORIDAD MÁXIMA */
-input,
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
-input[type="tel"],
-input[type="url"],
-textarea,
-.stTextInput input,
-.stNumberInput input,
-.stTextInput > div > div > input,
-.stNumberInput > div > div > input,
-div[data-testid="stTextInput"] input,
-div[data-testid="stNumberInput"] input,
-div[data-baseweb="input"] input,
-[class*="textInput"] input,
-[class*="numberInput"] input {
-    color: #2E2E2E !important;
-    -webkit-text-fill-color: #2E2E2E !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Asegurar que el texto se vea negro incluso con autocompletado */
+/* Autofill override */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-text-fill-color: #2E2E2E !important;
-    -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
-    box-shadow: 0 0 0 1000px #FFFFFF inset !important;
-    color: #2E2E2E !important;
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text-primary) !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--surface-card) inset !important;
 }
 
-/* Labels de los inputs en negro */
-.stTextInput label,
-.stNumberInput label
-
-section.main {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-    background-color: #E8E8E8 !important;
-}
-
-section.main > div,
-section.main > div:first-child {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-    background-color: #E8E8E8 !important;
-}
-
-div[data-testid="stVerticalBlock"],
-div[data-testid="stVerticalBlock"] > div:first-child {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-}
-
-/* Ocultar header y toolbar de Streamlit */
-header[data-testid="stHeader"],
-div[data-testid="stToolbar"],
-.stDeployButton {
-    display: none !important;
-    height: 0 !important;
-}
-
-/* ============================================
-   4. ESTRUCTURA PRINCIPAL
-   ============================================ */
-.main-content {
-    background-color: #E8E8E8;
-    min-height: 100vh;
-    padding: 0 var(--space-lg) var(--space-2xl);
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* ============================================
-   5. LOGO Y BRANDING
-   ============================================ */
-.logo-section {
-    text-align: center !important;
-    padding: 0 !important;
-    margin: 0 0 var(--space-sm) 0 !important;
-    line-height: 0 !important;
-    animation: fadeInDown 0.6s ease-out;
-    background-color: transparent !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-}
-
-.logo-section img {
-    max-width: 50% !important;
-    height: auto !important;
-    filter: drop-shadow(var(--shadow-sm));
-    transition: transform var(--transition-base);
-    margin: 0 auto !important;
-    padding: 0 !important;
-    display: block !important;
-}
-
-.logo-section img:hover {
-    transform: scale(1.02);
-}
-
-/* ============================================
-   6. TIPOGRAFÍA
-   ============================================ */
-.big-title {
-    font-size: var(--font-size-4xl) !important;
-    font-weight: 700 !important;
-    color: var(--color-primary) !important;
-    text-align: center;
-    margin: var(--space-lg) 0 var(--space-md) 0 !important;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    animation: fadeIn 0.8s ease-out;
-}
-
-.subtitle {
-    font-size: var(--font-size-xl) !important;
-    color: var(--color-text-secondary) !important;
-    text-align: center;
-    margin: var(--space-sm) auto var(--space-md) auto !important;
-    font-weight: 400 !important;
-    max-width: 800px;
-    line-height: 1.6;
-    padding: 0 var(--space-md);
-    animation: fadeIn 1s ease-out;
-}
-
-.welcome-title {
-    font-size: var(--font-size-2xl) !important;
-    font-weight: 600 !important;
-    color: var(--color-text-primary) !important;
-    text-align: center;
-    margin: var(--space-lg) auto var(--space-md) auto !important;
-    max-width: 900px;
-    line-height: 1.4;
-    padding: 0 var(--space-md);
-    animation: fadeIn 0.9s ease-out;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--color-text-primary);
-}
-
-p {
-    margin-bottom: var(--space-md);
-    line-height: 1.7;
-}
-
-/* ============================================
-   7. SECCIÓN DE BIENVENIDA
-   ============================================ */
-.welcome-text {
-    background: var(--color-surface);
-    padding: var(--space-xl);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    margin: 0 auto var(--space-xl) auto;
-    max-width: 900px;
-    border: 1px solid var(--color-border);
-    position: relative;
-    overflow: hidden;
-    animation: slideUp 0.8s ease-out;
-}
-
-.welcome-text::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-}
-
-.welcome-text p {
-    color: var(--color-text-primary);
-    line-height: 1.8;
-    margin-bottom: var(--space-md);
-    font-size: var(--font-size-lg);
-    text-align: justify;
-}
-
-.welcome-text p:last-child {
-    margin-bottom: 0;
-}
-
-.welcome-text p:first-of-type {
-    font-weight: 500;
-}
-
-/* ============================================
-   8. TARJETAS INFORMATIVAS
-   ============================================ */
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-lg);
-    margin: var(--space-xl) 0;
-    animation: fadeIn 1s ease-out;
-}
-
-.info-card {
-    background: var(--color-surface);
-    padding: var(--space-xl);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-border);
-    transition: all var(--transition-base);
-    height: 100%;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.info-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
-    transform: scaleX(0);
-    transition: transform var(--transition-base);
-}
-
-.info-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-primary-light);
-}
-
-.info-card:hover::before {
-    transform: scaleX(1);
-}
-
-.info-card h4 {
-    font-size: var(--font-size-xl);
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-sm);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-xs);
-}
-
-.info-card p {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-base);
-    line-height: 1.6;
-    margin: 0;
-}
-
-/* ============================================
-   9. BOTONES
-   ============================================ */
-.center-button {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    margin: var(--space-xl) 0 !important;
-    text-align: center !important;
-}
-
-.center-button .stButton {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-}
-
-div[data-testid="column"] .stButton {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-}
-
-.stButton > button {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%) !important;
-    color: white !important;
-    padding: 1rem 2.5rem !important;
-    border-radius: var(--radius-full) !important;
-    border: none !important;
-    font-weight: 600 !important;
-    font-size: var(--font-size-lg) !important;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: all var(--transition-base);
-    box-shadow: var(--shadow-md);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    width: 100% !important;
-}
-
-.stButton > button::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
-
-.stButton > button:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-}
-
-.stButton > button:hover::before {
-    width: 300px;
-    height: 300px;
-}
-
-.stButton > button:active {
-    transform: translateY(-1px);
-}
-
-.stButton > button:focus {
-    outline: 3px solid rgba(43, 135, 209, 0.3);
-    outline-offset: 2px;
-}
-
-/* ============================================
-   10. NOTA DE CONFIDENCIALIDAD
-   ============================================ */
-.confidentiality-note {
-    background: linear-gradient(135deg, var(--color-surface-variant) 0%, #E9ECEF 100%);
-    padding: var(--space-lg);
-    border-radius: var(--radius-md);
-    text-align: center;
-    border: 1px solid var(--color-border);
-    margin-top: var(--space-xl);
-    box-shadow: var(--shadow-sm);
-    animation: fadeIn 1.2s ease-out;
-    color: var(--color-text-primary);
-}
-
-.confidentiality-note::before {
-    content: '🔒';
-    display: block;
-    font-size: var(--font-size-2xl);
-    margin-bottom: var(--space-sm);
-}
-
-.confidentiality-note p {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    margin: var(--space-xs) 0;
-    line-height: 1.6;
-}
-
-/* ============================================
-   11. FORMULARIOS Y CONTROLES
-   ============================================ */
-
-/* Títulos de páginas */
-h1[class*="st-"] {
-    color: #2E2E2E !important;
-    font-size: var(--font-size-3xl) !important;
-    font-weight: 700 !important;
-    text-align: center;
-    margin-bottom: var(--space-lg) !important;
-}
-
-/* Subtítulos de secciones */
-h3[class*="st-"] {
-    color: #2E2E2E !important;
-    font-size: var(--font-size-xl) !important;
-    font-weight: 600 !important;
-    margin-top: var(--space-lg) !important;
-    margin-bottom: var(--space-md) !important;
-}
-
-/* Contenedor de formulario */
-div[data-testid="stForm"] {
-    background: var(--color-surface) !important;
-    padding: var(--space-xl) !important;
-    border-radius: var(--radius-lg) !important;
-    box-shadow: var(--shadow-md) !important;
-    border: 1px solid var(--color-border) !important;
-    margin: var(--space-md) 0 !important;
-}
-
-/* Inputs de texto y selectores */
-.stTextInput > div > div > input,
-.stNumberInput > div > div > input,
-.stNumberInput input {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    border-radius: var(--radius-sm) !important;
-    border: 1px solid var(--color-border) !important;
-    transition: all var(--transition-fast) !important;
-    padding: 0.75rem 1rem !important;
-    font-size: var(--font-size-base) !important;
-    color: #2E2E2E !important;
-}
-
-.stTextInput > div > div > input:hover,
-.stNumberInput > div > div > input:hover,
-.stNumberInput input:hover {
-    border-color: var(--color-primary) !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-.stTextInput > div > div > input:focus,
-.stNumberInput > div > div > input:focus,
-.stNumberInput input:focus {
-    border-color: var(--color-primary) !important;
-    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
-    outline: none !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* FORZAR FONDO BLANCO Y TEXTO NEGRO EN TODOS LOS INPUTS */
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
-input {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Inputs dentro de contenedores de Streamlit */
-.stTextInput input,
-.stNumberInput input,
-div[data-testid="stTextInput"] input,
-div[data-testid="stNumberInput"] input {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Todos los divs que contienen inputs */
-.stTextInput > div,
-.stNumberInput > div,
-.stTextInput > div > div,
-.stNumberInput > div > div,
-.stTextInput > div > div > div,
-.stNumberInput > div > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Placeholder text */
-.stTextInput input::placeholder,
-.stNumberInput input::placeholder {
-    color: #999999 !important;
-    opacity: 0.7 !important;
-}
-
-/* Input en focus */
-.stTextInput input:focus,
-.stNumberInput input:focus {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Selectbox con fondo blanco y texto negro */
-.stSelectbox select,
-.stSelectbox div[role="button"] {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
-}
-
-/* Contenedores de number input con fondo blanco */
-.stNumberInput > div,
-.stNumberInput > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-}
-
-/* Botones de incremento/decremento del number input */
+/* Number input buttons */
 .stNumberInput button {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #2E2E2E !important;
+    background: var(--surface) !important;
+    color: var(--text-secondary) !important;
     border: none !important;
+    transition: background var(--ease) !important;
 }
 
 .stNumberInput button:hover {
-    background: #F5F5F5 !important;
-    background-color: #F5F5F5 !important;
-}
-
-/* Forzar todos los elementos dentro de stNumberInput */
-.stNumberInput * {
-    background-color: transparent !important;
-}
-
-.stNumberInput > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
+    background: var(--border) !important;
+    color: var(--text-primary) !important;
 }
 
 /* Selectbox */
+.stSelectbox {
+    width: 100% !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+}
+
 .stSelectbox > div > div,
 .stSelectbox > div > div > div {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
+    background: var(--surface-card) !important;
+    border: 1px solid var(--border) !important;
     border-radius: var(--radius-sm) !important;
-    border: 1px solid var(--color-border) !important;
-    transition: all var(--transition-fast) !important;
-    color: #2E2E2E !important;
+    color: var(--text-primary) !important;
+    transition: border-color var(--ease) !important;
 }
 
 .stSelectbox > div > div:hover {
-    border-color: var(--color-primary) !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
+    border-color: var(--primary-light) !important;
 }
 
 .stSelectbox > div > div:focus-within {
-    border-color: var(--color-primary) !important;
-    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(212, 145, 29, 0.12) !important;
 }
 
-/* Texto dentro del selectbox */
 .stSelectbox div[data-baseweb="select"] > div,
 .stSelectbox div[data-baseweb="select"] span {
-    color: #2E2E2E !important;
-    background: #FFFFFF !important;
+    color: var(--text-primary) !important;
+    font-size: 1rem !important;
 }
 
-/* Opciones del dropdown del selectbox */
+/* Dropdown options */
 div[role="listbox"] {
-    background: #FFFFFF !important;
-    border: 1px solid var(--color-border) !important;
+    background: var(--surface-card) !important;
+    border: 1px solid var(--border) !important;
     border-radius: var(--radius-sm) !important;
-    box-shadow: var(--shadow-md) !important;
+    box-shadow: var(--shadow-lg) !important;
 }
 
 div[role="option"] {
-    color: #2E2E2E !important;
-    background: #FFFFFF !important;
-    padding: 0.75rem 1rem !important;
-    transition: background-color var(--transition-fast) !important;
+    color: var(--text-primary) !important;
+    padding: 0.625rem 0.75rem !important;
+    transition: background var(--ease) !important;
+    font-size: 1rem !important;
 }
 
 div[role="option"]:hover {
-    background: #F5F8FB !important;
-    background-color: #F5F8FB !important;
+    background: var(--surface) !important;
 }
 
 div[role="option"][aria-selected="true"] {
-    background: #E3F2FD !important;
-    background-color: #E3F2FD !important;
+    background: rgba(212, 145, 29, 0.08) !important;
     font-weight: 600 !important;
 }
 
-/* Radio buttons y checkboxes */
+/* Radio buttons — label styling */
 .stRadio > label {
-    color: var(--color-text-primary) !important;
+    color: var(--text-primary) !important;
     font-weight: 500 !important;
-    font-size: var(--font-size-base) !important;
-    margin-bottom: var(--space-sm) !important;
 }
 
-.stRadio > div {
-    background: #FFFFFF !important;
-    padding: 0.5rem !important;
-    border-radius: var(--radius-sm) !important;
+/* ── RADIO CENTERING: nuclear approach ──
+   Every div inside .stRadio becomes a flex column centered,
+   EXCEPT the radiogroup which is a centered flex row.
+   Uses both .stRadio and [data-testid="stRadio"] for max specificity. */
+
+.stRadio,
+div[data-testid="stRadio"],
+.stRadio > div,
+.stRadio > div > div,
+.stRadio > div > div > div,
+.stRadio > div > div > div > div,
+div[data-testid="stRadio"] > div,
+div[data-testid="stRadio"] > div > div,
+div[data-testid="stRadio"] > div > div > div,
+div[data-testid="stRadio"] > div > div > div > div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    background: transparent !important;
 }
 
-.stRadio > div[role="radiogroup"] {
-    gap: 1rem !important;
+/* The radiogroup itself: horizontal centered row */
+.stRadio div[role="radiogroup"],
+div[data-testid="stRadio"] div[role="radiogroup"] {
     display: flex !important;
     flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.625rem !important;
+    width: auto !important;
+    max-width: 100% !important;
+    padding: var(--space-3) 0 var(--space-4) 0 !important;
 }
 
-.stRadio > div[role="radiogroup"] > label {
-    background: #FFFFFF !important;
-    padding: 0.75rem 1.5rem !important;
-    border: 2px solid #D1D1D1 !important;
+/* Radio option labels — pill style */
+.stRadio div[role="radiogroup"] > label,
+div[data-testid="stRadio"] div[role="radiogroup"] > label {
+    display: flex !important;
+    flex-direction: row !important;
+    background: var(--surface-card) !important;
+    border: 1px solid var(--border) !important;
     border-radius: var(--radius-sm) !important;
-    cursor: pointer !important;
-    transition: all var(--transition-fast) !important;
-    color: #2E2E2E !important;
+    padding: 0.625rem 1.25rem !important;
+    color: var(--text-primary) !important;
     font-weight: 500 !important;
-    min-width: 80px !important;
+    font-size: 1rem !important;
+    cursor: pointer !important;
+    transition: all var(--ease) !important;
     text-align: center !important;
+    flex: 0 1 auto !important;
+    white-space: nowrap !important;
+    width: auto !important;
+    align-items: center !important;
 }
 
-.stRadio > div[role="radiogroup"] > label:hover {
-    border-color: #4CAF50 !important;
-    background: #F5F5F5 !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+.stRadio div[role="radiogroup"] > label:hover,
+div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {
+    border-color: var(--primary-light) !important;
+    background: var(--surface) !important;
 }
 
-.stRadio > div[role="radiogroup"] > label[data-checked="true"] {
-    background: #4CAF50 !important;
-    border-color: #4CAF50 !important;
+.stRadio div[role="radiogroup"] > label[data-checked="true"],
+div[data-testid="stRadio"] div[role="radiogroup"] > label[data-checked="true"] {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
     color: #FFFFFF !important;
     font-weight: 600 !important;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(212, 145, 29, 0.3) !important;
 }
 
-/* Ocultar el círculo de radio nativo */
-.stRadio input[type="radio"] {
+.stRadio div[role="radiogroup"] label p,
+div[data-testid="stRadio"] div[role="radiogroup"] label p {
+    color: inherit !important;
+    font-weight: inherit !important;
+    margin: 0 !important;
+}
+
+/* Hide native radio circle */
+.stRadio input[type="radio"],
+div[data-testid="stRadio"] input[type="radio"] {
     display: none !important;
 }
 
-/* Contenedor de preguntas */
-.question-container {
-    background: #FFFFFF !important;
-    padding: 1rem 1.5rem !important;
-    margin: 0.75rem 0 !important;
-    border-radius: 8px !important;
-    border: 1px solid #E0E0E0 !important;
-    transition: all var(--transition-fast) !important;
+/* Safety: block-container level override */
+.block-container .stRadio,
+.block-container div[data-testid="stRadio"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
 }
 
-.question-container:hover {
-    border-color: #4CAF50 !important;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1) !important;
+/* Toggle */
+.stToggle label span {
+    color: var(--text-primary) !important;
 }
 
 /* ============================================
-   13. ANIMACIONES
+   8. METRICS — Streamlit st.metric
    ============================================ */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+div[data-testid="stMetric"] {
+    background: var(--surface) !important;
+    border-radius: var(--radius-md) !important;
+    padding: var(--space-5) !important;
+    border: 1px solid var(--border) !important;
 }
 
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+div[data-testid="stMetric"] label {
+    color: var(--text-secondary) !important;
+    font-size: 1rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
+    font-family: var(--font-mono) !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
+}
+
+/* ============================================
+   9. DATAFRAME
+   ============================================ */
+.stDataFrame {
+    border-radius: var(--radius-md) !important;
+    overflow: hidden !important;
+    border: 1px solid var(--border) !important;
+}
+
+/* ============================================
+  10. ALERTS — st.info, st.success, etc.
+   ============================================ */
+.stAlert {
+    border-radius: var(--radius-sm) !important;
+    font-family: var(--font-sans) !important;
+    font-size: 1rem !important;
+}
+
+/* ============================================
+  11. PROGRESS BAR
+   ============================================ */
+.stProgress > div > div > div {
+    background: linear-gradient(90deg, var(--primary), var(--primary-light)) !important;
+    border-radius: var(--radius-full) !important;
+}
+
+.stProgress > div > div {
+    background: var(--border) !important;
+    border-radius: var(--radius-full) !important;
+    height: 6px !important;
+}
+
+/* ============================================
+  12. EXPANDER
+   ============================================ */
+.streamlit-expanderHeader {
+    font-family: var(--font-sans) !important;
+    font-weight: 500 !important;
+    color: var(--text-primary) !important;
+    background: var(--surface-card) !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+/* ============================================
+  13. ANXRISK COMPONENT CLASSES
+   ============================================ */
+
+/* Card */
+.anxrisk-card {
+    background: var(--surface-card);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    padding: var(--space-6) var(--space-8);
+    box-shadow: var(--shadow-md);
+    transition: box-shadow var(--ease);
+    margin-bottom: var(--space-6);
+    width: 100%;
+    text-align: center;
+}
+
+.anxrisk-card h3 {
+    text-align: center !important;
+    margin-bottom: var(--space-4) !important;
+}
+
+.anxrisk-card p {
+    text-align: center;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.anxrisk-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+/* Section Header */
+.anxrisk-section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--primary-soft);
+    margin-bottom: var(--space-5);
+}
+
+.anxrisk-section-header h2,
+.anxrisk-section-header h3 {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: var(--text-primary) !important;
+}
+
+/* Metric Card */
+.anxrisk-metric {
+    text-align: center;
+    padding: var(--space-5);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+
+.anxrisk-metric-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.anxrisk-metric-label {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: var(--space-1);
+}
+
+/* Badges */
+.anxrisk-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+}
+
+.anxrisk-badge-low {
+    background: var(--success-bg);
+    color: var(--success);
+}
+
+.anxrisk-badge-moderate {
+    background: var(--warning-bg);
+    color: var(--warning);
+}
+
+.anxrisk-badge-high {
+    background: var(--danger-bg);
+    color: var(--danger);
+}
+
+/* Genetic Tag */
+.anxrisk-genetic-tag {
+    background: var(--accent-genetic-bg);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    color: var(--accent-genetic);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+    font-size: 1rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Risk Gauge */
+.anxrisk-risk-gauge {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right,
+        var(--success) 0%, var(--success) 30%,
+        var(--warning) 30%, var(--warning) 60%,
+        var(--danger) 60%, var(--danger) 100%);
+    position: relative;
+    margin: var(--space-4) 0;
+}
+
+.anxrisk-risk-gauge-marker {
+    position: absolute;
+    top: -4px;
+    width: 4px;
+    height: 16px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transform: translateX(-50%);
+}
+
+/* Note / Info Block */
+.anxrisk-note {
+    background: var(--surface-card);
+    border-left: 3px solid var(--primary-light);
+    padding: var(--space-4) var(--space-5);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: var(--space-4) 0;
+    box-shadow: var(--shadow-xs);
+}
+
+.anxrisk-note p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+/* Clinical Warning */
+.anxrisk-clinical-warning {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: var(--radius-sm);
+    padding: var(--space-5) var(--space-6);
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin: var(--space-6) 0;
+}
+
+.anxrisk-clinical-warning strong {
+    color: var(--warning);
+}
+
+/* Progress Stepper */
+.anxrisk-progress-step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.anxrisk-step-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: all var(--ease);
+}
+
+.anxrisk-step-dot.active {
+    background: var(--primary);
+    box-shadow: 0 0 0 3px rgba(212, 145, 29, 0.25);
+}
+
+.anxrisk-step-dot.completed {
+    background: var(--success);
+}
+
+.anxrisk-step-label {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.anxrisk-step-label.active {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.anxrisk-step-label.completed {
+    color: var(--text-primary);
+}
+
+/* Hero Section */
+.anxrisk-hero {
+    text-align: center;
+    padding: var(--space-10) var(--space-8) var(--space-8);
+    margin-bottom: var(--space-8);
+}
+
+/* Logo */
+.anxrisk-logo {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #1A1A2E 0%, #2D2D44 40%, #1A1A2E 100%);
+    border-radius: 28px;
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(212, 145, 29, 0.15),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.anxrisk-logo::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(212, 145, 29, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.anxrisk-logo svg {
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.anxrisk-hero-title {
+    font-size: 3.25rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.12em;
+    color: var(--primary) !important;
+    margin-bottom: var(--space-2) !important;
+    font-family: var(--font-sans) !important;
+    text-transform: uppercase;
+}
+
+.anxrisk-hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-bottom: var(--space-4);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.anxrisk-hero-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 560px;
+    margin: 0 auto var(--space-8);
+    line-height: 1.7;
+}
+
+/* Feature Cards (Home) */
+.anxrisk-feature-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    text-align: center;
+    transition: all var(--ease);
+    height: 100%;
+}
+
+.anxrisk-feature-card:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-soft);
+    transform: translateY(-2px);
+}
+
+.anxrisk-feature-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--space-4);
+    background: rgba(212, 145, 29, 0.08);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.anxrisk-feature-card h4 {
+    color: var(--text-primary);
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+}
+
+.anxrisk-feature-card p {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Stats Bar (Home) */
+.anxrisk-stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-12);
+    padding: var(--space-6) var(--space-8);
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin: var(--space-8) 0;
+}
+
+.anxrisk-stat {
+    text-align: center;
+}
+
+.anxrisk-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--primary);
+}
+
+.anxrisk-stat-label {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: var(--space-1);
+}
+
+/* Questionnaire Card */
+.anxrisk-question-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5) var(--space-6);
+    margin-bottom: var(--space-4);
+    transition: border-color var(--ease);
+    width: 100%;
+    text-align: center;
+}
+
+.anxrisk-question-card:hover {
+    border-color: var(--primary-soft);
+}
+
+.anxrisk-question-number {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-2);
+    text-align: center;
+}
+
+.anxrisk-question-text {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: var(--space-3);
+    text-align: center;
+}
+
+/* Result Header */
+.anxrisk-result-header {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-8);
+    text-align: center;
+    margin-bottom: var(--space-6);
+    box-shadow: var(--shadow-sm);
+}
+
+.anxrisk-result-level {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+}
+
+.anxrisk-result-level.low    { color: var(--success); }
+.anxrisk-result-level.moderate { color: var(--warning); }
+.anxrisk-result-level.high   { color: var(--danger); }
+
+.anxrisk-result-prob {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-3);
+}
+
+.anxrisk-result-prob strong {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.anxrisk-result-model {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+/* Genetic Section */
+.anxrisk-genetic-section {
+    background: var(--surface-card);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    margin: var(--space-6) 0;
+}
+
+.anxrisk-genetic-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid rgba(124, 58, 237, 0.15);
+}
+
+.anxrisk-genetic-header h3 {
+    color: var(--accent-genetic) !important;
+    margin: 0 !important;
+}
+
+/* SHAP Colors */
+.anxrisk-shap-increase {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.anxrisk-shap-decrease {
+    color: var(--success);
+    font-weight: 600;
+}
+
+/* Sidebar Brand */
+.anxrisk-sidebar-brand {
+    text-align: center;
+    padding-bottom: var(--space-4);
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border);
+}
+
+.anxrisk-sidebar-brand h1 {
+    font-size: 1.375rem !important;
+    font-weight: 700 !important;
+    color: var(--primary) !important;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-1) !important;
+}
+
+.anxrisk-sidebar-brand p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Sidebar Model Info */
+.anxrisk-sidebar-model {
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+    margin: var(--space-4) 0;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+/* Page Header */
+.anxrisk-page-header {
+    margin-bottom: var(--space-8);
+    text-align: center;
+}
+
+.anxrisk-page-header h1 {
+    color: var(--text-primary) !important;
+    text-align: center !important;
+    margin-bottom: var(--space-2) !important;
+}
+
+.anxrisk-page-header p {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Disclaimer Footer */
+.anxrisk-disclaimer {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: var(--space-4);
+    line-height: 1.5;
+}
+
+/* ============================================
+  14. ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 @keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-    animation: fadeIn 0.6s ease-out;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s ease-out;
 }
 
 /* ============================================
-   14. UTILIDADES
+  15. RESPONSIVE
    ============================================ */
-.text-center {
-    text-align: center !important;
-}
-
-.text-primary {
-    color: var(--color-primary) !important;
-}
-
-.bg-surface {
-    background-color: var(--color-surface) !important;
-}
-
-.shadow-md {
-    box-shadow: var(--shadow-md);
-}
-
-/* ============================================
-   15. DISEÑO RESPONSIVO
-   ============================================ */
-@media (max-width: 1024px) {
-    .main-content {
-        padding: 0 var(--space-md) var(--space-xl);
-    }
-    
-    .features-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-}
-
 @media (max-width: 768px) {
-    :root {
-        --font-size-4xl: 2rem;
-        --font-size-3xl: 1.75rem;
-        --font-size-2xl: 1.5rem;
+    .anxrisk-hero {
+        padding: var(--space-8) var(--space-4);
     }
-    
-    .main-content {
-        padding: 0 var(--space-sm) var(--space-lg);
-    }
-    
-    .logo-section img {
-        max-width: 70% !important;
-    }
-    
-    .subtitle {
-        font-size: var(--font-size-lg) !important;
-        padding: 0 var(--space-sm);
-    }
-    
-    .welcome-text {
-        padding: var(--space-lg);
-        margin: 0 auto var(--space-lg) auto;
-    }
-    
-    .welcome-text p {
-        font-size: var(--font-size-base);
-    }
-    
-    .features-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
-    }
-    
-    .info-card {
-        padding: var(--space-lg);
-    }
-    
-    .stButton > button {
-        padding: 0.9rem 2.5rem !important;
-        font-size: var(--font-size-base) !important;
-    }
-    
-    .confidentiality-note {
-        padding: var(--space-md);
-    }
-}
 
-@media (max-width: 480px) {
-    .main-content {
-        padding: 0 var(--space-xs) var(--space-md);
+    .anxrisk-hero-title {
+        font-size: 1.75rem !important;
     }
-    
-    .logo-section img {
-        max-width: 85% !important;
-    }
-    
-    .welcome-text {
-        padding: var(--space-md);
-        border-radius: var(--radius-sm);
-    }
-    
-    .info-card {
-        padding: var(--space-md);
-    }
-    
-    .stButton > button {
-        padding: 0.8rem 2rem !important;
-        font-size: var(--font-size-sm) !important;
-    }
-}
 
-/* ============================================
-   16. MODO IMPRESIÓN
-   ============================================ */
-@media print {
-    .stButton,
-    [data-testid="stSidebar"],
-    .confidentiality-note {
-        display: none !important;
+    .anxrisk-logo {
+        width: 96px;
+        height: 96px;
+        border-radius: 22px;
     }
-    
-    .main-content {
-        max-width: 100%;
-        padding: 0;
+
+    .anxrisk-stats-bar {
+        flex-direction: column;
+        gap: var(--space-4);
     }
-    
-    .welcome-text,
-    .info-card {
-        box-shadow: none;
-        border: 1px solid #ccc;
+
+    .anxrisk-result-header {
+        padding: var(--space-6);
     }
-}
-
-/* ============================================
-   17. ACCESIBILIDAD
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* Mejorar contraste para lectores de pantalla */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-/* Focus visible mejorado */
-*:focus-visible {
-    outline: 3px solid var(--color-primary);
-    outline-offset: 2px;
-}
-
-/* Iconos y flechas del selectbox en negro */
-.stSelectbox svg {
-    color: #2E2E2E !important;
-    fill: #2E2E2E !important;
-}
-
-.stSelectbox div[data-baseweb="select"] svg {
-    color: #2E2E2E !important;
-    fill: #2E2E2E !important;
-}
-
-/* Icono de dropdown cuando está abierto/cerrado */
-.stSelectbox button svg,
-.stSelectbox span svg {
-    color: #2E2E2E !important;
-    fill: #2E2E2E !important;
-}
-
-/* Asegurar que todos los elementos SVG dentro del select sean negros */
-.stSelectbox path {
-    fill: #2E2E2E !important;
 }
