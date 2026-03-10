@@ -275,23 +275,40 @@ def mostrar_analisis_masivo():
                 # Statistics
                 st.markdown("### Estadísticas Generales")
 
-                col1, col2, col3, col4 = st.columns(4)
+                bajo = len(df_resultados[df_resultados['categoria_riesgo'] == 'Bajo'])
+                moderado = len(df_resultados[df_resultados['categoria_riesgo'] == 'Moderado'])
+                alto = len(df_resultados[df_resultados['categoria_riesgo'] == 'Alto'])
+                promedio_riesgo = df_resultados['riesgo_predicho'].mean()
+                total = len(df_resultados)
 
-                with col1:
-                    bajo = len(df_resultados[df_resultados['categoria_riesgo'] == 'Bajo'])
-                    st.metric("Riesgo Bajo", bajo, delta=f"{(bajo/len(df_resultados)*100):.1f}%")
+                bajo_pct = (bajo / total * 100) if total > 0 else 0
+                mod_pct = (moderado / total * 100) if total > 0 else 0
+                alto_pct = (alto / total * 100) if total > 0 else 0
 
-                with col2:
-                    moderado = len(df_resultados[df_resultados['categoria_riesgo'] == 'Moderado'])
-                    st.metric("Riesgo Moderado", moderado, delta=f"{(moderado/len(df_resultados)*100):.1f}%")
-
-                with col3:
-                    alto = len(df_resultados[df_resultados['categoria_riesgo'] == 'Alto'])
-                    st.metric("Riesgo Alto", alto, delta=f"{(alto/len(df_resultados)*100):.1f}%")
-
-                with col4:
-                    promedio_riesgo = df_resultados['riesgo_predicho'].mean()
-                    st.metric("Riesgo Promedio", f"{promedio_riesgo:.3f}", delta=None)
+                st.markdown(f"""
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.5rem 0;">
+                    <div class="anxrisk-masivo-stat" style="border-top: 3px solid var(--success);">
+                        <div class="anxrisk-masivo-value" style="color: var(--success);">{bajo}</div>
+                        <div class="anxrisk-masivo-label">Riesgo Bajo</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">{bajo_pct:.1f}%</div>
+                    </div>
+                    <div class="anxrisk-masivo-stat" style="border-top: 3px solid var(--warning);">
+                        <div class="anxrisk-masivo-value" style="color: var(--warning);">{moderado}</div>
+                        <div class="anxrisk-masivo-label">Riesgo Moderado</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">{mod_pct:.1f}%</div>
+                    </div>
+                    <div class="anxrisk-masivo-stat" style="border-top: 3px solid var(--danger);">
+                        <div class="anxrisk-masivo-value" style="color: var(--danger);">{alto}</div>
+                        <div class="anxrisk-masivo-label">Riesgo Alto</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">{alto_pct:.1f}%</div>
+                    </div>
+                    <div class="anxrisk-masivo-stat" style="border-top: 3px solid var(--primary);">
+                        <div class="anxrisk-masivo-value" style="color: var(--primary);">{promedio_riesgo:.3f}</div>
+                        <div class="anxrisk-masivo-label">Riesgo Promedio</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">{'Alto' if promedio_riesgo >= 0.60 else ('Moderado' if promedio_riesgo >= 0.30 else 'Bajo')}</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
 
                 st.markdown("---")
 

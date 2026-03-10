@@ -8,58 +8,42 @@ def mostrar_datos_geneticos():
     # --- Cargar estilos CSS globales ---
     with open("src/assets/styles/main.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-    
-    # Estilos específicos para selectbox con texto negro
+
+    # Page header
     st.markdown("""
-    <style>
-    /* Color negro para las opciones de selectbox */
-    .stSelectbox label {
-        color: #2E2E2E !important;
-    }
-    .stSelectbox div[data-baseweb="select"] {
-        color: #2E2E2E !important;
-    }
-    </style>
+    <div class="anxrisk-page-header">
+        <h1>Datos Genéticos</h1>
+        <p>Información genética relacionada con la predisposición a la ansiedad</p>
+    </div>
     """, unsafe_allow_html=True)
-    
-    # Título centrado y en negro
-    st.markdown(
-        "<h1 style='text-align: center; color: #2E2E2E; font-size: 2rem; font-weight: 700;'> Datos Genéticos</h1>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "<h3 style='text-align: center; color: #2E2E2E; font-size: 1.25rem; font-weight: 600; margin-bottom: 2rem;'>Información genética relacionada con la ansiedad</h3>",
-        unsafe_allow_html=True
-    )
-    
-    # Texto explicativo
+
+    # Context card
     st.markdown("""
-    <div style="background: #FFFFFF; padding: 1.25rem; margin: 0.75rem 0 1.5rem 0; border-radius: 8px; border: 1px solid #E0E0E0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-        <h4 style="color: #2E2E2E; font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">
-        ¿Por qué evaluamos factores genéticos?
-        </h4>
-        <p style="color: #2E2E2E; font-size: 1rem; line-height: 1.7; text-align: justify; margin-bottom: 0.75rem;">
-        Los <strong>factores genéticos</strong> juegan un papel importante en la predisposición a trastornos de ansiedad. 
-        Estudios científicos han identificado varios genes asociados con una mayor vulnerabilidad a la ansiedad, incluyendo 
-        <strong><i>PRKCA</i>, <i>TCF4</i> y <i>CDH20</i></strong>.
+    <div class="anxrisk-card">
+        <h3>¿Por qué evaluamos factores genéticos?</h3>
+        <p style="margin-bottom: 0.75rem;">
+            Los <strong>factores genéticos</strong> juegan un papel importante en la predisposición a trastornos de ansiedad.
+            Estudios científicos han identificado varios genes asociados con una mayor vulnerabilidad a la ansiedad, incluyendo
+            <strong><em>PRKCA</em>, <em>TCF4</em> y <em>CDH20</em></strong>.
         </p>
-        <p style="color: #2E2E2E; font-size: 1rem; line-height: 1.7; text-align: justify; margin: 0;">
-        Esta información genética, combinada con los cuestionarios clínicos, nos permite realizar una evaluación más 
-        completa y personalizada del riesgo de ansiedad según el modelo de diátesis-estrés.
+        <p style="margin-bottom: 0.75rem;">
+            Esta información genética, combinada con los cuestionarios clínicos, nos permite realizar una evaluación más
+            completa y personalizada del riesgo de ansiedad según el modelo de diátesis-estrés.
         </p>
-        <p style="color: #666666; font-style: italic; text-align: center; margin-top: 1rem; margin-bottom: 0; font-size: 1.05rem;">
-        <strong>⚠️ Todos los genotipos son obligatorios</strong><br>Seleccione el genotipo correspondiente para cada gen
+        <p style="font-size: 0.9375rem; color: var(--text-secondary); font-style: italic; text-align: center; margin-bottom: 0;">
+            <strong>⚠️ Todos los genotipos son obligatorios</strong> — Seleccione el genotipo correspondiente para cada gen
         </p>
     </div>
     """, unsafe_allow_html=True)
-    
-    # Sección de Genes
-    st.markdown("<h3 style='color: #4CAF50; font-size: 1.5rem; font-weight: 700; margin: 2rem 0 1rem 0; border-bottom: 2px solid #E0E0E0; padding-bottom: 0.5rem;'>Selección de Genotipos</h3>", unsafe_allow_html=True)
-    
+
     # PRKCA
-    st.markdown("<p style='color: #2E2E2E; font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem; margin-top: 1.5rem;'><span style='color: #4CAF50; font-weight: 700;'>Gen <i>PRKCA</i></span></p>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #666666; font-size: 0.95rem; margin-bottom: 0.5rem;'><strong><i>PRKCA</i>:</strong> Proteína Quinasa C Alfa</p>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #666666; font-size: 0.95rem; font-style: italic; margin-bottom: 0.75rem;'>Relacionada con la regulación del estrés y la respuesta emocional</p>", unsafe_allow_html=True)
+    st.markdown("""
+    <div class="anxrisk-question-card section-hads" style="border-left: 3px solid var(--genetic);">
+        <div class="anxrisk-question-number" style="background: var(--genetic); color: white;">Gen PRKCA</div>
+        <div class="anxrisk-question-text"><em>PRKCA</em> — Proteína Quinasa C Alfa</div>
+        <p style="color: var(--text-secondary); font-size: 0.9375rem; font-style: italic; margin: 0;">Relacionada con la regulación del estrés y la respuesta emocional</p>
+    </div>
+    """, unsafe_allow_html=True)
     prkca_genotipo = st.selectbox(
         "Seleccione el genotipo para PRKCA:",
         options=["Seleccione una opción", "T/T", "C/T", "C/C"],
@@ -68,10 +52,13 @@ def mostrar_datos_geneticos():
     )
     
     # TCF4
-    st.markdown("<div style='height: 1.5rem;'></div>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #2E2E2E; font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem;'><span style='color: #4CAF50; font-weight: 700;'>Gen <i>TCF4</i></span></p>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #666666; font-size: 0.95rem; margin-bottom: 0.5rem;'><strong><i>TCF4</i>:</strong> Factor de Transcripción 4</p>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #666666; font-size: 0.95rem; font-style: italic; margin-bottom: 0.75rem;'>Implicado en el desarrollo neuronal y predisposición a trastornos psiquiátricos</p>", unsafe_allow_html=True)
+    st.markdown("""
+    <div class="anxrisk-question-card section-hads" style="border-left: 3px solid var(--genetic);">
+        <div class="anxrisk-question-number" style="background: var(--genetic); color: white;">Gen TCF4</div>
+        <div class="anxrisk-question-text"><em>TCF4</em> — Factor de Transcripción 4</div>
+        <p style="color: var(--text-secondary); font-size: 0.9375rem; font-style: italic; margin: 0;">Implicado en el desarrollo neuronal y predisposición a trastornos psiquiátricos</p>
+    </div>
+    """, unsafe_allow_html=True)
     tcf4_genotipo = st.selectbox(
         "Seleccione el genotipo para TCF4:",
         options=["Seleccione una opción", "A/A", "A/T", "T/T"],
@@ -80,10 +67,13 @@ def mostrar_datos_geneticos():
     )
     
     # CDH20
-    st.markdown("<div style='height: 1.5rem;'></div>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #2E2E2E; font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem;'><span style='color: #4CAF50; font-weight: 700;'>Gen <i>CDH20</i></span></p>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #666666; font-size: 0.95rem; margin-bottom: 0.5rem;'><strong><i>CDH20</i>:</strong> Cadherina 20</p>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #666666; font-size: 0.95rem; font-style: italic; margin-bottom: 0.75rem;'>Asociada con la conectividad neuronal y neurotransmisión</p>", unsafe_allow_html=True)
+    st.markdown("""
+    <div class="anxrisk-question-card section-hads" style="border-left: 3px solid var(--genetic);">
+        <div class="anxrisk-question-number" style="background: var(--genetic); color: white;">Gen CDH20</div>
+        <div class="anxrisk-question-text"><em>CDH20</em> — Cadherina 20</div>
+        <p style="color: var(--text-secondary); font-size: 0.9375rem; font-style: italic; margin: 0;">Asociada con la conectividad neuronal y neurotransmisión</p>
+    </div>
+    """, unsafe_allow_html=True)
     cdh20_genotipo = st.selectbox(
         "Seleccione el genotipo para CDH20:",
         options=["Seleccione una opción", "G/G", "G/A", "A/A"],

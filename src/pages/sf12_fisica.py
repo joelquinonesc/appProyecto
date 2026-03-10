@@ -61,10 +61,19 @@ def mostrar_sf12_fisica():
 
     m = st.session_state['sf12_f_partial']
 
+    # Inline progress bar
+    sf12f_answered = sum(1 for v in m if v is not None)
+    sf12f_pct = (sf12f_answered / 6) * 100
+    st.markdown(f"""
+    <div class="anxrisk-inline-progress">
+        <div class="anxrisk-inline-progress-bar" style="width: {sf12f_pct}%;"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
     # Pregunta 1
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 1 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 1 de 6</div>
         <div class="anxrisk-question-text">En general, ¿diría que su salud es?</div>
     </div>
     """, unsafe_allow_html=True)
@@ -78,8 +87,8 @@ def mostrar_sf12_fisica():
 
     # Pregunta 2
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 2 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 2 de 6</div>
         <div class="anxrisk-question-text">Esfuerzos moderados (mover una mesa, caminar más de 1 hora)</div>
     </div>
     """, unsafe_allow_html=True)
@@ -91,8 +100,8 @@ def mostrar_sf12_fisica():
 
     # Pregunta 3
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 3 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 3 de 6</div>
         <div class="anxrisk-question-text">Subir varios pisos por la escalera</div>
     </div>
     """, unsafe_allow_html=True)
@@ -103,15 +112,15 @@ def mostrar_sf12_fisica():
     m[2] = (["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"].index(resp3) + 1) if resp3 is not None else None
 
     st.markdown("""
-    <div class="anxrisk-question-card">
+    <div class="anxrisk-question-card section-sf12">
         <div class="anxrisk-question-text">Durante las 4 últimas semanas, ¿ha tenido alguno de los siguientes problemas en su trabajo o en sus actividades cotidianas, a causa de su salud física?</div>
     </div>
     """, unsafe_allow_html=True)
 
     # Pregunta 4
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 4 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 4 de 6</div>
         <div class="anxrisk-question-text">¿Hizo menos de lo que hubiera querido hacer?</div>
     </div>
     """, unsafe_allow_html=True)
@@ -123,8 +132,8 @@ def mostrar_sf12_fisica():
 
     # Pregunta 5
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 5 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 5 de 6</div>
         <div class="anxrisk-question-text">¿Tuvo que dejar de hacer algunas tareas en su trabajo o en sus actividades cotidianas?</div>
     </div>
     """, unsafe_allow_html=True)
@@ -136,8 +145,8 @@ def mostrar_sf12_fisica():
 
     # Pregunta 6
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 6 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 6 de 6</div>
         <div class="anxrisk-question-text">¿Hasta qué punto el dolor le ha dificultado su trabajo habitual?</div>
     </div>
     """, unsafe_allow_html=True)

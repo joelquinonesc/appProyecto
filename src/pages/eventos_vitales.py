@@ -56,11 +56,20 @@ def mostrar_eventos_vitales():
     for i in range(len(preguntas)):
         if f"ev_pregunta_{i}" not in st.session_state:
             st.session_state[f"ev_pregunta_{i}"] = None
+
+    # Inline progress bar
+    answered = sum(1 for i in range(len(preguntas)) if st.session_state.get(f"ev_pregunta_{i}") is not None)
+    progress_pct = (answered / len(preguntas)) * 100
+    st.markdown(f"""
+    <div class="anxrisk-inline-progress">
+        <div class="anxrisk-inline-progress-bar" style="width: {progress_pct}%;"></div>
+    </div>
+    """, unsafe_allow_html=True)
     
     for i, pregunta in enumerate(preguntas):
         st.markdown(f"""
-        <div class="anxrisk-question-card">
-            <div class="anxrisk-question-number">Pregunta {i+1} de {len(preguntas)}</div>
+        <div class="anxrisk-question-card section-lte">
+            <div class="anxrisk-question-number section-lte">Pregunta {i+1} de {len(preguntas)}</div>
             <div class="anxrisk-question-text">{pregunta}</div>
         </div>
         """, unsafe_allow_html=True)

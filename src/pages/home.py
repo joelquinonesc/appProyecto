@@ -9,17 +9,14 @@ def mostrar_home():
     st.markdown("""
     <div class="anxrisk-hero animate-fade-in">
         <div class="anxrisk-logo">
-            <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Stylized "A" monogram -->
-                <text x="36" y="54" text-anchor="middle" font-family="Helvetica, Arial, sans-serif"
-                      font-size="50" font-weight="bold" fill="#E8A832" letter-spacing="-2">A</text>
-                <!-- Neural pulse line across the middle -->
+            <svg width="56" height="56" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <text x="36" y="54" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif"
+                      font-size="50" font-weight="bold" fill="#00E5FF" letter-spacing="-2">A</text>
                 <polyline points="6,36 18,36 22,28 27,44 32,24 37,48 42,28 47,44 52,36 66,36"
                           stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"
                           stroke-linejoin="round" fill="none" opacity="0.9"/>
-                <!-- Accent dots at peaks -->
-                <circle cx="32" cy="24" r="2" fill="#E8A832" opacity="0.8"/>
-                <circle cx="37" cy="48" r="2" fill="#E8A832" opacity="0.8"/>
+                <circle cx="32" cy="24" r="2.5" fill="#00E5FF" opacity="0.9"/>
+                <circle cx="37" cy="48" r="2.5" fill="#00E5FF" opacity="0.9"/>
             </svg>
         </div>
         <div class="anxrisk-hero-title">ANXRISK</div>
@@ -53,7 +50,7 @@ def mostrar_home():
         st.markdown("""
         <div class="anxrisk-feature-card">
             <div class="anxrisk-feature-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
                     <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
                 </svg>
             </div>
@@ -66,9 +63,12 @@ def mostrar_home():
         st.markdown("""
         <div class="anxrisk-feature-card">
             <div class="anxrisk-feature-icon" style="background: var(--accent-genetic-bg);">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-genetic);">
-                    <path d="M10 2v8L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45L14 10V2"/>
-                    <path d="M8.5 2h7"/><path d="M7 16h10"/>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-genetic);">
+                    <path d="M2 15c6.667-6 13.333 0 20-6"/>
+                    <path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/>
+                    <path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/>
+                    <path d="M17 6l-2.5-2.5"/><path d="M14 8l-1-1"/>
+                    <path d="M7 18l2.5 2.5"/><path d="M10 16l1 1"/>
                 </svg>
             </div>
             <h4>Panel Genético</h4>
@@ -80,7 +80,7 @@ def mostrar_home():
         st.markdown("""
         <div class="anxrisk-feature-card">
             <div class="anxrisk-feature-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
                     <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
                     <line x1="6" y1="20" x2="6" y2="14"/>
                 </svg>
@@ -165,7 +165,7 @@ No se almacena información en servidores externos. Consulte la Política de Tra
 
     # Confidentiality & Habeas Data footer
     st.markdown("""
-    <div class="anxrisk-card" style="margin-top: 2rem; text-align: center; border-left: 3px solid var(--primary-light);">
+    <div class="anxrisk-card" style="margin-top: 2rem; text-align: center; border-left: 3px solid var(--accent);">
         <p style="margin-bottom: 0.5rem;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
                  stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary); vertical-align: middle; margin-right: 6px;">

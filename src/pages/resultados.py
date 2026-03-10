@@ -425,17 +425,28 @@ def mostrar_resultados():
 
 
 def _mostrar_resultado_riesgo(nivel_triple, prob_alto, modo_label):
-    """Muestra el resultado de riesgo con CSS classes."""
+    """Muestra el resultado de riesgo con gauge semicircular tipo Illumina."""
     css_class = _risk_css_class(nivel_triple)
-    marker_pos = f"{prob_alto * 100:.0f}%" if prob_alto is not None else "50%"
     prob_text = f"{prob_alto:.1%}" if prob_alto is not None else "N/A"
+    prob_value = prob_alto if prob_alto is not None else 0.5
+
+    # Needle rotation: 0% = -90deg (left), 100% = 90deg (right)
+    needle_deg = -90 + (prob_value * 180)
 
     st.markdown(f"""
     <div class="anxrisk-result-header">
         <div class="anxrisk-result-level {css_class}">{nivel_triple.upper()}</div>
-        <div class="anxrisk-result-prob">Probabilidad: <strong>{prob_text}</strong></div>
-        <div class="anxrisk-risk-gauge">
-            <div class="anxrisk-risk-gauge-marker" style="left: {marker_pos};"></div>
+        <div class="anxrisk-result-prob">Probabilidad<strong>{prob_text}</strong></div>
+        <div class="anxrisk-gauge-container">
+            <div class="anxrisk-gauge">
+                <div class="anxrisk-gauge-needle" style="transform: rotate({needle_deg}deg);"></div>
+                <div class="anxrisk-gauge-center"></div>
+            </div>
+            <div class="anxrisk-gauge-labels">
+                <span style="color: var(--success);">Bajo</span>
+                <span style="color: var(--warning);">Moderado</span>
+                <span style="color: var(--danger);">Alto</span>
+            </div>
         </div>
         <div class="anxrisk-result-model">Modelo: {modo_label}</div>
     </div>
@@ -454,21 +465,21 @@ def _mostrar_explicacion_modelo(modo_label):
 
     with col_modelo:
         st.markdown("""
-        <div class="anxrisk-card">
-            <h4>🧠 Red Neuronal MLP (Perceptrón Multicapa)</h4>
-            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text);">
+        <div class="anxrisk-card" style="border-top: 3px solid var(--primary);">
+            <h4 style="color: var(--primary) !important;">🧠 Red Neuronal MLP</h4>
+            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-secondary);">
                 El modelo utilizado es una <b>Red Neuronal Artificial de tipo MLP</b> (Multi-Layer Perceptron),
                 un algoritmo de aprendizaje supervisado que procesa las variables clínicas, demográficas y
                 (opcionalmente) genéticas del paciente a través de una capa oculta de 100 neuronas con
                 función de activación tangente hiperbólica (tanh).
             </p>
-            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text);">
+            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-secondary);">
                 A diferencia de modelos lineales, la red neuronal MLP captura <b>relaciones no lineales complejas</b>
                 entre los factores de riesgo, lo que permite identificar interacciones sutiles entre variables
                 que podrían pasar desapercibidas con métodos estadísticos tradicionales. El entrenamiento se
                 realiza mediante descenso de gradiente estocástico (SGD) con tasa de aprendizaje adaptativa.
             </p>
-            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">
+            <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem;">
                 <b>Modo actual:</b> """ + modo_label + """
             </p>
         </div>
@@ -476,15 +487,15 @@ def _mostrar_explicacion_modelo(modo_label):
 
     with col_roc:
         st.markdown("""
-        <div class="anxrisk-card">
-            <h4>📈 Curva ROC y Validación</h4>
-            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text);">
+        <div class="anxrisk-card" style="border-top: 3px solid var(--accent);">
+            <h4 style="color: var(--primary) !important;">📈 Curva ROC y Validación</h4>
+            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-secondary);">
                 La <b>Curva ROC</b> (Receiver Operating Characteristic) es la herramienta estándar para evaluar
                 la capacidad discriminativa de un modelo clasificador. Representa la relación entre la
                 <b>Sensibilidad</b> (tasa de verdaderos positivos) y <b>1 – Especificidad</b>
                 (tasa de falsos positivos) en todos los umbrales posibles.
             </p>
-            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text);">
+            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-secondary);">
                 El <b>AUC-ROC</b> (Área Bajo la Curva) resume esta capacidad en un solo valor entre 0 y 1.
                 Un AUC de <b>0.5</b> equivale a clasificar al azar, mientras que un AUC cercano a <b>1.0</b>
                 indica discriminación perfecta entre pacientes con y sin riesgo elevado de ansiedad.
@@ -581,30 +592,31 @@ def mostrar_shap_analysis(model, X, genero):
         top_shap_values = shap_array[0][top_indices]
         top_feature_names = [feature_names[i] for i in top_indices]
         
-        # SHAP chart with design system colors
+        # SHAP chart with Illumina design system colors
         fig, ax = plt.subplots(figsize=(10, 8))
-        colors = ['#DC2626' if val > 0 else '#059669' for val in top_shap_values]
-        ax.barh(range(len(top_shap_values)), top_shap_values, color=colors, alpha=0.85, edgecolor='#D4D0CC', linewidth=0.5)
+        colors = ['#E53935' if val > 0 else '#00B4D8' for val in top_shap_values]
+        ax.barh(range(len(top_shap_values)), top_shap_values, color=colors, alpha=0.88, edgecolor='#E2E8F0', linewidth=0.5)
         ax.set_yticks(range(len(top_shap_values)))
-        ax.set_yticklabels(top_feature_names, fontsize=10, fontfamily='sans-serif')
-        ax.set_xlabel('SHAP Value (Contribución al Riesgo)', fontsize=11, fontweight='600', color='#2D2D2D')
-        ax.set_title('Impacto de Características en la Predicción', fontsize=13, fontweight='600', color='#2D2D2D', pad=16)
-        ax.axvline(x=0, color='#2D2D2D', linestyle='-', linewidth=1.5)
-        ax.grid(axis='x', alpha=0.15, linestyle='-', color='#D4D0CC')
-        ax.set_facecolor('#F0EDEA')
-        fig.patch.set_facecolor('#F0EDEA')
+        ax.set_yticklabels(top_feature_names, fontsize=10, fontfamily='sans-serif', color='#334155')
+        ax.set_xlabel('SHAP Value (Contribución al Riesgo)', fontsize=11, fontweight='600', color='#0033A0')
+        ax.set_title('Impacto de Características en la Predicción', fontsize=13, fontweight='700', color='#0033A0', pad=16)
+        ax.axvline(x=0, color='#0033A0', linestyle='-', linewidth=1.5, alpha=0.6)
+        ax.grid(axis='x', alpha=0.12, linestyle='-', color='#94A3B8')
+        ax.set_facecolor('#FAFBFC')
+        fig.patch.set_facecolor('#FAFBFC')
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_color('#D4D0CC')
-        ax.spines['bottom'].set_color('#D4D0CC')
-        ax.tick_params(colors='#6B6B6B')
+        ax.spines['left'].set_color('#CBD5E1')
+        ax.spines['bottom'].set_color('#CBD5E1')
+        ax.tick_params(colors='#64748B')
         
         from matplotlib.patches import Patch
         legend_elements = [
-            Patch(facecolor='#DC2626', alpha=0.85, label='Aumenta Riesgo'),
-            Patch(facecolor='#059669', alpha=0.85, label='Disminuye Riesgo')
+            Patch(facecolor='#E53935', alpha=0.88, label='Aumenta Riesgo'),
+            Patch(facecolor='#00B4D8', alpha=0.88, label='Disminuye Riesgo')
         ]
-        ax.legend(handles=legend_elements, loc='lower right', fontsize=9, framealpha=0.9)
+        ax.legend(handles=legend_elements, loc='lower right', fontsize=9, framealpha=0.95,
+                  edgecolor='#CBD5E1', facecolor='#FFFFFF')
         
         plt.tight_layout()
         st.pyplot(fig)
@@ -710,18 +722,19 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
         doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=50, leftMargin=50, topMargin=40, bottomMargin=50)
         elements = []
 
-        # Design system colors
-        COLOR_PRIMARY = colors.HexColor('#D4911D')
-        COLOR_PRIMARY_LIGHT = colors.HexColor('#FDE8C4')
-        COLOR_TEXT = colors.HexColor('#2D2D2D')
-        COLOR_TEXT_SECONDARY = colors.HexColor('#6B6B6B')
-        COLOR_SURFACE = colors.HexColor('#F5F3F0')
-        COLOR_BORDER = colors.HexColor('#D4D0CC')
-        COLOR_SUCCESS = colors.HexColor('#059669')
-        COLOR_WARNING = colors.HexColor('#D97706')
-        COLOR_DANGER = colors.HexColor('#DC2626')
+        # Design system colors — Illumina palette
+        COLOR_PRIMARY = colors.HexColor('#0033A0')
+        COLOR_PRIMARY_LIGHT = colors.HexColor('#E8F0FE')
+        COLOR_TEXT = colors.HexColor('#1A202C')
+        COLOR_TEXT_SECONDARY = colors.HexColor('#64748B')
+        COLOR_SURFACE = colors.HexColor('#F1F5F9')
+        COLOR_BORDER = colors.HexColor('#CBD5E1')
+        COLOR_SUCCESS = colors.HexColor('#00C853')
+        COLOR_WARNING = colors.HexColor('#FF9800')
+        COLOR_DANGER = colors.HexColor('#E53935')
         COLOR_WHITE = colors.white
-        COLOR_GENETIC = colors.HexColor('#7C3AED')
+        COLOR_GENETIC = colors.HexColor('#7B1FA2')
+        COLOR_ACCENT = colors.HexColor('#00B4D8')
 
         styles = getSampleStyleSheet()
 
@@ -769,11 +782,11 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
             d = Drawing(logo_w, logo_h)
 
             # Navy background with rounded appearance
-            d.add(Rect(0, 0, logo_w, logo_h, fillColor=HexColor('#1A1A2E'), strokeColor=None, rx=18, ry=18))
+            d.add(Rect(0, 0, logo_w, logo_h, fillColor=HexColor('#0033A0'), strokeColor=None, rx=18, ry=18))
 
             # "A" letter — stylized monogram
             d.add(String(50, 28, "A", fontSize=56, fontName='Helvetica-Bold',
-                         fillColor=HexColor('#E8A832'), textAnchor='middle'))
+                         fillColor=HexColor('#00B4D8'), textAnchor='middle'))
 
             # Thin horizontal line through the A (EEG pulse style)
             d.add(Line(12, 52, 25, 52, strokeColor=HexColor('#FFFFFF'), strokeWidth=1.8))
@@ -789,9 +802,9 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
             d.add(Line(70, 52, 88, 52, strokeColor=HexColor('#FFFFFF'), strokeWidth=1.8))
 
             # Small accent dots
-            d.add(Circle(30, 62, 2, fillColor=HexColor('#E8A832'), strokeColor=None))
-            d.add(Circle(50, 56, 2, fillColor=HexColor('#E8A832'), strokeColor=None))
-            d.add(Circle(60, 60, 2, fillColor=HexColor('#E8A832'), strokeColor=None))
+            d.add(Circle(30, 62, 2, fillColor=HexColor('#00E5FF'), strokeColor=None))
+            d.add(Circle(50, 56, 2, fillColor=HexColor('#00E5FF'), strokeColor=None))
+            d.add(Circle(60, 60, 2, fillColor=HexColor('#00E5FF'), strokeColor=None))
 
             # Render drawing to image
             logo_buf = BytesIO()

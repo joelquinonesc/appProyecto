@@ -1,61 +1,77 @@
 /* =========================================================
-   ANXRISK — Professional Design System
+   ANXRISK — Illumina Genomics Design System
    Medical SaaS for Anxiety Risk Stratification
-   Version: 3.0 — Clinical Professional
+   Version: 4.0 — Illumina-Inspired Biotech Premium
    ========================================================= */
 
 /* ============================================
    1. GOOGLE FONTS
    ============================================ */
-@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 /* ============================================
    2. CSS CUSTOM PROPERTIES — Design Tokens
    ============================================ */
 :root {
-    /* Primary Palette — Illumina-inspired: dark amber/gold + charcoal */
-    --primary:        #D4911D;
-    --primary-light:  #E8A832;
-    --primary-soft:   #FDE8C4;
-    --primary-hover:  #B87A14;
+    /* Primary — Illumina Deep Navy */
+    --primary:        #0033A0;
+    --primary-light:  #3366CC;
+    --primary-soft:   #E8EFF9;
+    --primary-hover:  #001F5C;
+    --primary-dark:   #001F5C;
 
-    /* Surfaces — Warm neutral tones */
-    --surface:        #F0EDEA;
+    /* Accent — Illumina Teal/Cyan */
+    --accent:         #00B4D8;
+    --accent-light:   #E0F7FA;
+    --accent-glow:    rgba(0, 180, 216, 0.15);
+
+    /* Surfaces — Clean, clinical */
+    --bg:             #FAFBFC;
+    --surface:        #FAFBFC;
     --surface-card:   #FFFFFF;
+    --surface-alt:    #F5F7FA;
 
     /* Text — Charcoal grays */
-    --text-primary:   #2D2D2D;
-    --text-secondary: #6B6B6B;
+    --text-primary:   #1A202C;
+    --text-secondary: #64748B;
+    --text-muted:     #94A3B8;
+    --text:           #1A202C;
 
     /* Borders & Dividers */
-    --border:         #D4D0CC;
-    --border-focus:   #D4911D;
+    --border:         #E2E8F0;
+    --border-light:   #EDF2F7;
+    --border-focus:   #0033A0;
 
-    /* Semantic Colors */
-    --success:        #059669;
-    --success-bg:     rgba(5, 150, 105, 0.10);
-    --warning:        #D97706;
-    --warning-bg:     rgba(217, 119, 6, 0.10);
-    --danger:         #DC2626;
-    --danger-bg:      rgba(220, 38, 38, 0.10);
-    --info:           #4A90C4;
-    --info-bg:        rgba(74, 144, 196, 0.10);
+    /* Semantic Colors — Genomics */
+    --success:        #00C853;
+    --success-bg:     #E8F5E9;
+    --warning:        #FF9800;
+    --warning-bg:     #FFF3E0;
+    --danger:         #E53935;
+    --danger-bg:      #FFEBEE;
+    --info:           #00B4D8;
+    --info-bg:        #E0F7FA;
 
-    /* Accent — Genetics Module */
-    --accent-genetic: #7C3AED;
-    --accent-genetic-bg: rgba(124, 58, 237, 0.08);
+    /* Genetic Purple */
+    --genetic:        #7B1FA2;
+    --genetic-light:  #F3E5F5;
+    --accent-genetic: #7B1FA2;
+    --accent-genetic-bg: rgba(123, 31, 162, 0.08);
 
-    /* Shadows */
-    --shadow-xs:  0 1px 2px rgba(0,0,0,0.04);
-    --shadow-sm:  0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+    /* Shadows — Soft & clinical */
+    --shadow-xs:  0 1px 2px rgba(0,0,0,0.03);
+    --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
     --shadow-md:  0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.06);
-    --shadow-lg:  0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.05);
-    --shadow-hover: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg:  0 10px 25px rgba(0,0,0,0.06), 0 4px 10px rgba(0,0,0,0.04);
+    --shadow-hover: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
+    --shadow-glow-teal: 0 0 20px rgba(0, 180, 216, 0.2);
+    --shadow-glow-navy: 0 2px 8px rgba(0, 51, 160, 0.25);
 
     /* Border Radius */
     --radius-sm:   8px;
     --radius-md:   12px;
     --radius-lg:   16px;
+    --radius-xl:   20px;
     --radius-full: 9999px;
 
     /* Spacing (4px grid) */
@@ -68,29 +84,29 @@
     --space-8:  2rem;
     --space-10: 2.5rem;
     --space-12: 3rem;
+    --space-16: 4rem;
 
     /* Typography */
-    --font-sans:  'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono:  'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
 
     /* Transitions */
     --ease:       0.2s ease;
-    --ease-slow:  0.35s ease;
+    --ease-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-slow:  0.4s ease;
 }
 
 /* ============================================
    3. RESET & BASE
    ============================================ */
-*, *::before, *::after {
-    box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 html, body {
     font-family: var(--font-sans) !important;
     font-size: 16px;
     line-height: 1.65;
     color: var(--text-primary);
-    background-color: var(--surface) !important;
+    background-color: var(--bg) !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -118,12 +134,10 @@ p {
 /* ============================================
    4. STREAMLIT APP OVERRIDES
    ============================================ */
-.stApp {
-    background-color: var(--surface) !important;
-}
+.stApp { background-color: var(--bg) !important; }
 
 .main, section.main {
-    background-color: var(--surface) !important;
+    background-color: var(--bg) !important;
     padding-top: 0 !important;
 }
 
@@ -132,7 +146,7 @@ p {
     padding-bottom: var(--space-8) !important;
     max-width: 960px !important;
     margin: 0 auto !important;
-    background-color: var(--surface) !important;
+    background-color: var(--bg) !important;
 }
 
 /* Hide Streamlit branding */
@@ -147,45 +161,75 @@ footer {
 }
 
 /* ============================================
-   5. SIDEBAR — Professional Stepper
+   5. SIDEBAR — Illumina Navy Pipeline
    ============================================ */
 section[data-testid="stSidebar"] {
-    background: var(--surface-card) !important;
-    border-right: 1px solid var(--border) !important;
-    box-shadow: var(--shadow-sm) !important;
+    background: linear-gradient(180deg, #001F5C 0%, #0033A0 100%) !important;
+    border-right: none !important;
+    box-shadow: 4px 0 20px rgba(0, 31, 92, 0.15) !important;
 }
 
 section[data-testid="stSidebar"] > div {
-    background: var(--surface-card) !important;
+    background: transparent !important;
     padding: var(--space-6) var(--space-4) !important;
 }
 
 section[data-testid="stSidebar"] .stMarkdown p,
 section[data-testid="stSidebar"] .stMarkdown span {
-    color: var(--text-primary) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
 }
 
-/* Sidebar headings */
 section[data-testid="stSidebar"] h1,
 section[data-testid="stSidebar"] h2,
 section[data-testid="stSidebar"] h3 {
-    color: var(--primary) !important;
+    color: #FFFFFF !important;
     font-weight: 600 !important;
 }
 
-/* Sidebar progress bar */
 section[data-testid="stSidebar"] .stProgress > div > div > div {
-    background: linear-gradient(90deg, var(--primary), var(--primary-light)) !important;
+    background: linear-gradient(90deg, var(--accent), #00E5FF) !important;
     border-radius: var(--radius-full) !important;
+    box-shadow: 0 0 12px rgba(0, 180, 216, 0.4) !important;
 }
 
 section[data-testid="stSidebar"] .stProgress > div > div {
-    background: var(--border) !important;
+    background: rgba(255, 255, 255, 0.15) !important;
     border-radius: var(--radius-full) !important;
 }
 
+section[data-testid="stSidebar"] .stButton > button {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+section[data-testid="stSidebar"] .stButton > button:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 12px rgba(0, 180, 216, 0.2) !important;
+}
+
+section[data-testid="stSidebar"] .stButton > button[kind="primary"],
+section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton-primary"] {
+    background: linear-gradient(135deg, var(--accent), #00E5FF) !important;
+    color: #001F5C !important;
+    border: none !important;
+    font-weight: 700 !important;
+}
+
+section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover,
+section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton-primary"]:hover {
+    box-shadow: 0 4px 16px rgba(0, 180, 216, 0.4) !important;
+    transform: translateY(-1px) !important;
+}
+
+section[data-testid="stSidebar"] hr {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
 /* ============================================
-   6. BUTTONS
+   6. BUTTONS — Illumina Style
    ============================================ */
 .stButton > button {
     font-family: var(--font-sans) !important;
@@ -193,31 +237,28 @@ section[data-testid="stSidebar"] .stProgress > div > div {
     font-size: 1rem !important;
     border-radius: var(--radius-sm) !important;
     padding: 0.75rem 1.75rem !important;
-    transition: all var(--ease) !important;
+    transition: all var(--ease-smooth) !important;
     cursor: pointer !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
     border: none !important;
     box-shadow: var(--shadow-xs) !important;
     width: 100% !important;
     min-height: 48px !important;
 }
 
-/* Primary button */
 .stButton > button[kind="primary"],
 .stButton > button[data-testid="stBaseButton-primary"] {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%) !important;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%) !important;
     color: #FFFFFF !important;
+    box-shadow: var(--shadow-glow-navy) !important;
 }
 
 .stButton > button[kind="primary"]:hover,
 .stButton > button[data-testid="stBaseButton-primary"]:hover {
     background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%) !important;
-    box-shadow: 0 4px 14px rgba(212, 145, 29, 0.35) !important;
+    box-shadow: 0 4px 16px rgba(0, 51, 160, 0.35) !important;
     transform: translateY(-1px) !important;
 }
 
-/* Secondary/default button */
 .stButton > button[kind="secondary"],
 .stButton > button:not([kind="primary"]):not([data-testid="stBaseButton-primary"]) {
     background: var(--surface-card) !important;
@@ -228,60 +269,49 @@ section[data-testid="stSidebar"] .stProgress > div > div {
 .stButton > button[kind="secondary"]:hover,
 .stButton > button:not([kind="primary"]):not([data-testid="stBaseButton-primary"]):hover {
     border-color: var(--primary) !important;
-    background: var(--surface) !important;
+    background: var(--primary-soft) !important;
     box-shadow: var(--shadow-sm) !important;
     transform: translateY(-1px) !important;
 }
 
-/* Focus ring (accessibility) */
 .stButton > button:focus-visible {
-    outline: 2px solid var(--primary-light) !important;
+    outline: 2px solid var(--accent) !important;
     outline-offset: 2px !important;
 }
 
-/* Download buttons */
 .stDownloadButton > button {
     font-family: var(--font-sans) !important;
     font-weight: 600 !important;
     font-size: 1rem !important;
     border-radius: var(--radius-sm) !important;
     padding: 0.75rem 1.75rem !important;
-    transition: all var(--ease) !important;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%) !important;
-    color: #FFFFFF !important;
+    transition: all var(--ease-smooth) !important;
+    background: linear-gradient(135deg, var(--accent), #00E5FF) !important;
+    color: #001F5C !important;
     border: none !important;
-    box-shadow: var(--shadow-xs) !important;
+    box-shadow: var(--shadow-glow-teal) !important;
     min-height: 48px !important;
 }
 
 .stDownloadButton > button:hover {
-    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%) !important;
-    box-shadow: 0 4px 14px rgba(212, 145, 29, 0.35) !important;
+    box-shadow: 0 4px 20px rgba(0, 180, 216, 0.4) !important;
     transform: translateY(-1px) !important;
 }
 
 /* ============================================
-   7. FORM INPUTS
+   7. FORM INPUTS — Clean Clinical
    ============================================ */
-
-/* Labels */
-label,
-.stTextInput label,
-.stNumberInput label,
-.stSelectbox label,
-.stRadio label {
+label, .stTextInput label, .stNumberInput label, .stSelectbox label, .stRadio label {
     color: var(--text-primary) !important;
     font-weight: 500 !important;
     font-size: 1rem !important;
     font-family: var(--font-sans) !important;
 }
 
-/* Text & Number inputs */
 .stTextInput > div > div > input,
 .stNumberInput > div > div > input,
 .stNumberInput input,
-input[type="text"],
-input[type="number"] {
+input[type="text"], input[type="number"] {
     background: var(--surface-card) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--radius-sm) !important;
@@ -296,7 +326,7 @@ input[type="number"] {
 .stNumberInput > div > div > input:focus,
 .stNumberInput input:focus {
     border-color: var(--primary) !important;
-    box-shadow: 0 0 0 3px rgba(212, 145, 29, 0.12) !important;
+    box-shadow: 0 0 0 3px rgba(0, 51, 160, 0.12) !important;
     outline: none !important;
 }
 
@@ -306,14 +336,12 @@ input[type="number"] {
     border-color: var(--primary-light) !important;
 }
 
-/* Placeholder */
 .stTextInput input::placeholder,
 .stNumberInput input::placeholder {
-    color: var(--text-secondary) !important;
-    opacity: 0.6 !important;
+    color: var(--text-muted) !important;
+    opacity: 0.7 !important;
 }
 
-/* Autofill override */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
@@ -321,9 +349,8 @@ input:-webkit-autofill:focus {
     -webkit-box-shadow: 0 0 0 1000px var(--surface-card) inset !important;
 }
 
-/* Number input buttons */
 .stNumberInput button {
-    background: var(--surface) !important;
+    background: var(--surface-alt) !important;
     color: var(--text-secondary) !important;
     border: none !important;
     transition: background var(--ease) !important;
@@ -334,15 +361,9 @@ input:-webkit-autofill:focus {
     color: var(--text-primary) !important;
 }
 
-/* Selectbox */
-.stSelectbox {
-    width: 100% !important;
-    max-width: 480px !important;
-    margin: 0 auto !important;
-}
+.stSelectbox { width: 100% !important; max-width: 480px !important; margin: 0 auto !important; }
 
-.stSelectbox > div > div,
-.stSelectbox > div > div > div {
+.stSelectbox > div > div, .stSelectbox > div > div > div {
     background: var(--surface-card) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--radius-sm) !important;
@@ -350,213 +371,101 @@ input:-webkit-autofill:focus {
     transition: border-color var(--ease) !important;
 }
 
-.stSelectbox > div > div:hover {
-    border-color: var(--primary-light) !important;
+.stSelectbox > div > div:hover { border-color: var(--primary-light) !important; }
+.stSelectbox > div > div:focus-within { border-color: var(--primary) !important; box-shadow: 0 0 0 3px rgba(0, 51, 160, 0.12) !important; }
+.stSelectbox div[data-baseweb="select"] > div, .stSelectbox div[data-baseweb="select"] span { color: var(--text-primary) !important; font-size: 1rem !important; }
+
+div[role="listbox"] { background: var(--surface-card) !important; border: 1px solid var(--border) !important; border-radius: var(--radius-sm) !important; box-shadow: var(--shadow-lg) !important; }
+div[role="option"] { color: var(--text-primary) !important; padding: 0.625rem 0.75rem !important; transition: background var(--ease) !important; font-size: 1rem !important; }
+div[role="option"]:hover { background: var(--primary-soft) !important; }
+div[role="option"][aria-selected="true"] { background: rgba(0, 51, 160, 0.08) !important; font-weight: 600 !important; }
+
+.stRadio > label { color: var(--text-primary) !important; font-weight: 500 !important; }
+
+/* Radio centering */
+.stRadio, div[data-testid="stRadio"],
+.stRadio > div, .stRadio > div > div, .stRadio > div > div > div, .stRadio > div > div > div > div,
+div[data-testid="stRadio"] > div, div[data-testid="stRadio"] > div > div, div[data-testid="stRadio"] > div > div > div, div[data-testid="stRadio"] > div > div > div > div {
+    display: flex !important; flex-direction: column !important; align-items: center !important; width: 100% !important; background: transparent !important;
 }
 
-.stSelectbox > div > div:focus-within {
-    border-color: var(--primary) !important;
-    box-shadow: 0 0 0 3px rgba(212, 145, 29, 0.12) !important;
-}
-
-.stSelectbox div[data-baseweb="select"] > div,
-.stSelectbox div[data-baseweb="select"] span {
-    color: var(--text-primary) !important;
-    font-size: 1rem !important;
-}
-
-/* Dropdown options */
-div[role="listbox"] {
-    background: var(--surface-card) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: var(--radius-sm) !important;
-    box-shadow: var(--shadow-lg) !important;
-}
-
-div[role="option"] {
-    color: var(--text-primary) !important;
-    padding: 0.625rem 0.75rem !important;
-    transition: background var(--ease) !important;
-    font-size: 1rem !important;
-}
-
-div[role="option"]:hover {
-    background: var(--surface) !important;
-}
-
-div[role="option"][aria-selected="true"] {
-    background: rgba(212, 145, 29, 0.08) !important;
-    font-weight: 600 !important;
-}
-
-/* Radio buttons — label styling */
-.stRadio > label {
-    color: var(--text-primary) !important;
-    font-weight: 500 !important;
-}
-
-/* ── RADIO CENTERING: nuclear approach ──
-   Every div inside .stRadio becomes a flex column centered,
-   EXCEPT the radiogroup which is a centered flex row.
-   Uses both .stRadio and [data-testid="stRadio"] for max specificity. */
-
-.stRadio,
-div[data-testid="stRadio"],
-.stRadio > div,
-.stRadio > div > div,
-.stRadio > div > div > div,
-.stRadio > div > div > div > div,
-div[data-testid="stRadio"] > div,
-div[data-testid="stRadio"] > div > div,
-div[data-testid="stRadio"] > div > div > div,
-div[data-testid="stRadio"] > div > div > div > div {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    width: 100% !important;
-    background: transparent !important;
-}
-
-/* The radiogroup itself: horizontal centered row */
-.stRadio div[role="radiogroup"],
-div[data-testid="stRadio"] div[role="radiogroup"] {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 0.625rem !important;
-    width: auto !important;
-    max-width: 100% !important;
+.stRadio div[role="radiogroup"], div[data-testid="stRadio"] div[role="radiogroup"] {
+    display: flex !important; flex-direction: row !important; flex-wrap: wrap !important;
+    justify-content: center !important; align-items: center !important;
+    gap: 0.625rem !important; width: auto !important; max-width: 100% !important;
     padding: var(--space-3) 0 var(--space-4) 0 !important;
 }
 
-/* Radio option labels — pill style */
-.stRadio div[role="radiogroup"] > label,
-div[data-testid="stRadio"] div[role="radiogroup"] > label {
-    display: flex !important;
-    flex-direction: row !important;
-    background: var(--surface-card) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: var(--radius-sm) !important;
-    padding: 0.625rem 1.25rem !important;
-    color: var(--text-primary) !important;
-    font-weight: 500 !important;
-    font-size: 1rem !important;
-    cursor: pointer !important;
-    transition: all var(--ease) !important;
-    text-align: center !important;
-    flex: 0 1 auto !important;
-    white-space: nowrap !important;
-    width: auto !important;
-    align-items: center !important;
+/* Radio pills — Illumina rounded */
+.stRadio div[role="radiogroup"] > label, div[data-testid="stRadio"] div[role="radiogroup"] > label {
+    display: flex !important; flex-direction: row !important;
+    background: var(--surface-card) !important; border: 1.5px solid var(--border) !important;
+    border-radius: var(--radius-full) !important; padding: 0.625rem 1.5rem !important;
+    color: var(--text-primary) !important; font-weight: 500 !important; font-size: 1rem !important;
+    cursor: pointer !important; transition: all var(--ease-smooth) !important;
+    text-align: center !important; flex: 0 1 auto !important; white-space: nowrap !important;
+    width: auto !important; align-items: center !important;
 }
 
-.stRadio div[role="radiogroup"] > label:hover,
-div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {
-    border-color: var(--primary-light) !important;
-    background: var(--surface) !important;
+.stRadio div[role="radiogroup"] > label:hover, div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {
+    border-color: var(--accent) !important; background: var(--accent-light) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
 }
 
-.stRadio div[role="radiogroup"] > label[data-checked="true"],
-div[data-testid="stRadio"] div[role="radiogroup"] > label[data-checked="true"] {
-    background: var(--primary) !important;
-    border-color: var(--primary) !important;
-    color: #FFFFFF !important;
-    font-weight: 600 !important;
-    box-shadow: 0 2px 8px rgba(212, 145, 29, 0.3) !important;
+.stRadio div[role="radiogroup"] > label[data-checked="true"], div[data-testid="stRadio"] div[role="radiogroup"] > label[data-checked="true"] {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%) !important;
+    border-color: transparent !important; color: #FFFFFF !important; font-weight: 600 !important;
+    box-shadow: var(--shadow-glow-navy) !important;
 }
 
-.stRadio div[role="radiogroup"] label p,
-div[data-testid="stRadio"] div[role="radiogroup"] label p {
-    color: inherit !important;
-    font-weight: inherit !important;
-    margin: 0 !important;
-}
+.stRadio div[role="radiogroup"] label p, div[data-testid="stRadio"] div[role="radiogroup"] label p { color: inherit !important; font-weight: inherit !important; margin: 0 !important; }
+.stRadio input[type="radio"], div[data-testid="stRadio"] input[type="radio"] { display: none !important; }
+.block-container .stRadio, .block-container div[data-testid="stRadio"] { display: flex !important; flex-direction: column !important; align-items: center !important; width: 100% !important; }
 
-/* Hide native radio circle */
-.stRadio input[type="radio"],
-div[data-testid="stRadio"] input[type="radio"] {
-    display: none !important;
-}
-
-/* Safety: block-container level override */
-.block-container .stRadio,
-.block-container div[data-testid="stRadio"] {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    width: 100% !important;
-}
-
-/* Toggle */
-.stToggle label span {
-    color: var(--text-primary) !important;
-}
+.stToggle label span { color: var(--text-primary) !important; }
 
 /* ============================================
-   8. METRICS — Streamlit st.metric
+   8. METRICS
    ============================================ */
 div[data-testid="stMetric"] {
-    background: var(--surface) !important;
+    background: var(--surface-card) !important;
     border-radius: var(--radius-md) !important;
     padding: var(--space-5) !important;
-    border: 1px solid var(--border) !important;
+    border: 1px solid var(--border-light) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: all var(--ease-smooth) !important;
 }
 
-div[data-testid="stMetric"] label {
-    color: var(--text-secondary) !important;
-    font-size: 1rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-}
-
-div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
-    font-family: var(--font-mono) !important;
-    font-weight: 700 !important;
-    color: var(--text-primary) !important;
-}
+div[data-testid="stMetric"]:hover { box-shadow: var(--shadow-md) !important; transform: translateY(-1px) !important; }
+div[data-testid="stMetric"] label { color: var(--text-secondary) !important; font-size: 0.875rem !important; text-transform: uppercase !important; letter-spacing: 0.06em !important; font-weight: 500 !important; }
+div[data-testid="stMetric"] div[data-testid="stMetricValue"] { font-family: var(--font-sans) !important; font-weight: 700 !important; color: var(--primary) !important; }
 
 /* ============================================
    9. DATAFRAME
    ============================================ */
-.stDataFrame {
-    border-radius: var(--radius-md) !important;
-    overflow: hidden !important;
-    border: 1px solid var(--border) !important;
-}
+.stDataFrame { border-radius: var(--radius-md) !important; overflow: hidden !important; border: 1px solid var(--border) !important; box-shadow: var(--shadow-sm) !important; }
 
 /* ============================================
-  10. ALERTS — st.info, st.success, etc.
+  10. ALERTS
    ============================================ */
-.stAlert {
-    border-radius: var(--radius-sm) !important;
-    font-family: var(--font-sans) !important;
-    font-size: 1rem !important;
-}
+.stAlert { border-radius: var(--radius-sm) !important; font-family: var(--font-sans) !important; font-size: 1rem !important; }
 
 /* ============================================
-  11. PROGRESS BAR
+  11. PROGRESS BAR — Teal Glow
    ============================================ */
 .stProgress > div > div > div {
-    background: linear-gradient(90deg, var(--primary), var(--primary-light)) !important;
+    background: linear-gradient(90deg, var(--accent), #00E5FF) !important;
     border-radius: var(--radius-full) !important;
+    box-shadow: 0 0 8px rgba(0, 180, 216, 0.3) !important;
 }
-
-.stProgress > div > div {
-    background: var(--border) !important;
-    border-radius: var(--radius-full) !important;
-    height: 6px !important;
-}
+.stProgress > div > div { background: var(--border) !important; border-radius: var(--radius-full) !important; height: 6px !important; }
 
 /* ============================================
   12. EXPANDER
    ============================================ */
 .streamlit-expanderHeader {
-    font-family: var(--font-sans) !important;
-    font-weight: 500 !important;
-    color: var(--text-primary) !important;
-    background: var(--surface-card) !important;
+    font-family: var(--font-sans) !important; font-weight: 500 !important;
+    color: var(--text-primary) !important; background: var(--surface-card) !important;
     border-radius: var(--radius-sm) !important;
 }
 
@@ -564,572 +473,408 @@ div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
   13. ANXRISK COMPONENT CLASSES
    ============================================ */
 
-/* Card */
+/* Card Premium */
 .anxrisk-card {
-    background: var(--surface-card);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    padding: var(--space-6) var(--space-8);
-    box-shadow: var(--shadow-md);
-    transition: box-shadow var(--ease);
-    margin-bottom: var(--space-6);
-    width: 100%;
-    text-align: center;
+    background: var(--surface-card); border-radius: var(--radius-md);
+    border: 1px solid var(--border-light); padding: var(--space-6) var(--space-8);
+    box-shadow: var(--shadow-sm); transition: all var(--ease-smooth);
+    margin-bottom: var(--space-6); width: 100%; text-align: center;
 }
+.anxrisk-card h3 { text-align: center !important; margin-bottom: var(--space-4) !important; color: var(--primary) !important; }
+.anxrisk-card p { text-align: center; max-width: 640px; margin-left: auto; margin-right: auto; }
+.anxrisk-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
 
-.anxrisk-card h3 {
-    text-align: center !important;
-    margin-bottom: var(--space-4) !important;
-}
-
-.anxrisk-card p {
-    text-align: center;
-    max-width: 640px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.anxrisk-card:hover {
-    box-shadow: var(--shadow-hover);
-}
-
-/* Section Header */
+/* Section Header — gradient underline */
 .anxrisk-section-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding-bottom: var(--space-3);
-    border-bottom: 2px solid var(--primary-soft);
-    margin-bottom: var(--space-5);
+    display: flex; align-items: center; gap: var(--space-3);
+    padding-bottom: var(--space-3); border-bottom: none;
+    margin-bottom: var(--space-5); position: relative;
 }
+.anxrisk-section-header::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--primary));
+    border-radius: 2px;
+}
+.anxrisk-section-header h2, .anxrisk-section-header h3 { margin: 0 !important; padding: 0 !important; color: var(--text-primary) !important; }
 
-.anxrisk-section-header h2,
-.anxrisk-section-header h3 {
-    margin: 0 !important;
-    padding: 0 !important;
-    color: var(--text-primary) !important;
-}
+/* Gradient Divider */
+.anxrisk-divider { height: 3px; background: linear-gradient(90deg, var(--primary), var(--accent), transparent); border: none; margin: 2rem 0; border-radius: 2px; }
 
 /* Metric Card */
 .anxrisk-metric {
-    text-align: center;
-    padding: var(--space-5);
-    border-radius: var(--radius-md);
-    background: var(--surface);
-    border: 1px solid var(--border);
+    text-align: center; padding: var(--space-5); border-radius: var(--radius-md);
+    background: var(--surface-card); border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm); transition: all var(--ease-smooth);
 }
-
-.anxrisk-metric-value {
-    font-size: 1.75rem;
-    font-weight: 700;
-    font-family: var(--font-mono);
-    color: var(--text-primary);
-    line-height: 1.2;
-}
-
-.anxrisk-metric-label {
-    font-size: 0.9375rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-top: var(--space-1);
-}
+.anxrisk-metric:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.anxrisk-metric-value { font-size: 1.75rem; font-weight: 700; font-family: var(--font-sans); color: var(--primary); line-height: 1.2; }
+.anxrisk-metric-label { font-size: 0.875rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-top: var(--space-1); font-weight: 500; }
 
 /* Badges */
-.anxrisk-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-full);
-    font-size: 0.9375rem;
-    font-weight: 600;
-    font-family: var(--font-sans);
-}
+.anxrisk-badge { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.9375rem; font-weight: 600; font-family: var(--font-sans); }
+.anxrisk-badge-low { background: var(--success-bg); color: var(--success); }
+.anxrisk-badge-moderate { background: var(--warning-bg); color: var(--warning); }
+.anxrisk-badge-high { background: var(--danger-bg); color: var(--danger); }
 
-.anxrisk-badge-low {
-    background: var(--success-bg);
-    color: var(--success);
-}
-
-.anxrisk-badge-moderate {
-    background: var(--warning-bg);
-    color: var(--warning);
-}
-
-.anxrisk-badge-high {
-    background: var(--danger-bg);
-    color: var(--danger);
-}
+/* Genetic Badges — Illumina Mono */
+.anxrisk-genetic-badge { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 500; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); display: inline-block; letter-spacing: 0.02em; }
+.anxrisk-genetic-badge.risk { background: var(--danger-bg); color: var(--danger); }
+.anxrisk-genetic-badge.hetero { background: var(--warning-bg); color: var(--warning); }
+.anxrisk-genetic-badge.protective { background: var(--success-bg); color: var(--success); }
 
 /* Genetic Tag */
-.anxrisk-genetic-tag {
-    background: var(--accent-genetic-bg);
-    border: 1px solid rgba(124, 58, 237, 0.2);
-    color: var(--accent-genetic);
-    border-radius: var(--radius-sm);
-    padding: var(--space-2) var(--space-3);
-    font-size: 1rem;
-    font-weight: 600;
-    display: inline-block;
+.anxrisk-genetic-tag { background: var(--genetic-light); border: 1px solid rgba(123, 31, 162, 0.2); color: var(--genetic); border-radius: var(--radius-full); padding: var(--space-2) var(--space-4); font-size: 0.9375rem; font-weight: 600; font-family: var(--font-mono); display: inline-block; letter-spacing: 0.02em; }
+
+/* Risk Gauge — Semicircular */
+.anxrisk-gauge-container { display: flex; flex-direction: column; align-items: center; margin: var(--space-6) 0; }
+
+.anxrisk-gauge {
+    width: 240px; height: 120px; border-radius: 120px 120px 0 0;
+    background: conic-gradient(from 0.75turn at 50% 100%, var(--success) 0deg, #4CAF50 30deg, var(--warning) 60deg, #FF9800 90deg, var(--danger) 120deg, #C62828 180deg);
+    position: relative; overflow: hidden;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.08);
+}
+.anxrisk-gauge::after {
+    content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 180px; height: 90px; background: var(--surface-card);
+    border-radius: 90px 90px 0 0;
+}
+.anxrisk-gauge-needle {
+    position: absolute; bottom: 0; left: 50%;
+    width: 3px; height: 100px; background: var(--text-primary);
+    transform-origin: bottom center; z-index: 2; border-radius: 2px;
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.anxrisk-gauge-center {
+    position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 14px; background: var(--primary);
+    border-radius: 50%; z-index: 3; box-shadow: 0 0 8px rgba(0, 51, 160, 0.3);
+}
+.anxrisk-gauge-labels {
+    display: flex; justify-content: space-between; width: 260px;
+    margin-top: var(--space-2); font-size: 0.75rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
 }
 
-/* Risk Gauge */
+/* Legacy horizontal risk gauge */
 .anxrisk-risk-gauge {
-    height: 8px;
-    border-radius: 4px;
-    background: linear-gradient(to right,
-        var(--success) 0%, var(--success) 30%,
-        var(--warning) 30%, var(--warning) 60%,
-        var(--danger) 60%, var(--danger) 100%);
-    position: relative;
-    margin: var(--space-4) 0;
+    height: 8px; border-radius: 4px;
+    background: linear-gradient(to right, var(--success) 0%, var(--success) 30%, var(--warning) 30%, var(--warning) 60%, var(--danger) 60%, var(--danger) 100%);
+    position: relative; margin: var(--space-4) 0;
 }
+.anxrisk-risk-gauge-marker { position: absolute; top: -4px; width: 4px; height: 16px; background: var(--text-primary); border-radius: 2px; transform: translateX(-50%); }
 
-.anxrisk-risk-gauge-marker {
-    position: absolute;
-    top: -4px;
-    width: 4px;
-    height: 16px;
-    background: var(--text-primary);
-    border-radius: 2px;
-    transform: translateX(-50%);
-}
-
-/* Note / Info Block */
+/* Note */
 .anxrisk-note {
-    background: var(--surface-card);
-    border-left: 3px solid var(--primary-light);
-    padding: var(--space-4) var(--space-5);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    font-size: 1rem;
-    color: var(--text-secondary);
-    margin: var(--space-4) 0;
+    background: var(--surface-card); border-left: 3px solid var(--accent);
+    padding: var(--space-4) var(--space-5); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 1rem; color: var(--text-secondary); margin: var(--space-4) 0;
     box-shadow: var(--shadow-xs);
 }
-
-.anxrisk-note p {
-    margin: 0;
-    font-size: 1rem;
-    color: var(--text-secondary);
-}
+.anxrisk-note p { margin: 0; font-size: 1rem; color: var(--text-secondary); }
 
 /* Clinical Warning */
 .anxrisk-clinical-warning {
-    background: #FFFBEB;
-    border: 1px solid #FDE68A;
-    border-radius: var(--radius-sm);
-    padding: var(--space-5) var(--space-6);
-    font-size: 1rem;
-    color: var(--text-primary);
-    margin: var(--space-6) 0;
+    background: var(--primary-soft); border: 1px solid rgba(0, 51, 160, 0.12);
+    border-left: 4px solid var(--primary); border-radius: var(--radius-sm);
+    padding: var(--space-5) var(--space-6); font-size: 1rem;
+    color: var(--text-primary); margin: var(--space-6) 0;
 }
+.anxrisk-clinical-warning strong { color: var(--primary); }
 
-.anxrisk-clinical-warning strong {
-    color: var(--warning);
-}
-
-/* Progress Stepper */
+/* Progress Stepper — Pipeline */
 .anxrisk-progress-step {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-2) 0;
-    font-size: 1rem;
-    color: var(--text-secondary);
+    display: flex; align-items: center; gap: var(--space-3);
+    padding: var(--space-2) var(--space-3); font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.6); position: relative;
+    margin-left: var(--space-2);
 }
+.anxrisk-progress-step::before {
+    content: ''; position: absolute; left: 17px; top: -6px;
+    width: 2px; height: calc(100% + 0px); background: rgba(255, 255, 255, 0.12);
+}
+.anxrisk-progress-step:first-child::before { top: 50%; height: 50%; }
+.anxrisk-progress-step:last-child::before { height: 50%; }
 
 .anxrisk-step-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--border);
-    flex-shrink: 0;
-    transition: all var(--ease);
+    width: 14px; height: 14px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2); flex-shrink: 0;
+    transition: all var(--ease-smooth); position: relative; z-index: 1;
+    border: 2px solid transparent;
 }
-
 .anxrisk-step-dot.active {
-    background: var(--primary);
-    box-shadow: 0 0 0 3px rgba(212, 145, 29, 0.25);
+    background: var(--accent); border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(0, 180, 216, 0.3), 0 0 12px rgba(0, 180, 216, 0.4);
+    animation: pulse-teal 2s infinite;
 }
-
 .anxrisk-step-dot.completed {
-    background: var(--success);
+    background: var(--success); border-color: var(--success);
+    box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
 }
 
-.anxrisk-step-label {
-    font-size: 1rem;
-    color: var(--text-secondary);
-}
+.anxrisk-step-label { font-size: 0.9375rem; color: rgba(255, 255, 255, 0.55); font-weight: 400; }
+.anxrisk-step-label.active { color: #FFFFFF; font-weight: 600; }
+.anxrisk-step-label.completed { color: rgba(255, 255, 255, 0.85); font-weight: 500; }
 
-.anxrisk-step-label.active {
-    color: var(--primary);
-    font-weight: 600;
-}
-
-.anxrisk-step-label.completed {
-    color: var(--text-primary);
-}
-
-/* Hero Section */
+/* Hero — Illumina Gradient */
 .anxrisk-hero {
-    text-align: center;
-    padding: var(--space-10) var(--space-8) var(--space-8);
+    text-align: center; padding: var(--space-16) var(--space-8) var(--space-10);
     margin-bottom: var(--space-8);
+    background: linear-gradient(135deg, #001F5C 0%, #0033A0 40%, #00669E 70%, #00B4D8 100%);
+    border-radius: var(--radius-xl); position: relative; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 31, 92, 0.2);
 }
-
-/* Logo */
-.anxrisk-logo {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto var(--space-6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(145deg, #1A1A2E 0%, #2D2D44 40%, #1A1A2E 100%);
-    border-radius: 28px;
-    box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.25),
-        0 0 0 1px rgba(212, 145, 29, 0.15),
-        inset 0 1px 0 rgba(255,255,255,0.05);
-    position: relative;
-    overflow: hidden;
+.anxrisk-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(0, 180, 216, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 180, 216, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 60% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 30%);
+    pointer-events: none;
 }
-
-.anxrisk-logo::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(ellipse at 30% 20%, rgba(212, 145, 29, 0.08) 0%, transparent 60%);
+.anxrisk-hero::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.12) 50%, transparent 50%),
+        radial-gradient(2px 2px at 25% 60%, rgba(0,180,216,0.18) 50%, transparent 50%),
+        radial-gradient(2px 2px at 45% 30%, rgba(255,255,255,0.08) 50%, transparent 50%),
+        radial-gradient(2px 2px at 65% 75%, rgba(0,180,216,0.12) 50%, transparent 50%),
+        radial-gradient(2px 2px at 80% 40%, rgba(255,255,255,0.1) 50%, transparent 50%),
+        radial-gradient(2px 2px at 90% 70%, rgba(0,180,216,0.15) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 15% 80%, rgba(255,255,255,0.06) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 55% 15%, rgba(0,180,216,0.1) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 75% 55%, rgba(255,255,255,0.08) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 35% 45%, rgba(0,180,216,0.08) 50%, transparent 50%);
+    animation: float-particles 20s linear infinite;
     pointer-events: none;
 }
 
-.anxrisk-logo svg {
-    position: relative;
-    z-index: 1;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+@keyframes float-particles {
+    0% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-10px) translateX(5px); }
+    100% { transform: translateY(0) translateX(0); }
 }
+
+/* Logo — Glass with Teal Glow */
+.anxrisk-logo {
+    width: 100px; height: 100px; margin: 0 auto var(--space-6);
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 40px rgba(0, 180, 216, 0.25), 0 8px 32px rgba(0, 0, 0, 0.15);
+    position: relative; z-index: 1;
+    animation: glow-teal 4s ease-in-out infinite;
+}
+.anxrisk-logo svg { position: relative; z-index: 1; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2)); }
 
 .anxrisk-hero-title {
-    font-size: 3.25rem !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.12em;
-    color: var(--primary) !important;
-    margin-bottom: var(--space-2) !important;
-    font-family: var(--font-sans) !important;
-    text-transform: uppercase;
+    font-size: 3.5rem !important; font-weight: 800 !important;
+    letter-spacing: 0.14em; color: #FFFFFF !important;
+    margin-bottom: var(--space-2) !important; font-family: var(--font-sans) !important;
+    text-transform: uppercase; position: relative; z-index: 1;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
 }
-
 .anxrisk-hero-subtitle {
-    font-size: 1.25rem;
-    color: var(--text-secondary);
-    font-weight: 400;
-    margin-bottom: var(--space-4);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
+    font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 400;
+    margin-bottom: var(--space-4); max-width: 600px;
+    margin-left: auto; margin-right: auto; line-height: 1.6;
+    position: relative; z-index: 1;
 }
-
 .anxrisk-hero-description {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    max-width: 560px;
-    margin: 0 auto var(--space-8);
-    line-height: 1.7;
+    font-size: 1rem; color: rgba(255, 255, 255, 0.7);
+    max-width: 560px; margin: 0 auto var(--space-8);
+    line-height: 1.7; position: relative; z-index: 1;
 }
 
-/* Feature Cards (Home) */
+/* Feature Cards */
 .anxrisk-feature-card {
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: var(--space-6);
-    text-align: center;
-    transition: all var(--ease);
-    height: 100%;
+    background: var(--surface-card); border: 1px solid var(--border-light);
+    border-radius: var(--radius-md); padding: var(--space-8) var(--space-6);
+    text-align: center; transition: all var(--ease-smooth);
+    height: 100%; position: relative; overflow: hidden;
 }
-
-.anxrisk-feature-card:hover {
-    box-shadow: var(--shadow-hover);
-    border-color: var(--primary-soft);
-    transform: translateY(-2px);
+.anxrisk-feature-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: linear-gradient(90deg, var(--primary), var(--accent));
+    opacity: 0; transition: opacity var(--ease-smooth);
 }
+.anxrisk-feature-card:hover { box-shadow: var(--shadow-hover); border-color: transparent; transform: translateY(-4px); }
+.anxrisk-feature-card:hover::before { opacity: 1; }
 
 .anxrisk-feature-icon {
-    width: 48px;
-    height: 48px;
-    margin: 0 auto var(--space-4);
-    background: rgba(212, 145, 29, 0.08);
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
+    width: 56px; height: 56px; margin: 0 auto var(--space-5);
+    background: var(--primary-soft); border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; transition: all var(--ease-smooth);
 }
-
-.anxrisk-feature-card h4 {
-    color: var(--text-primary);
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: var(--space-2);
+.anxrisk-feature-card:hover .anxrisk-feature-icon {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    box-shadow: 0 4px 16px rgba(0, 51, 160, 0.25);
 }
+.anxrisk-feature-card:hover .anxrisk-feature-icon svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+.anxrisk-feature-card h4 { color: var(--text-primary); font-size: 1.125rem; font-weight: 600; margin-bottom: var(--space-2); }
+.anxrisk-feature-card p { color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.55; margin: 0; }
 
-.anxrisk-feature-card p {
-    color: var(--text-secondary);
-    font-size: 0.9375rem;
-    line-height: 1.5;
-    margin: 0;
-}
-
-/* Stats Bar (Home) */
+/* Stats Bar — Glass Top Line */
 .anxrisk-stats-bar {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-12);
+    display: flex; justify-content: center; gap: var(--space-12);
     padding: var(--space-6) var(--space-8);
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    margin: var(--space-8) 0;
+    background: var(--surface-card); border: 1px solid var(--border-light);
+    border-radius: var(--radius-md); margin: var(--space-8) 0;
+    box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
 }
-
-.anxrisk-stat {
-    text-align: center;
+.anxrisk-stats-bar::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: linear-gradient(90deg, transparent, var(--accent), var(--primary), transparent);
 }
+.anxrisk-stat { text-align: center; }
+.anxrisk-stat-value { font-size: 1.5rem; font-weight: 700; font-family: var(--font-sans); color: var(--primary); letter-spacing: -0.01em; }
+.anxrisk-stat-label { font-size: 0.8125rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-top: var(--space-1); font-weight: 500; }
 
-.anxrisk-stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    font-family: var(--font-mono);
-    color: var(--primary);
-}
-
-.anxrisk-stat-label {
-    font-size: 0.9375rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-top: var(--space-1);
-}
-
-/* Questionnaire Card */
+/* Question Card — with colored left border */
 .anxrisk-question-card {
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: var(--space-5) var(--space-6);
-    margin-bottom: var(--space-4);
-    transition: border-color var(--ease);
-    width: 100%;
-    text-align: center;
+    background: var(--surface-card); border: 1px solid var(--border-light);
+    border-radius: var(--radius-md); padding: var(--space-6);
+    margin-bottom: var(--space-4); transition: all var(--ease-smooth);
+    width: 100%; text-align: center; box-shadow: var(--shadow-sm);
+    position: relative; overflow: hidden;
 }
-
-.anxrisk-question-card:hover {
-    border-color: var(--primary-soft);
+.anxrisk-question-card::before {
+    content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+    width: 4px; background: var(--primary); border-radius: 2px 0 0 2px;
 }
+.anxrisk-question-card.section-lte::before { background: var(--warning); }
+.anxrisk-question-card.section-sf12::before { background: var(--accent); }
+.anxrisk-question-card.section-hads::before { background: var(--genetic); }
+.anxrisk-question-card.section-zsas::before { background: var(--danger); }
+.anxrisk-question-card:hover { border-color: var(--border); box-shadow: var(--shadow-md); }
 
 .anxrisk-question-number {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: var(--space-2);
-    text-align: center;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--primary-soft); color: var(--primary);
+    font-size: 0.8125rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: var(--space-3);
+    padding: 0.25rem 0.75rem; border-radius: var(--radius-full);
 }
+/* Section-specific question number colors */
+.anxrisk-question-number.section-lte { background: var(--warning-bg); color: #E65100; }
+.anxrisk-question-number.section-sf12 { background: var(--accent-light); color: #006064; }
+.anxrisk-question-number.section-hads { background: var(--genetic-light); color: var(--genetic); }
+.anxrisk-question-number.section-zsas { background: var(--danger-bg); color: var(--danger); }
 
 .anxrisk-question-text {
-    font-size: 1.125rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    line-height: 1.5;
-    margin-bottom: var(--space-3);
-    text-align: center;
+    font-size: 1.125rem; font-weight: 500; color: var(--text-primary);
+    line-height: 1.55; margin-bottom: var(--space-3); text-align: center;
 }
 
 /* Result Header */
 .anxrisk-result-header {
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: var(--space-8);
-    text-align: center;
-    margin-bottom: var(--space-6);
-    box-shadow: var(--shadow-sm);
+    background: var(--surface-card); border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg); padding: var(--space-10) var(--space-8);
+    text-align: center; margin-bottom: var(--space-6);
+    box-shadow: var(--shadow-md); position: relative; overflow: hidden;
 }
-
-.anxrisk-result-level {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: var(--space-2);
+.anxrisk-result-header::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; background: linear-gradient(90deg, var(--success), var(--warning), var(--danger));
 }
-
-.anxrisk-result-level.low    { color: var(--success); }
+.anxrisk-result-level { font-size: 2.5rem; font-weight: 800; margin-bottom: var(--space-2); letter-spacing: 0.04em; }
+.anxrisk-result-level.low { color: var(--success); }
 .anxrisk-result-level.moderate { color: var(--warning); }
-.anxrisk-result-level.high   { color: var(--danger); }
-
-.anxrisk-result-prob {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-3);
-}
-
-.anxrisk-result-prob strong {
-    font-family: var(--font-mono);
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.anxrisk-result-model {
-    font-size: 1rem;
-    color: var(--text-secondary);
-}
+.anxrisk-result-level.high { color: var(--danger); animation: pulse-danger 2s infinite; }
+.anxrisk-result-prob { font-size: 1.25rem; color: var(--text-secondary); margin-bottom: var(--space-4); }
+.anxrisk-result-prob strong { font-family: var(--font-mono); font-weight: 700; font-size: 2.5rem; color: var(--text-primary); display: block; margin-top: var(--space-2); }
+.anxrisk-result-model { font-size: 0.9375rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 
 /* Genetic Section */
 .anxrisk-genetic-section {
-    background: var(--surface-card);
-    border: 1px solid rgba(124, 58, 237, 0.2);
-    border-radius: var(--radius-md);
-    padding: var(--space-6);
-    margin: var(--space-6) 0;
+    background: var(--surface-card); border: 1px solid rgba(123, 31, 162, 0.15);
+    border-left: 4px solid var(--genetic); border-radius: var(--radius-md);
+    padding: var(--space-6); margin: var(--space-6) 0; box-shadow: var(--shadow-sm);
 }
-
 .anxrisk-genetic-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-4);
-    padding-bottom: var(--space-3);
-    border-bottom: 2px solid rgba(124, 58, 237, 0.15);
+    display: flex; align-items: center; gap: var(--space-3);
+    margin-bottom: var(--space-4); padding-bottom: var(--space-3);
+    border-bottom: 2px solid rgba(123, 31, 162, 0.1);
 }
-
-.anxrisk-genetic-header h3 {
-    color: var(--accent-genetic) !important;
-    margin: 0 !important;
-}
+.anxrisk-genetic-header h3 { color: var(--genetic) !important; margin: 0 !important; }
 
 /* SHAP Colors */
-.anxrisk-shap-increase {
-    color: var(--danger);
-    font-weight: 600;
-}
+.anxrisk-shap-increase { color: var(--danger); font-weight: 600; }
+.anxrisk-shap-decrease { color: var(--accent); font-weight: 600; }
 
-.anxrisk-shap-decrease {
-    color: var(--success);
-    font-weight: 600;
-}
-
-/* Sidebar Brand */
+/* Sidebar Brand — Dark */
 .anxrisk-sidebar-brand {
-    text-align: center;
-    padding-bottom: var(--space-4);
-    margin-bottom: var(--space-4);
-    border-bottom: 1px solid var(--border);
+    text-align: center; padding-bottom: var(--space-5);
+    margin-bottom: var(--space-5); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-.anxrisk-sidebar-brand h1 {
-    font-size: 1.375rem !important;
-    font-weight: 700 !important;
-    color: var(--primary) !important;
-    letter-spacing: 0.06em;
-    margin-bottom: var(--space-1) !important;
-}
-
-.anxrisk-sidebar-brand p {
-    font-size: 0.9375rem;
-    color: var(--text-secondary);
-    margin: 0;
-    line-height: 1.4;
-}
+.anxrisk-sidebar-brand h1 { font-size: 1.375rem !important; font-weight: 700 !important; color: #FFFFFF !important; letter-spacing: 0.08em; margin-bottom: var(--space-1) !important; }
+.anxrisk-sidebar-brand p { font-size: 0.875rem; color: rgba(255, 255, 255, 0.6); margin: 0; line-height: 1.4; }
 
 /* Sidebar Model Info */
 .anxrisk-sidebar-model {
-    background: var(--surface);
-    border-radius: var(--radius-sm);
-    padding: var(--space-3) var(--space-4);
-    margin: var(--space-4) 0;
-    font-size: 1rem;
-    color: var(--text-secondary);
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.06); border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4); margin: var(--space-4) 0;
+    font-size: 0.9375rem; color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Page Header */
-.anxrisk-page-header {
-    margin-bottom: var(--space-8);
-    text-align: center;
-}
+.anxrisk-page-header { margin-bottom: var(--space-8); text-align: center; }
+.anxrisk-page-header h1 { color: var(--primary) !important; text-align: center !important; margin-bottom: var(--space-2) !important; font-size: 2rem !important; font-weight: 700 !important; }
+.anxrisk-page-header p { text-align: center; color: var(--text-secondary); font-size: 1.125rem; max-width: 600px; margin: 0 auto; }
 
-.anxrisk-page-header h1 {
-    color: var(--text-primary) !important;
-    text-align: center !important;
-    margin-bottom: var(--space-2) !important;
-}
+/* Disclaimer */
+.anxrisk-disclaimer { font-size: 0.875rem; color: rgba(255, 255, 255, 0.5); text-align: center; padding: var(--space-4); line-height: 1.5; }
 
-.anxrisk-page-header p {
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: 1.125rem;
-    max-width: 600px;
-    margin: 0 auto;
-}
+/* Inline Progress */
+.anxrisk-inline-progress { width: 100%; height: 4px; background: var(--border); border-radius: 2px; margin: var(--space-4) 0 var(--space-6); overflow: hidden; }
+.anxrisk-inline-progress-bar { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width var(--ease-smooth); box-shadow: 0 0 6px rgba(0, 180, 216, 0.3); }
 
-/* Disclaimer Footer */
-.anxrisk-disclaimer {
-    font-size: 0.9375rem;
-    color: var(--text-secondary);
-    text-align: center;
-    padding: var(--space-4);
-    line-height: 1.5;
+/* SHAP Container */
+.anxrisk-shap-container { background: var(--surface-card); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: var(--space-6); box-shadow: var(--shadow-sm); }
+
+/* Masivo Stats */
+.anxrisk-masivo-stat {
+    background: var(--surface-card); border: 1px solid var(--border-light);
+    border-radius: var(--radius-md); padding: var(--space-5);
+    text-align: center; box-shadow: var(--shadow-sm); transition: all var(--ease-smooth);
 }
+.anxrisk-masivo-stat:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.anxrisk-masivo-value { font-size: 2rem; font-weight: 800; font-family: var(--font-sans); color: var(--primary); line-height: 1; }
+.anxrisk-masivo-label { font-size: 0.8125rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-top: var(--space-2); font-weight: 500; }
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] { gap: 0 !important; background: var(--surface-alt) !important; border-radius: var(--radius-sm) !important; padding: 4px !important; }
+.stTabs [data-baseweb="tab"] { border-radius: 6px !important; font-weight: 500 !important; font-family: var(--font-sans) !important; color: var(--text-secondary) !important; padding: 0.5rem 1rem !important; }
+.stTabs [aria-selected="true"] { background: var(--surface-card) !important; color: var(--primary) !important; box-shadow: var(--shadow-sm) !important; font-weight: 600 !important; }
 
 /* ============================================
   14. ANIMATIONS
    ============================================ */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-danger { 0%, 100% { text-shadow: 0 0 0 rgba(229, 57, 53, 0); } 50% { text-shadow: 0 0 20px rgba(229, 57, 53, 0.3); } }
+@keyframes pulse-teal { 0%, 100% { box-shadow: 0 0 0 4px rgba(0, 180, 216, 0.3), 0 0 12px rgba(0, 180, 216, 0.4); } 50% { box-shadow: 0 0 0 6px rgba(0, 180, 216, 0.15), 0 0 20px rgba(0, 180, 216, 0.2); } }
+@keyframes glow-teal { 0%, 100% { box-shadow: 0 0 30px rgba(0, 180, 216, 0.2), 0 8px 32px rgba(0, 0, 0, 0.15); } 50% { box-shadow: 0 0 50px rgba(0, 180, 216, 0.35), 0 8px 32px rgba(0, 0, 0, 0.15); } }
+@keyframes count-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-    animation: fadeIn 0.4s ease-out;
-}
-
-.animate-slide-up {
-    animation: slideUp 0.4s ease-out;
-}
+.animate-fade-in { animation: fadeInUp 0.6s ease-out; }
+.animate-slide-up { animation: slideUp 0.5s ease-out; }
+.animate-count { animation: count-up 0.8s ease-out forwards; }
 
 /* ============================================
   15. RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
-    .anxrisk-hero {
-        padding: var(--space-8) var(--space-4);
-    }
-
-    .anxrisk-hero-title {
-        font-size: 1.75rem !important;
-    }
-
-    .anxrisk-logo {
-        width: 96px;
-        height: 96px;
-        border-radius: 22px;
-    }
-
-    .anxrisk-stats-bar {
-        flex-direction: column;
-        gap: var(--space-4);
-    }
-
-    .anxrisk-result-header {
-        padding: var(--space-6);
-    }
+    .anxrisk-hero { padding: var(--space-10) var(--space-4) var(--space-8); border-radius: var(--radius-md); }
+    .anxrisk-hero-title { font-size: 2rem !important; letter-spacing: 0.08em; }
+    .anxrisk-logo { width: 80px; height: 80px; border-radius: 18px; }
+    .anxrisk-stats-bar { flex-direction: column; gap: var(--space-4); }
+    .anxrisk-result-header { padding: var(--space-6); }
+    .anxrisk-result-prob strong { font-size: 2rem; }
+    .anxrisk-gauge { width: 180px; height: 90px; }
 }

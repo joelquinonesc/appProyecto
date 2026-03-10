@@ -101,13 +101,23 @@ def _mostrar_todas_preguntas(respuestas):
     
     total_preguntas = len(preguntas_ordenadas)
 
+    # Inline progress bar
+    zsas_keys = [f"zsas_{p[0][:10]}" for p in preguntas_ordenadas]
+    answered = sum(1 for k in zsas_keys if st.session_state.get(k) is not None)
+    progress_pct = (answered / total_preguntas) * 100
+    st.markdown(f"""
+    <div class="anxrisk-inline-progress">
+        <div class="anxrisk-inline-progress-bar" style="width: {progress_pct}%;"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
     for pregunta, es_regular in preguntas_ordenadas:
         numero = pregunta.split('.')[0]
         texto = pregunta.split('. ', 1)[1]
         
         st.markdown(f"""
-        <div class="anxrisk-question-card">
-            <div class="anxrisk-question-number">Pregunta {numero} de {total_preguntas}</div>
+        <div class="anxrisk-question-card section-zsas">
+            <div class="anxrisk-question-number section-zsas">Pregunta {numero} de {total_preguntas}</div>
             <div class="anxrisk-question-text">{texto}</div>
         </div>
         """, unsafe_allow_html=True)

@@ -40,7 +40,7 @@ def mostrar_sf12_mental():
     """, unsafe_allow_html=True)
 
     st.markdown("""
-    <div class="anxrisk-question-card">
+    <div class="anxrisk-question-card section-sf12">
         <div class="anxrisk-question-text">Responda las preguntas relacionadas con la salud mental:</div>
     </div>
     """, unsafe_allow_html=True)
@@ -65,10 +65,19 @@ def mostrar_sf12_mental():
     opciones_frecuencia = ["Siempre", "Casi siempre", "Algunas veces", "Sólo alguna vez", "Nunca"]
     opciones_tiempo = ["Siempre", "Casi siempre", "Muchas veces", "Algunas veces", "Sólo una vez", "Nunca"]
 
+    # Inline progress bar
+    sf12m_answered = sum(1 for v in m if v is not None)
+    sf12m_pct = (sf12m_answered / 6) * 100
+    st.markdown(f"""
+    <div class="anxrisk-inline-progress">
+        <div class="anxrisk-inline-progress-bar" style="width: {sf12m_pct}%;"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
     # Pregunta 1
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 1 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 1 de 6</div>
         <div class="anxrisk-question-text">¿Hizo menos de lo que hubiera querido hacer, por algún problema emocional?</div>
     </div>
     """, unsafe_allow_html=True)
@@ -85,8 +94,8 @@ def mostrar_sf12_mental():
 
     # Pregunta 2
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 2 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 2 de 6</div>
         <div class="anxrisk-question-text">¿No hizo su trabajo o sus actividades cotidianas tan cuidadosamente como de costumbre, por algún problema emocional?</div>
     </div>
     """, unsafe_allow_html=True)
@@ -103,8 +112,8 @@ def mostrar_sf12_mental():
 
     # Pregunta 3
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 3 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 3 de 6</div>
         <div class="anxrisk-question-text">¿Con qué frecuencia la salud física o los problemas emocionales le han dificultado sus actividades sociales?</div>
     </div>
     """, unsafe_allow_html=True)
@@ -117,8 +126,8 @@ def mostrar_sf12_mental():
 
     # Pregunta 4
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 4 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 4 de 6</div>
         <div class="anxrisk-question-text">¿Se sintió calmado y tranquilo? ¿Cuánto tiempo?</div>
     </div>
     """, unsafe_allow_html=True)
@@ -132,8 +141,8 @@ def mostrar_sf12_mental():
 
     # Pregunta 5
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 5 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 5 de 6</div>
         <div class="anxrisk-question-text">¿Tuvo mucha energía? ¿Cuánto tiempo?</div>
     </div>
     """, unsafe_allow_html=True)
@@ -147,8 +156,8 @@ def mostrar_sf12_mental():
 
     # Pregunta 6
     st.markdown("""
-    <div class="anxrisk-question-card">
-        <div class="anxrisk-question-number">Pregunta 6 de 6</div>
+    <div class="anxrisk-question-card section-sf12">
+        <div class="anxrisk-question-number section-sf12">Pregunta 6 de 6</div>
         <div class="anxrisk-question-text">¿Se ha sentido desanimado(a) y triste? ¿Cuánto tiempo?</div>
     </div>
     """, unsafe_allow_html=True)

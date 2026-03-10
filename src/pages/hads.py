@@ -82,13 +82,24 @@ def mostrar_hads():
     
     respuestas = []
     contador = 0
+
+    # Inline progress bar
+    hads_keys = [f"hads_{p[:10]}" for p in preguntas_hads.keys()]
+    answered = sum(1 for k in hads_keys if st.session_state.get(k) is not None)
+    progress_pct = (answered / len(preguntas_hads)) * 100
+    st.markdown(f"""
+    <div class="anxrisk-inline-progress">
+        <div class="anxrisk-inline-progress-bar" style="width: {progress_pct}%;"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
     for pregunta, opciones in preguntas_hads.items():
         contador += 1
         texto = pregunta.split('. ', 1)[1]
 
         st.markdown(f"""
-        <div class="anxrisk-question-card">
-            <div class="anxrisk-question-number">Pregunta {contador} de {len(preguntas_hads)}</div>
+        <div class="anxrisk-question-card section-hads">
+            <div class="anxrisk-question-number section-hads">Pregunta {contador} de {len(preguntas_hads)}</div>
             <div class="anxrisk-question-text">{texto}</div>
         </div>
         """, unsafe_allow_html=True)
