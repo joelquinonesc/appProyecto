@@ -7,6 +7,6 @@ level = "info"
 [theme]
 primaryColor = "#00B4D8"
 backgroundColor = "#FAFBFC"
-secondaryBackgroundColor = "#001029"
+secondaryBackgroundColor = "#EDF2F7"
 textColor = "#1A1A2E"
 font = "sans serif"

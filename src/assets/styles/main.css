@@ -160,129 +160,105 @@ footer {
     visibility: hidden !important;
 }
 
-/* Make header transparent so sidebar collapse/expand button remains accessible */
+/* Make header transparent — sidebar toggle button lives here */
 header[data-testid="stHeader"] {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }
 
-/* Sidebar collapse button (inside sidebar — white icon on dark bg) */
-button[data-testid="stSidebarCollapseButton"],
-button[data-testid="baseButton-headerNoPadding"],
-section[data-testid="stSidebar"] button[data-testid="stBaseButton-headerNoPadding"] {
-    color: rgba(255, 255, 255, 0.85) !important;
-    background: transparent !important;
-    border: none !important;
-}
-
-/* Sidebar expand button (in header when sidebar is collapsed) */
-button[data-testid="stSidebarExpandButton"],
-div[data-testid="collapsedControl"],
-div[data-testid="collapsedControl"] button {
-    color: var(--primary, #0033A0) !important;
-    visibility: visible !important;
-    display: flex !important;
-}
-
 /* ============================================
-   5. SIDEBAR — Illumina Navy Pipeline
+   5. SIDEBAR — Illumina Light Professional
    ============================================ */
 section[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #001029 0%, #002045 40%, #00306A 100%) !important;
-    border-right: none !important;
-    box-shadow: 8px 0 30px rgba(0, 16, 48, 0.45) !important;
-}
-
-section[data-testid="stSidebar"] > div {
-    background: transparent !important;
+    background: linear-gradient(180deg, #EDF2F7 0%, #F7F9FC 100%) !important;
+    border-right: 1px solid rgba(0, 51, 160, 0.08) !important;
+    box-shadow: 4px 0 20px rgba(0, 16, 48, 0.06) !important;
 }
 
 section[data-testid="stSidebar"] > div:first-child {
     padding: var(--space-6) var(--space-4) !important;
 }
 
-/* Force sidebar text to be light — wildcard but excludes toggle buttons */
-section[data-testid="stSidebar"] *:not(button[data-testid="stSidebarCollapseButton"]):not(button[data-testid="baseButton-headerNoPadding"]):not(button[data-testid="stBaseButton-headerNoPadding"]):not(svg):not(path):not(line):not(polyline):not(circle):not(rect) {
-    color: rgba(255, 255, 255, 0.92) !important;
+/* Sidebar text — dark on light background */
+section[data-testid="stSidebar"] .stMarkdown p,
+section[data-testid="stSidebar"] .stMarkdown span,
+section[data-testid="stSidebar"] .stMarkdown div,
+section[data-testid="stSidebar"] .stMarkdown li,
+section[data-testid="stSidebar"] .stMarkdown strong,
+section[data-testid="stSidebar"] .stMarkdown em,
+section[data-testid="stSidebar"] .stText,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span {
+    color: #2D3748 !important;
+}
+
+section[data-testid="stSidebar"] .stMarkdown a,
+section[data-testid="stSidebar"] a {
+    color: var(--accent, #00B4D8) !important;
 }
 
 section[data-testid="stSidebar"] h1,
 section[data-testid="stSidebar"] h2,
 section[data-testid="stSidebar"] h3 {
-    color: #FFFFFF !important;
+    color: #0033A0 !important;
     font-weight: 700 !important;
 }
 
+/* Progress bar */
 section[data-testid="stSidebar"] .stProgress > div > div > div {
-    background: linear-gradient(90deg, var(--accent), #00E5FF) !important;
+    background: linear-gradient(90deg, var(--primary, #0033A0), var(--accent, #00B4D8)) !important;
     border-radius: var(--radius-full) !important;
-    box-shadow: 0 0 16px rgba(0, 180, 216, 0.45) !important;
+    box-shadow: 0 0 12px rgba(0, 51, 160, 0.25) !important;
 }
 
 section[data-testid="stSidebar"] .stProgress > div > div {
-    background: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(0, 51, 160, 0.08) !important;
     border-radius: var(--radius-full) !important;
 }
 
+/* Sidebar secondary buttons */
 section[data-testid="stSidebar"] .stButton > button {
-    background: rgba(255, 255, 255, 0.12) !important;
-    color: #FFFFFF !important;
-    border: 1px solid rgba(255, 255, 255, 0.22) !important;
-    backdrop-filter: blur(10px) !important;
+    background: #FFFFFF !important;
+    color: #0033A0 !important;
+    border: 1px solid rgba(0, 51, 160, 0.18) !important;
     padding: 0.6rem 0.9rem !important;
     border-radius: 8px !important;
-}
-
-section[data-testid="stSidebar"] .stButton > button *,
-section[data-testid="stSidebar"] .stButton > button p {
-    color: #FFFFFF !important;
+    box-shadow: 0 1px 4px rgba(0, 16, 48, 0.06) !important;
 }
 
 section[data-testid="stSidebar"] .stButton > button:hover {
-    background: rgba(255, 255, 255, 0.22) !important;
-    border-color: var(--accent) !important;
-    box-shadow: 0 6px 22px rgba(0, 180, 216, 0.15) !important;
+    background: #F0F5FF !important;
+    border-color: var(--accent, #00B4D8) !important;
+    box-shadow: 0 4px 16px rgba(0, 180, 216, 0.12) !important;
 }
 
-/* Primary actions in the sidebar: teal gradient for high contrast */
+/* Primary buttons in sidebar */
 section[data-testid="stSidebar"] .stButton > button[kind="primary"],
 section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton-primary"] {
-    background: linear-gradient(135deg, #00B4D8, #00E5FF) !important;
-    color: #001029 !important;
+    background: linear-gradient(135deg, #0033A0, #00B4D8) !important;
+    color: #FFFFFF !important;
     border: none !important;
     font-weight: 700 !important;
-    box-shadow: 0 4px 16px rgba(0, 180, 216, 0.35) !important;
+    box-shadow: 0 4px 16px rgba(0, 51, 160, 0.25) !important;
 }
 
 section[data-testid="stSidebar"] .stButton > button[kind="primary"] *,
-section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton-primary"] *,
-section[data-testid="stSidebar"] .stButton > button[kind="primary"] p,
-section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton-primary"] p {
-    color: #001029 !important;
+section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton-primary"] * {
+    color: #FFFFFF !important;
 }
 
 section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover,
 section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton-primary"]:hover {
     transform: translateY(-1px) !important;
-    box-shadow: 0 6px 24px rgba(0, 180, 216, 0.45) !important;
-    background: linear-gradient(135deg, #00C9E8, #00F0FF) !important;
-}
-
-/* Links / small text contrast */
-section[data-testid="stSidebar"] a, section[data-testid="stSidebar"] .stText, section[data-testid="stSidebar"] .stExpander {
-    color: rgba(255,255,255,0.92) !important;
-}
-
-/* Active / selected items: accent outline */
-section[data-testid="stSidebar"] .stButton > button[aria-pressed="true"] {
-    outline: 2px solid rgba(0, 180, 216, 0.22) !important;
-    box-shadow: 0 6px 24px rgba(0, 180, 216, 0.12) !important;
+    box-shadow: 0 6px 24px rgba(0, 51, 160, 0.3) !important;
+    background: linear-gradient(135deg, #002880, #00A0C0) !important;
 }
 
 /* Sidebar dividers */
 section[data-testid="stSidebar"] hr {
-    border-color: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(0, 51, 160, 0.1) !important;
     margin: var(--space-4) 0 !important;
 }
 
@@ -645,35 +621,35 @@ div[data-testid="stMetric"] div[data-testid="stMetricValue"] { font-family: var(
 .anxrisk-progress-step {
     display: flex; align-items: center; gap: var(--space-3);
     padding: var(--space-2) var(--space-3); font-size: 0.9375rem;
-    color: rgba(255, 255, 255, 0.8); position: relative;
+    color: #4A5568; position: relative;
     margin-left: var(--space-2);
 }
 .anxrisk-progress-step::before {
     content: ''; position: absolute; left: 17px; top: -6px;
-    width: 2px; height: calc(100% + 0px); background: rgba(255, 255, 255, 0.18);
+    width: 2px; height: calc(100% + 0px); background: rgba(0, 51, 160, 0.12);
 }
 .anxrisk-progress-step:first-child::before { top: 50%; height: 50%; }
 .anxrisk-progress-step:last-child::before { height: 50%; }
 
 .anxrisk-step-dot {
     width: 14px; height: 14px; border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3); flex-shrink: 0;
+    background: rgba(0, 51, 160, 0.15); flex-shrink: 0;
     transition: all var(--ease-smooth); position: relative; z-index: 1;
-    border: 2px solid rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(0, 51, 160, 0.1);
 }
 .anxrisk-step-dot.active {
     background: var(--accent); border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(0, 180, 216, 0.3), 0 0 12px rgba(0, 180, 216, 0.4);
+    box-shadow: 0 0 0 4px rgba(0, 180, 216, 0.2), 0 0 12px rgba(0, 180, 216, 0.3);
     animation: pulse-teal 2s infinite;
 }
 .anxrisk-step-dot.completed {
     background: var(--success); border-color: var(--success);
-    box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
+    box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.15);
 }
 
-.anxrisk-step-label { font-size: 0.9375rem; color: rgba(255, 255, 255, 0.75); font-weight: 400; }
-.anxrisk-step-label.active { color: #FFFFFF; font-weight: 700; text-shadow: 0 0 12px rgba(0, 180, 216, 0.4); }
-.anxrisk-step-label.completed { color: rgba(255, 255, 255, 0.92); font-weight: 500; }
+.anxrisk-step-label { font-size: 0.9375rem; color: #4A5568; font-weight: 400; }
+.anxrisk-step-label.active { color: #0033A0; font-weight: 700; }
+.anxrisk-step-label.completed { color: #2D3748; font-weight: 500; }
 
 /* Hero — Illumina Gradient */
 .anxrisk-hero {
@@ -863,20 +839,21 @@ div[data-testid="stMetric"] div[data-testid="stMetricValue"] { font-family: var(
 .anxrisk-shap-increase { color: var(--danger); font-weight: 600; }
 .anxrisk-shap-decrease { color: var(--accent); font-weight: 600; }
 
-/* Sidebar Brand — Dark */
+/* Sidebar Brand — Light */
 .anxrisk-sidebar-brand {
     text-align: center; padding-bottom: var(--space-5);
-    margin-bottom: var(--space-5); border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    margin-bottom: var(--space-5); border-bottom: 1px solid rgba(0, 51, 160, 0.1);
 }
-.anxrisk-sidebar-brand h1 { font-size: 1.375rem !important; font-weight: 700 !important; color: #FFFFFF !important; letter-spacing: 0.08em; margin-bottom: var(--space-1) !important; }
-.anxrisk-sidebar-brand p { font-size: 0.875rem; color: rgba(255, 255, 255, 0.82); margin: 0; line-height: 1.4; }
+.anxrisk-sidebar-brand h1 { font-size: 1.375rem !important; font-weight: 700 !important; color: #0033A0 !important; letter-spacing: 0.08em; margin-bottom: var(--space-1) !important; }
+.anxrisk-sidebar-brand p { font-size: 0.875rem; color: #4A5568; margin: 0; line-height: 1.4; }
 
 /* Sidebar Model Info */
 .anxrisk-sidebar-model {
-    background: rgba(255, 255, 255, 0.1); border-radius: var(--radius-sm);
+    background: #FFFFFF; border-radius: var(--radius-sm);
     padding: var(--space-3) var(--space-4); margin: var(--space-4) 0;
-    font-size: 0.9375rem; color: rgba(255, 255, 255, 0.88);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.9375rem; color: #2D3748;
+    border: 1px solid rgba(0, 51, 160, 0.1);
+    box-shadow: 0 1px 4px rgba(0, 16, 48, 0.04);
 }
 
 /* Page Header */
@@ -885,7 +862,7 @@ div[data-testid="stMetric"] div[data-testid="stMetricValue"] { font-family: var(
 .anxrisk-page-header p { text-align: center; color: var(--text-secondary); font-size: 1.125rem; max-width: 600px; margin: 0 auto; }
 
 /* Disclaimer */
-.anxrisk-disclaimer { font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); text-align: center; padding: var(--space-4); line-height: 1.5; }
+.anxrisk-disclaimer { font-size: 0.875rem; color: #718096; text-align: center; padding: var(--space-4); line-height: 1.5; }
 
 /* Inline Progress */
 .anxrisk-inline-progress { width: 100%; height: 4px; background: var(--border); border-radius: 2px; margin: var(--space-4) 0 var(--space-6); overflow: hidden; }
