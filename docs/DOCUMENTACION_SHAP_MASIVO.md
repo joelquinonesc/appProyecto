@@ -70,7 +70,7 @@ def main_shap_integration(df):
 **`procesar_datos_para_modelo(df)`**
 - Convierte datos raw en 22 features (EDAD24, AEFGROUPS, LTE12_0-2, SF12F_Q1-Q4, SF12M_Q1-Q4, PRKCA, TCF4, CDH20)
 - Aplica One-Hot Encoding
-- Mantiene orden exacto del modelo CatBoost
+- Mantiene orden exacto del modelo MLP
 
 **`calcular_shap_values(model, X_background, X_test)`**
 - Usa explainer adaptativo (TreeExplainer si es posible, sino KernelExplainer)
@@ -210,7 +210,7 @@ top5_importancia = resultado['top5_importance']
 ✅ **Solución**: El script ahora normaliza los nombres automáticamente
 
 ### Error: "No se puede cargar el modelo"
-✅ **Solución**: Verificar que `src/models/anxrisk_best_extended.joblib` existe
+✅ **Solución**: Verificar que `src/models/mlp_no_gender_model_tuned.joblib` existe
 
 ### Cálculo muy lento
 ✅ **Solución**: Es normal para >200 pacientes. Aumentar `background_size` si es necesario en el código

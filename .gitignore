@@ -51,7 +51,7 @@ MANIFEST
 # Streamlit
 .streamlit/secrets.toml
 
-# Datos sensibles y temporales
+# Archivos temporales y logs
 temp/
 tmp/
 *.tmp
@@ -67,13 +67,6 @@ logs/
 .idea/
 *.sublime-project
 *.sublime-workspace
-*.swo
-*~
-
-# Sistema operativo
-.DS_Store
-Thumbs.db
-*.log
 
 # Datos sensibles
 *.csv

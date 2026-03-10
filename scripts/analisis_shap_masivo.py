@@ -2,7 +2,7 @@
 Análisis SHAP Completo para Análisis Masivos
 ==============================================
 Genera visualizaciones SHAP para entender la importancia de cada característica
-en las predicciones del modelo CatBoost para análisis masivos.
+en las predicciones del modelo MLP para análisis masivos.
 """
 
 import pandas as pd
@@ -25,7 +25,7 @@ def cargar_modelo_y_datos():
     print("="*80)
     
     # Cargar modelo
-    print("\n📦 Cargando modelo CatBoost...")
+    print("\n📦 Cargando modelo MLP...")
     model = joblib.load('src/models/anxrisk_best_extended.joblib')
     
     # Cargar datos simulados
@@ -46,14 +46,14 @@ def procesar_datos_para_modelo(df):
     
     # Diccionario de órdenes canónico (EXACTO del modelo)
     for idx, row in df.iterrows():
-        edad24 = 1 if row['edad'] >= 24 else 0
-        aefgroups = 1 if row['años_educacion'] >= 12 else 0
+        edad24 = 0 if row['edad'] <= 24 else 1
+        aefgroups = 0 if row['años_educacion'] <= 14 else 1
         
-        # LTE-12 con One-Hot Encoding (0-2 eventos, 3-5 eventos, 6+ eventos)
+        # LTE-12 con One-Hot Encoding (0 eventos, 1 evento, 2+ eventos)
         lte12_count = row['lte12_count']
-        lte12_0 = 1 if lte12_count <= 2 else 0
-        lte12_1 = 1 if 3 <= lte12_count <= 5 else 0
-        lte12_2 = 1 if lte12_count >= 6 else 0
+        lte12_0 = 1 if lte12_count == 0 else 0
+        lte12_1 = 1 if lte12_count == 1 else 0
+        lte12_2 = 1 if lte12_count >= 2 else 0
         
         # SF-12 Física - Cuartiles
         sf12f_raw = row['sf12_fisica']

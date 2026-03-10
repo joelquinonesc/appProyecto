@@ -5,7 +5,7 @@ Flujo:
 1. Tras ZSAS → se muestra resumen + pregunta de genética + botón "Generar Evaluación"
 2. Al presionar el botón → se ejecuta predicción CatBoost + SHAP
 3. Se muestran resultados, gráfico SHAP y botón de descarga PDF (sin HTML)
-4. El PDF incluye portada, cuestionarios, predicción, SHAP y firma del psiquiatra.
+4. El PDF incluye portada, cuestionarios, predicción, SHAP y firma del profesional.
 """
 import streamlit as st
 from src.utils.dataframe_manager import mostrar_dataframe_actual, obtener_registro_actual
@@ -542,7 +542,7 @@ def mostrar_shap_analysis(model, X, genero):
         top_names = [feature_names[i] for i in top_idx]
 
         fig, ax = plt.subplots(figsize=(10, 8))
-        bar_c = ['#DC3545' if v > 0 else '#2B87D1' for v in top_vals]
+        bar_c = ['#DC3545' if v > 0 else '#28A745' for v in top_vals]
         ax.barh(range(len(top_vals)), top_vals, color=bar_c, alpha=0.8, edgecolor='black', linewidth=0.5)
         ax.set_yticks(range(len(top_vals)))
         ax.set_yticklabels(top_names, fontsize=10)
@@ -553,7 +553,7 @@ def mostrar_shap_analysis(model, X, genero):
         from matplotlib.patches import Patch
         ax.legend(handles=[
             Patch(facecolor='#DC3545', alpha=0.8, edgecolor='black', label='Aumenta Riesgo'),
-            Patch(facecolor='#2B87D1', alpha=0.8, edgecolor='black', label='Disminuye Riesgo'),
+            Patch(facecolor='#28A745', alpha=0.8, edgecolor='black', label='Disminuye Riesgo'),
         ], loc='lower right', fontsize=10)
         plt.tight_layout()
         st.pyplot(fig)
@@ -564,7 +564,7 @@ def mostrar_shap_analysis(model, X, genero):
             <p style='color:#2E2E2E; margin:0; font-weight:600;'>📊 Interpretación:</p>
             <ul style='margin:.5rem 0 0 1rem;'>
                 <li style='color:#DC3545;'>🔴 Barras rojas (→): Factores que <strong>AUMENTAN</strong> el riesgo</li>
-                <li style='color:#2B87D1;'>🟢 Barras verdes (←): Factores que <strong>DISMINUYEN</strong> el riesgo</li>
+                <li style='color:#28A745;'>🟢 Barras verdes (←): Factores que <strong>DISMINUYEN</strong> el riesgo</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -589,12 +589,12 @@ def _mostrar_interpretacion_shap(shap_arr, feature_names, X, top_indices):
         feat = feature_names[idx]
         sv = shap_arr[0][idx]
         fv = X.iloc[0, idx]
-        color = "#DC3545" if sv > 0 else "#2B87D1"
+        color = "#DC3545" if sv > 0 else "#28A745"
         efecto = "aumenta" if sv > 0 else "disminuye"
         icono = "⬆️" if sv > 0 else "⬇️"
         interp = obtener_interpretacion_feature(feat, fv)
         st.markdown(f"""
-        <div style='background:#F8F9FA; padding:.75rem; margin:.5rem 0; border-radius:6px; border-left:4px solid {color};'>
+        <div style='background:#F9F9F9; padding:.75rem; margin:.5rem 0; border-radius:6px; border-left:4px solid {color};'>
             <strong style='color:{color};'>{icono} {feat}</strong>
             <p style='color:#2E2E2E; margin:.3rem 0; font-size:.9rem;'>{interp}</p>
             <p style='color:#666; margin:0; font-size:.85rem;'>{efecto} riesgo (~{abs(sv):.3f} SHAP)</p>
@@ -643,7 +643,7 @@ def generar_pdf_resultados(resultados, registro):
     - Genética (si aplica)
     - Predicción de riesgo + umbrales
     - Gráfico SHAP + interpretación textual
-    - Nota clínica + Firma del psiquiatra que valida
+    - Nota clínica + Firma del profesional y paciente
     """
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -834,7 +834,7 @@ def generar_pdf_resultados(resultados, registro):
             t_names = [feat_names[i] for i in t_idx]
 
             fig, ax = plt.subplots(figsize=(7, 5), dpi=120)
-            bc = ['#DC3545' if v > 0 else '#2B87D1' for v in t_vals]
+            bc = ['#DC3545' if v > 0 else '#28A745' for v in t_vals]
             ax.barh(range(len(t_vals)), t_vals, color=bc, alpha=0.85, edgecolor='black', linewidth=0.4)
             ax.set_yticks(range(len(t_vals)))
             ax.set_yticklabels(t_names, fontsize=8)
@@ -882,10 +882,9 @@ def generar_pdf_resultados(resultados, registro):
 
     fecha_firma = datetime.now().strftime('%d/%m/%Y')
 
-    # Datos del profesional desde session_state (capturados en Home)
-    datos_prof = st.session_state.get('datos_profesional', {})
-    nombre_prof = datos_prof.get('nombre', '____________________')
-    cedula_prof = datos_prof.get('cedula', '_______________')
+    # Datos del profesional evaluador (capturados en Demográficos)
+    nombre_prof = st.session_state.get('_prof_nombre', '') or st.session_state.get('prof_nombre', '') or '____________________'
+    cedula_prof = st.session_state.get('_prof_registro', '') or st.session_state.get('prof_registro', '') or '_______________'
 
     # Nombre del paciente
     nombre_paciente = registro.get('nombre', '____________________') if registro else '____________________'

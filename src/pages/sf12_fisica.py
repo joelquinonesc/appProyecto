@@ -7,37 +7,43 @@ from ..utils.calculos import (
     transformar_sf12_fisica_a_label,
     calcular_sf12,
 )
-from ..utils.dataframe_manager import agregar_o_actualizar_registro
+from ..utils.dataframe_manager import mostrar_dataframe_actual, agregar_o_actualizar_registro
 
 
 def mostrar_sf12_fisica():
-    # Page header
+    # Cargar estilos
+    with open("src/assets/styles/main.css", encoding="utf-8") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+    st.markdown(
+        "<h1 style='text-align: center; color: #2E2E2E; font-size: 2rem; font-weight: 700;'>SF-12 — Componente Física (PCS)</h1>",
+        unsafe_allow_html=True
+    )
+
+    # Texto explicativo
     st.markdown("""
-    <div class="anxrisk-page-header">
-        <h1>SF-12 — Componente Física (PCS)</h1>
-        <p>Evalúa la percepción de salud física del paciente mediante 6 ítems</p>
+    <div style="background: #FFFFFF; padding: 1.25rem; margin: 0.75rem 0 1.5rem 0; border-radius: 8px; border: 1px solid #E0E0E0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <h4 style="color: #2E2E2E; font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">
+        Evaluación de la Salud Física
+        </h4>
+        <p style="color: #2E2E2E; font-size: 1rem; line-height: 1.7; text-align: justify; margin-bottom: 0.75rem;">
+        El <strong>SF-12 (Short Form-12)</strong> es un cuestionario de calidad de vida validado internacionalmente. El componente físico (PCS) evalúa 
+        la percepción sobre el estado de salud física, las limitaciones funcionales y el impacto en actividades cotidianas.
+        </p>
+        <p style="color: #666666; font-style: italic; text-align: center; margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1.05rem;">
+        <strong>⚠️ Todas las preguntas son obligatorias</strong>
+        </p>
+        <p style="color: #888888; font-size: 0.9rem; text-align: center; margin: 0.5rem 0 0 0;">
+        <em>Ware, J. E., Kosinski, M., & Keller, S. D. (1996). A 12-item short-form health survey: construction of scales and preliminary tests of reliability and validity. Medical Care, 34(3), 220-233.</em>
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
-    # Context card
-    st.markdown("""
-    <div class="anxrisk-card">
-        <h3>Evaluación de la Salud Física</h3>
-        <p style="margin-bottom: 0.75rem;">
-            El <strong>SF-12 (Short Form-12)</strong> es un cuestionario de calidad de vida validado
-            internacionalmente. El componente físico (PCS) evalúa la percepción sobre el estado de
-            salud física, las limitaciones funcionales y el impacto en actividades cotidianas.
-        </p>
-        <p style="font-size: 0.9375rem; color: var(--text-secondary); font-style: italic; text-align: center; margin-bottom: 0.5rem;">
-            Todas las preguntas son obligatorias
-        </p>
-        <p style="font-size: 0.875rem; color: var(--text-secondary); text-align: center; margin: 0;">
-            Ware, J. E., Kosinski, M., & Keller, S. D. (1996). <em>Medical Care</em>, 34(3), 220-233.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("#### Responda las preguntas relacionadas con la salud física:")
 
     # --- Ensure the form is NOT pre-filled on first visit ---
+    # We clear previous per-field session keys only once (first time the page is shown)
+    # to avoid wiping user input on every rerun (which would break validation).
     keys_to_clear = [
         'sf12_partial',
         'sf12_f_salud',
@@ -51,113 +57,59 @@ def mostrar_sf12_fisica():
         for k in keys_to_clear:
             if k in st.session_state:
                 del st.session_state[k]
+        # Inicializar parcial global si no existe
         if 'sf12_partial' not in st.session_state:
             st.session_state['sf12_partial'] = [None] * 12
+        # Inicializar parcial específico de física (6 items)
         st.session_state['sf12_f_partial'] = [None] * 6
         st.session_state['sf12_f_cleared'] = True
 
+    # Asegurar que existe el parcial físico
     if 'sf12_f_partial' not in st.session_state:
         st.session_state['sf12_f_partial'] = [None] * 6
 
     m = st.session_state['sf12_f_partial']
 
-    # Inline progress bar
-    sf12f_answered = sum(1 for v in m if v is not None)
-    sf12f_pct = (sf12f_answered / 6) * 100
-    st.markdown(f"""
-    <div class="anxrisk-inline-progress">
-        <div class="anxrisk-inline-progress-bar" style="width: {sf12f_pct}%;"></div>
-    </div>
-    """, unsafe_allow_html=True)
-
     # Pregunta 1
-    st.markdown("""
-    <div class="anxrisk-question-card section-sf12">
-        <div class="anxrisk-question-number section-sf12">Pregunta 1 de 6</div>
-        <div class="anxrisk-question-text">En general, ¿diría que su salud es?</div>
-    </div>
-    """, unsafe_allow_html=True)
-    opciones_salud = ["Excelente", "Muy buena", "Buena", "Regular", "Mala"]
-    resp1 = st.selectbox("Pregunta 1", options=opciones_salud, key="sf12_f_salud", index=None, placeholder="Seleccione una opción", label_visibility="collapsed")
-    if resp1 is None:
+    opciones_salud = ["Seleccione una opción", "Excelente", "Muy buena", "Buena", "Regular", "Mala"]
+    resp1 = st.selectbox("1. En general, ¿diría que su salud es?", options=opciones_salud, key="sf12_f_salud", index=None)
+    # `resp1` puede ser None cuando no hay selección (index=None). Manejar ambos casos.
+    if resp1 is None or resp1 == "Seleccione una opción":
         m[0] = None
     else:
+        # Puntuación estándar SF-12: Excelente=5, Muy buena=4, Buena=3, Regular=2, Mala=1
         scoring = {"Excelente": 5, "Muy buena": 4, "Buena": 3, "Regular": 2, "Mala": 1}
         m[0] = scoring[resp1]
 
     # Pregunta 2
-    st.markdown("""
-    <div class="anxrisk-question-card section-sf12">
-        <div class="anxrisk-question-number section-sf12">Pregunta 2 de 6</div>
-        <div class="anxrisk-question-text">Esfuerzos moderados (mover una mesa, caminar más de 1 hora)</div>
-    </div>
-    """, unsafe_allow_html=True)
-    resp2 = None
-    _, col_r2, _ = st.columns([1, 3, 1])
-    with col_r2:
-        resp2 = st.radio("Pregunta 2", ["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"], key="sf12_f_q2", horizontal=True, index=None, label_visibility="collapsed")
+    resp2 = st.radio("2. Esfuerzos moderados (mover una mesa,  caminar más de 1 hora)", ["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"], key="sf12_f_q2", horizontal=True, index=None)
     m[1] = (["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"].index(resp2) + 1) if resp2 is not None else None
 
     # Pregunta 3
-    st.markdown("""
-    <div class="anxrisk-question-card section-sf12">
-        <div class="anxrisk-question-number section-sf12">Pregunta 3 de 6</div>
-        <div class="anxrisk-question-text">Subir varios pisos por la escalera</div>
-    </div>
-    """, unsafe_allow_html=True)
-    resp3 = None
-    _, col_r3, _ = st.columns([1, 3, 1])
-    with col_r3:
-        resp3 = st.radio("Pregunta 3", ["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"], key="sf12_f_q3", horizontal=True, index=None, label_visibility="collapsed")
+    resp3 = st.radio("3. Subir varios pisos por la escalera", ["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"], key="sf12_f_q3", horizontal=True, index=None)
     m[2] = (["Sí, limitado mucho", "Sí, limitado un poco", "No, no limitado en absoluto"].index(resp3) + 1) if resp3 is not None else None
 
-    st.markdown("""
-    <div class="anxrisk-question-card section-sf12">
-        <div class="anxrisk-question-text">Durante las 4 últimas semanas, ¿ha tenido alguno de los siguientes problemas en su trabajo o en sus actividades cotidianas, a causa de su salud física?</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("####  Durante las 4 últimas semanas, ¿ha tenido alguno de los siguientes problemas en su trabajo o en sus actividades cotidianas, a causa de su salud física? :")
 
     # Pregunta 4
-    st.markdown("""
-    <div class="anxrisk-question-card section-sf12">
-        <div class="anxrisk-question-number section-sf12">Pregunta 4 de 6</div>
-        <div class="anxrisk-question-text">¿Hizo menos de lo que hubiera querido hacer?</div>
-    </div>
-    """, unsafe_allow_html=True)
-    resp4 = None
-    _, col_r4, _ = st.columns([1, 2, 1])
-    with col_r4:
-        resp4 = st.radio("Pregunta 4", ["Sí", "No"], key="sf12_f_q4", horizontal=True, index=None, label_visibility="collapsed")
+    resp4 = st.radio("4. ¿Hizo menos de lo que hubiera querido hacer?", ["Sí", "No"], key="sf12_f_q4", horizontal=True, index=None)
+    # Radios: Sí=1, No=2
     m[3] = 1 if resp4 == "Sí" else 2 if resp4 == "No" else None
 
     # Pregunta 5
-    st.markdown("""
-    <div class="anxrisk-question-card section-sf12">
-        <div class="anxrisk-question-number section-sf12">Pregunta 5 de 6</div>
-        <div class="anxrisk-question-text">¿Tuvo que dejar de hacer algunas tareas en su trabajo o en sus actividades cotidianas?</div>
-    </div>
-    """, unsafe_allow_html=True)
-    resp5 = None
-    _, col_r5, _ = st.columns([1, 2, 1])
-    with col_r5:
-        resp5 = st.radio("Pregunta 5", ["Sí", "No"], key="sf12_f_q5", horizontal=True, index=None, label_visibility="collapsed")
+    resp5 = st.radio("5. ¿Tuvo que dejar de hacer algunas tareas en su trabajo o en sus actividades cotidianas?", ["Sí", "No"], key="sf12_f_q5", horizontal=True, index=None)
+    # Sí=1, No=2
     m[4] = 1 if resp5 == "Sí" else 2 if resp5 == "No" else None
 
-    # Pregunta 6
-    st.markdown("""
-    <div class="anxrisk-question-card section-sf12">
-        <div class="anxrisk-question-number section-sf12">Pregunta 6 de 6</div>
-        <div class="anxrisk-question-text">¿Hasta qué punto el dolor le ha dificultado su trabajo habitual?</div>
-    </div>
-    """, unsafe_allow_html=True)
-    resp6 = None
-    _, col_r6, _ = st.columns([1, 3, 1])
-    with col_r6:
-        resp6 = st.radio("Pregunta 6", ["Nada", "Un poco", "Regular", "Bastante", "Mucho"], key="sf12_f_q6", horizontal=True, index=None, label_visibility="collapsed")
+    # Pregunta 6 (dolor)
+    resp6 = st.radio("6. ¿Hasta qué punto el dolor le ha dificultado su trabajo habitual?", ["Nada", "Un poco", "Regular", "Bastante", "Mucho"], key="sf12_f_q6", horizontal=True, index=None)
     m[5] = (5 - ["Nada", "Un poco", "Regular", "Bastante", "Mucho"].index(resp6)) if resp6 is not None else None
 
+    # Guardar parcial físico en session_state
     st.session_state['sf12_f_partial'] = m
 
+    # Validación: asegurar que las preguntas de esta hoja estén completas.
+    # Comprobar directamente los valores de los widgets en st.session_state
     def _answered(key, placeholder=None):
         if key not in st.session_state:
             return False
@@ -169,7 +121,7 @@ def mostrar_sf12_fisica():
         return True
 
     required_keys = [
-        ('sf12_f_salud', None),
+        ('sf12_f_salud', 'Seleccione una opción'),
         ('sf12_f_q2', None),
         ('sf12_f_q3', None),
         ('sf12_f_q4', None),
@@ -179,27 +131,31 @@ def mostrar_sf12_fisica():
 
     faltan = not all(_answered(k, p) for k, p in required_keys)
     if faltan:
-        st.error("Responda todas las preguntas de la sección física antes de continuar.")
+        st.error("❗ Por favor, responda todas las preguntas de la sección física antes de continuar.")
         disabled = True
     else:
-        st.success("Componente física completada")
+        st.success("✅ Componente física completada")
         disabled = False
 
     col1, col2 = st.columns([2, 1])
     with col2:
-        if st.button("Siguiente", key="sf12_f_next", disabled=disabled, type="primary", use_container_width=True):
+        if st.button("Siguiente →", key="sf12_f_next", disabled=disabled, width='stretch'):
+            # Montar respuestas completas: combinar parcial global con parcial físico
             full_respuestas = None
             if 'sf12_partial' in st.session_state and isinstance(st.session_state['sf12_partial'], list) and len(st.session_state['sf12_partial']) == 12:
-                full_respuestas = st.session_state['sf12_partial'][:]
+                full_respuestas = st.session_state['sf12_partial'][:]  # copiar
             else:
                 full_respuestas = [None] * 12
 
+            # Mapear m (0..5) a las posiciones originales [0,1,2,3,4,7]
             mapping = {0:0, 1:1, 2:2, 3:3, 4:4, 5:7}
             for mi, val in enumerate(m):
                 full_respuestas[mapping[mi]] = val
 
+            # Guardar parcial combinado en session_state
             st.session_state['sf12_partial'] = full_respuestas
 
+            # Calcular puntuaciones físicas (si es posible) y persistir cuartil físico
             resultados = calcular_sf12(full_respuestas)
             fisica = resultados.get('fisica')
             mental = resultados.get('mental')
@@ -210,7 +166,10 @@ def mostrar_sf12_fisica():
 
             if 'resultados' not in st.session_state:
                 st.session_state.resultados = {}
+            # Mantener/merge si ya existe la estructura 'sf12' creada por la otra sección
             sf12 = st.session_state.resultados.get('sf12', {})
+            # SOLO actualizar los valores relacionados con FÍSICA
+            # NO sobrescribir puntaje_mental que fue calculado en la página mental
             sf12.update({
                 'puntaje_fisico': fisica,
                 'cuartil_fisica': cuartil_fis,
@@ -219,6 +178,7 @@ def mostrar_sf12_fisica():
             })
             st.session_state.resultados['sf12'] = sf12
 
+            # Persistir únicamente el cuartil físico desde esta página
             agregar_o_actualizar_registro(
                 {
                     'salud_fisica': fisica,
@@ -228,7 +188,12 @@ def mostrar_sf12_fisica():
                 tipo_datos='sf12'
             )
 
+            # Ir a la página mental
             st.session_state.pagina_actual = "SF-12 Mental"
             st.rerun()
+
+    st.markdown("---")
+    with st.expander("Ver DataFrame completo"):
+        mostrar_dataframe_actual()
 
     return None
