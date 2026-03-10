@@ -2,7 +2,7 @@
 Análisis SHAP Completo para Análisis Masivos
 ==============================================
 Genera visualizaciones SHAP para entender la importancia de cada característica
-en las predicciones del modelo MLP para análisis masivos.
+en las predicciones del modelo CatBoost para análisis masivos.
 """
 
 import pandas as pd
@@ -25,8 +25,8 @@ def cargar_modelo_y_datos():
     print("="*80)
     
     # Cargar modelo
-    print("\n📦 Cargando modelo MLP...")
-    model = joblib.load('src/models/mlp_no_gender_model_tuned.joblib')
+    print("\n📦 Cargando modelo CatBoost...")
+    model = joblib.load('src/models/anxrisk_best_extended.joblib')
     
     # Cargar datos simulados
     print("📊 Cargando datos simulados...")

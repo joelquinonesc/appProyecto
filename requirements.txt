@@ -1,37 +1,41 @@
 # ===================================
 # ANXRISK - Requisitos del Proyecto
 # ===================================
-# scikit-learn fijado para reproducibilidad de métricas (Patente §0022)
-# Demás paquetes con versión mínima compatible
+# Aplicación de evaluación de riesgo de ansiedad
+# Incluye cuestionarios: SF-12, HADS, ZSAS, LTE-12
+# y análisis genético (PRKCA, TCF4, CDH20)
 
 # Framework principal
-streamlit>=1.29.0
+streamlit>=1.28.0
 
 # Análisis de datos
-pandas>=2.1.0
-numpy>=1.26.0
+pandas>=2.0.0
+numpy>=1.24.0
 
-# Machine Learning — scikit-learn FIJADO para reproducibilidad del modelo
-# Modelos entrenados con scikit-learn 1.6.1 (verificado en .joblib)
-scikit-learn==1.6.1
+# Machine Learning
+scikit-learn>=1.3.0
+lightgbm>=4.0.0
+catboost>=1.2.2
 joblib>=1.3.0
-shap>=0.44.0
+shap>=0.42.0
 
 # Generación de PDFs
 reportlab>=4.0.0
-matplotlib>=3.8.0
+matplotlib>=3.7.0
 
 # Soporte para archivos Excel
 openpyxl>=3.1.0
 
-# Análisis estadístico
-scipy>=1.11.0
+# Librerías estándar de Python (incluidas por defecto)
+# - base64 (para codificación de imágenes)
+# - os (operaciones del sistema)
+# - sys (parámetros del sistema)
+# - subprocess (ejecución de procesos)
 
-# Nota: xgboost, catboost y lightgbm NO se incluyen aquí porque
-# la app de producción solo usa el modelo MLP pre-entrenado (.joblib).
-# Estas librerías solo se necesitan en el pipeline de entrenamiento (Colab).
-# Si se necesitan para el módulo de análisis masivo con SHAP de otros
-# modelos, descomentar las siguientes líneas:
-# xgboost==2.0.3
-# catboost==1.2.2
-# lightgbm==4.1.0
+# ===================================
+# Instalación:
+# ===================================
+# pip install -r requirements.txt
+#
+# O para actualizar:
+# pip install --upgrade -r requirements.txt

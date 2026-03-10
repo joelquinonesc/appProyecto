@@ -72,7 +72,7 @@ def mostrar_home():
                 </svg>
             </div>
             <h4>Panel Genético</h4>
-            <p>SNPs <em>PRKCA</em>, <em>CDH20</em> como módulo opcional</p>
+            <p>SNPs <em>PRKCA</em>, <em>TCF4</em>, <em>CDH20</em> como módulo opcional</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -121,10 +121,10 @@ def mostrar_home():
             st.markdown("""
 ### 1. Introducción
 ANXRISK es una herramienta integral que evalúa el riesgo de ansiedad combinando múltiples fuentes de datos:
-- **Datos demográficos:** Edad, género
+- **Datos demográficos:** Edad, género, educación
 - **Datos psicosociales:** Eventos vitales estresantes (LTE-12)
 - **Datos clínicos:** Cuestionarios validados SF-12, HADS, ZSAS
-- **Datos genéticos (opcional):** Marcadores *PRKCA*, *CDH20*
+- **Datos genéticos (opcional):** Marcadores *PRKCA*, *TCF4*, *CDH20*
 
 > Esta herramienta es de apoyo a la decisión clínica y debe ser interpretada por profesionales de salud mental.
 
@@ -132,7 +132,7 @@ ANXRISK es una herramienta integral que evalúa el riesgo de ansiedad combinando
 
 | Paso | Instrumento | Descripción |
 |------|------------|-------------|
-| 1 | Datos Demográficos | Nombre, edad, género |
+| 1 | Datos Demográficos | Nombre, edad, género, años de educación |
 | 2 | LTE-12 | 12 eventos vitales estresantes (Brugha et al., 1985) |
 | 3 | SF-12 Física | Componente físico del SF-12 (Ware et al., 1996) |
 | 4 | SF-12 Mental | Componente mental del SF-12 |
@@ -202,7 +202,7 @@ Los datos personales y de salud recopilados se utilizan exclusivamente para:
 #### 3. Datos Recopilados
 - **Datos de identificación:** Nombre (opcional), edad, género
 - **Datos de salud:** Respuestas a cuestionarios clínicos validados (LTE-12, SF-12, HADS, ZSAS)
-- **Datos genéticos (opcional):** Genotipos PRKCA, CDH20
+- **Datos genéticos (opcional):** Genotipos PRKCA, TCF4, CDH20
 
 #### 4. Tratamiento y Seguridad
 - Los datos se procesan **exclusivamente en la sesión del navegador** del usuario

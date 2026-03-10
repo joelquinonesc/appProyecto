@@ -93,7 +93,7 @@ def calcular_shap_values(model, X_background, X_test):
         print("   ✓ Usando TreeExplainer (rápido)")
     except:
         try:
-            # Si es MLP, usar explainer específico
+            # Si no es CatBoost/árbol, usar KernelExplainer como fallback
             explainer = shap.KernelExplainer(model.predict, X_background)
             print("   ✓ Usando KernelExplainer")
         except:
@@ -156,7 +156,7 @@ def main_shap_integration(df):
     """
     try:
         print("\n📦 Cargando modelo...")
-        model = joblib.load('src/models/mlp_no_gender_model_tuned.joblib')
+        model = joblib.load('src/models/anxrisk_best_extended.joblib')
         print("✅ Modelo cargado")
         
         # Procesar datos

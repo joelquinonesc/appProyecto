@@ -24,7 +24,7 @@ def mostrar_datos_geneticos():
         <p style="margin-bottom: 0.75rem;">
             Los <strong>factores genéticos</strong> juegan un papel importante en la predisposición a trastornos de ansiedad.
             Estudios científicos han identificado varios genes asociados con una mayor vulnerabilidad a la ansiedad, incluyendo
-            <strong><em>PRKCA</em> y <em>CDH20</em></strong>.
+            <strong><em>PRKCA</em>, <em>TCF4</em> y <em>CDH20</em></strong>.
         </p>
         <p style="margin-bottom: 0.75rem;">
             Esta información genética, combinada con los cuestionarios clínicos, nos permite realizar una evaluación más
@@ -51,6 +51,21 @@ def mostrar_datos_geneticos():
         label_visibility="collapsed"
     )
     
+    # TCF4
+    st.markdown("""
+    <div class="anxrisk-question-card section-hads" style="border-left: 3px solid var(--genetic);">
+        <div class="anxrisk-question-number" style="background: var(--genetic); color: white;">Gen TCF4</div>
+        <div class="anxrisk-question-text"><em>TCF4</em> — Factor de Transcripción 4</div>
+        <p style="color: var(--text-secondary); font-size: 0.9375rem; font-style: italic; margin: 0;">Implicado en el desarrollo neuronal y predisposición a trastornos psiquiátricos</p>
+    </div>
+    """, unsafe_allow_html=True)
+    tcf4_genotipo = st.selectbox(
+        "Seleccione el genotipo para TCF4:",
+        options=["Seleccione una opción", "A/A", "A/T", "T/T"],
+        key="tcf4_select",
+        label_visibility="collapsed"
+    )
+    
     # CDH20
     st.markdown("""
     <div class="anxrisk-question-card section-hads" style="border-left: 3px solid var(--genetic);">
@@ -71,6 +86,7 @@ def mostrar_datos_geneticos():
     # Verificar si todos los datos están completos
     genotipos_validos = (
         prkca_genotipo != "Seleccione una opción" and
+        tcf4_genotipo != "Seleccione una opción" and
         cdh20_genotipo != "Seleccione una opción"
     )
     
@@ -106,12 +122,14 @@ def mostrar_datos_geneticos():
             
             st.session_state.resultados['datos_geneticos'] = {
                 'prkca': prkca_genotipo,
+                'tcf4': tcf4_genotipo,
                 'cdh20': cdh20_genotipo
             }
 
             # Guardar en DataFrame
             agregar_o_actualizar_registro({
                 'prkca': prkca_genotipo,
+                'tcf4': tcf4_genotipo,
                 'cdh20': cdh20_genotipo
             }, tipo_datos='geneticos')
             

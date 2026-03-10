@@ -9,12 +9,12 @@ Constantes canónicas alineadas con la arquitectura de patente:
 """
 
 # ── Rutas de modelos ──────────────────────────────────────────────
-MODEL_STANDARD_PATH = "src/models/anxrisk_mlp_model_standard.joblib"
-MODEL_EXTENDED_PATH = "src/models/anxrisk_mlp_model_extended.joblib"
+MODEL_STANDARD_PATH = "src/models/anxrisk_best_standard.joblib"
+MODEL_EXTENDED_PATH = "src/models/anxrisk_best_extended.joblib"
 
 # ── Orden canónico de features (Patente §0021) ───────────────────
 FEATURES_STANDARD = [
-    'EDAD24',
+    'EDAD24', 'AEFGROUPS',
     'LTE12_0', 'LTE12_1', 'LTE12_2',
     'SF12F_Q1', 'SF12F_Q2', 'SF12F_Q3', 'SF12F_Q4',
     'SF12M_Q1', 'SF12M_Q2', 'SF12M_Q3', 'SF12M_Q4',
@@ -22,6 +22,7 @@ FEATURES_STANDARD = [
 
 FEATURES_EXTENDED = FEATURES_STANDARD + [
     'PRKCA_C/C', 'PRKCA_C/T', 'PRKCA_T/T',
+    'TCF4_A/A', 'TCF4_A/T', 'TCF4_T/T',
     'CDH20_A/A', 'CDH20_A/G', 'CDH20_G/G',
 ]
 
@@ -31,4 +32,5 @@ THRESHOLD_HIGH = 0.60
 
 # ── Genotipos válidos ─────────────────────────────────────────────
 GENOTIPOS_PRKCA = ['C/C', 'C/T', 'T/T']
+GENOTIPOS_TCF4 = ['A/A', 'A/T', 'T/T']
 GENOTIPOS_CDH20 = ['A/A', 'A/G', 'G/G']

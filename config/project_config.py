@@ -24,12 +24,10 @@ STREAMLIT_CONFIG = {
 MODEL_CONFIG = {
     "models_directory": "src/models/",
     "available_models": {
-        "mlp_full": "mlp_full_model_tuned.joblib",
-        "mlp_female": "mlp_female_model_tuned.joblib",
-        "mlp_no_gender": "mlp_no_gender_model_tuned.joblib",
-        "lightgbm_male": "lightgbm_male_model_tuned.joblib"
+        "catboost_extended": "anxrisk_best_extended.joblib",
+        "catboost_standard": "anxrisk_best_standard.joblib",
     },
-    "default_model": "mlp_full",
+    "default_model": "catboost_standard",
     "shap_enabled": True
 }
 
