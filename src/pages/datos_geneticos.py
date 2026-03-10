@@ -2,7 +2,7 @@
 Sección de Datos Genéticos
 """
 import streamlit as st
-from src.utils.dataframe_manager import mostrar_dataframe_actual, agregar_o_actualizar_registro, obtener_registro_actual
+from src.utils.dataframe_manager import agregar_o_actualizar_registro, obtener_registro_actual
 
 def mostrar_datos_geneticos():
     # --- Cargar estilos CSS globales ---

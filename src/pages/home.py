@@ -11,12 +11,12 @@ def mostrar_home():
         <div class="anxrisk-logo">
             <svg width="56" height="56" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <text x="36" y="54" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif"
-                      font-size="50" font-weight="bold" fill="#00E5FF" letter-spacing="-2">A</text>
+                      font-size="50" font-weight="bold" fill="#64B5F6" letter-spacing="-2">A</text>
                 <polyline points="6,36 18,36 22,28 27,44 32,24 37,48 42,28 47,44 52,36 66,36"
                           stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"
                           stroke-linejoin="round" fill="none" opacity="0.9"/>
-                <circle cx="32" cy="24" r="2.5" fill="#00E5FF" opacity="0.9"/>
-                <circle cx="37" cy="48" r="2.5" fill="#00E5FF" opacity="0.9"/>
+                <circle cx="32" cy="24" r="2.5" fill="#64B5F6" opacity="0.9"/>
+                <circle cx="37" cy="48" r="2.5" fill="#64B5F6" opacity="0.9"/>
             </svg>
         </div>
         <div class="anxrisk-hero-title">ANXRISK</div>

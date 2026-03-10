@@ -8,7 +8,7 @@ Flujo:
 4. El PDF incluye portada, cuestionarios, predicción, SHAP y firma del profesional.
 """
 import streamlit as st
-from src.utils.dataframe_manager import mostrar_dataframe_actual, obtener_registro_actual
+from src.utils.dataframe_manager import obtener_registro_actual
 import pandas as pd
 import numpy as np
 from io import BytesIO
@@ -84,16 +84,12 @@ def mostrar_resultados():
     with open("src/assets/styles/main.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-    st.markdown(
-        "<h1 style='text-align:center; color:#2E2E2E; font-size:2rem; font-weight:700;'>"
-        "📊 Resultados de la Evaluación</h1>",
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        "<h3 style='text-align:center; color:#2E2E2E; font-size:1.25rem; font-weight:600; margin-bottom:2rem;'>"
-        "Análisis completo del riesgo de ansiedad</h3>",
-        unsafe_allow_html=True,
-    )
+    st.markdown("""
+    <div class="anxrisk-page-header">
+        <h1>Resultados de la Evaluación</h1>
+        <p>Análisis completo del riesgo de ansiedad</p>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Verificar datos completos
     if 'resultados' not in st.session_state or 'zsas' not in st.session_state.get('resultados', {}):
@@ -119,13 +115,13 @@ def mostrar_resultados():
 # ═══════════════════════════════════════════════════════════════════
 
 def _mostrar_seccion_pregenerada(registro):
-    """Muestra resumen de cuestionarios, pregunta genética y botón para evaluar."""
+    """Muestra resumen de cuestionarios, opción de genética y botón para generar la evaluación."""
 
     st.markdown("""
     <div style="background:#E3F2FD; padding:1.25rem; border-radius:8px; border-left:4px solid #2B87D1; margin-bottom:1.5rem;">
         <p style="color:#2E2E2E; margin:0; font-size:1rem;">
             <strong>✅ Todos los cuestionarios han sido completados.</strong><br>
-            Antes de generar la evaluación de riesgo, indique si dispone de datos genéticos del paciente.
+            Puede generar la evaluación con el modelo estándar o incluir datos genéticos para mayor precisión.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -135,8 +131,18 @@ def _mostrar_seccion_pregenerada(registro):
 
     st.markdown("---")
 
-    # ── Toggle genética ───────────────────────────────────────────
-    st.markdown("### 🧬 ¿Dispone de datos genéticos del paciente?")
+    # ── Toggle genética (opcional) ────────────────────────────────
+    st.markdown("""
+    <div class="anxrisk-card">
+        <h3>🧬 Datos Genéticos (Opcional)</h3>
+        <p style="margin-bottom: 0.75rem;">
+            Si dispone de datos genéticos del paciente, puede incluirlos para utilizar el
+            <strong>modelo extendido (22 features)</strong>. De lo contrario, se usará el
+            <strong>modelo estándar (13 features)</strong>.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
     tiene_genetica = st.toggle(
         "Incluir panel genético (modelo extendido — 22 features)",
         value=False,
@@ -144,24 +150,38 @@ def _mostrar_seccion_pregenerada(registro):
     )
 
     if tiene_genetica:
+        st.markdown("""
+        <div class="anxrisk-question-card">
+            <div class="anxrisk-question-text">Seleccione los genotipos del paciente:</div>
+        </div>
+        """, unsafe_allow_html=True)
         g1, g2, g3 = st.columns(3)
         with g1:
-            prkca_sel = st.selectbox("Genotipo PRKCA", GENOTIPOS_PRKCA, key="gen_prkca_sel")
+            prkca_sel = st.selectbox("Genotipo PRKCA", GENOTIPOS_PRKCA, key="gen_prkca_sel",
+                                     index=None, placeholder="Seleccione")
         with g2:
-            tcf4_sel = st.selectbox("Genotipo TCF4", GENOTIPOS_TCF4, key="gen_tcf4_sel")
+            tcf4_sel = st.selectbox("Genotipo TCF4", GENOTIPOS_TCF4, key="gen_tcf4_sel",
+                                    index=None, placeholder="Seleccione")
         with g3:
-            cdh20_sel = st.selectbox("Genotipo CDH20", GENOTIPOS_CDH20, key="gen_cdh20_sel")
+            cdh20_sel = st.selectbox("Genotipo CDH20", GENOTIPOS_CDH20, key="gen_cdh20_sel",
+                                     index=None, placeholder="Seleccione")
+
+        genotipos_completos = all([prkca_sel, tcf4_sel, cdh20_sel])
+        if not genotipos_completos:
+            st.warning("Seleccione los 3 genotipos para usar el modelo extendido.")
     else:
-        st.info("ℹ️ Se usará el modelo estándar (13 features). La incorporación del panel genético podría refinar la estimación.")
+        genotipos_completos = True  # No se requieren genotipos
+        prkca_sel = tcf4_sel = cdh20_sel = None
 
     st.markdown("<div style='height:1.5rem;'></div>", unsafe_allow_html=True)
 
     # ── Botón ─────────────────────────────────────────────────────
+    disabled = tiene_genetica and not genotipos_completos
     c1, c2, c3 = st.columns([1, 2, 1])
     with c2:
-        if st.button("🚀 Generar Evaluación de Riesgo", type="primary", use_container_width=True):
+        if st.button("🚀 Generar Evaluación de Riesgo", type="primary", use_container_width=True, disabled=disabled):
             # Guardar genética
-            if tiene_genetica:
+            if tiene_genetica and genotipos_completos:
                 st.session_state.resultados['datos_geneticos'] = {
                     'prkca': prkca_sel, 'tcf4': tcf4_sel, 'cdh20': cdh20_sel,
                 }
@@ -192,14 +212,56 @@ def _mostrar_evaluacion_completa(registro):
 
     if prob_alto is not None:
         color = "#F44336" if nivel_triple == 'Alto' else "#FFB74D" if nivel_triple == 'Moderado' else "#2B87D1"
+        # Ángulo de la aguja: 0% → -90° (izquierda), 100% → +90° (derecha)
+        angle = -90 + (prob_alto * 180)
+        pct_text = f"{prob_alto:.1%}"
+
         st.markdown(f"""
-        <div style='background:#FFF; padding:2.5rem; border-radius:12px;
-                    box-shadow:0 3px 12px rgba(0,0,0,.08); border:1px solid #D1D1D1;
-                    margin:1.5rem 0; text-align:center;'>
-            <h2 style='color:{color}; margin-bottom:.5rem; font-size:2.5rem;'>{nivel_triple}</h2>
-            <p style='color:#666; margin:.5rem 0; font-size:1rem;'>Nivel de Riesgo de Ansiedad</p>
-            <p style='color:#2E2E2E; margin:0; font-size:.95rem;'>
-                Probabilidad: <strong>{prob_alto:.1%}</strong> · Modelo: {model_name}</p>
+        <div style='background:#FFF; padding:2rem 2rem 1.5rem; border-radius:16px;
+                    box-shadow:0 4px 20px rgba(0,0,0,.08); border:1px solid #E0E0E0;
+                    margin:1.5rem auto; text-align:center; max-width:560px;'>
+
+            <!-- Tacómetro SVG -->
+            <svg viewBox="0 0 300 180" style="width:100%; max-width:380px; margin:0 auto; display:block;">
+                <!-- Arco de fondo gris -->
+                <path d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="#E8E8E8" stroke-width="22" stroke-linecap="round"/>
+                <!-- Zona BAJO (0–30%) -->
+                <path d="M 30 150 A 120 120 0 0 1 79.47 52.92" fill="none" stroke="#2B87D1" stroke-width="22" stroke-linecap="round"/>
+                <!-- Zona MODERADO (30–60%) -->
+                <path d="M 79.47 52.92 A 120 120 0 0 1 187.08 35.87" fill="none" stroke="#FFB74D" stroke-width="22"/>
+                <!-- Zona ALTO (60–100%) -->
+                <path d="M 187.08 35.87 A 120 120 0 0 1 270 150" fill="none" stroke="#F44336" stroke-width="22" stroke-linecap="round"/>
+
+                <!-- Etiquetas -->
+                <text x="28" y="172" font-size="11" fill="#2B87D1" font-weight="600" font-family="'Source Sans 3', sans-serif">Bajo</text>
+                <text x="150" y="18" font-size="11" fill="#FFB74D" font-weight="600" font-family="'Source Sans 3', sans-serif" text-anchor="middle">Moderado</text>
+                <text x="272" y="172" font-size="11" fill="#F44336" font-weight="600" font-family="'Source Sans 3', sans-serif" text-anchor="end">Alto</text>
+
+                <!-- Marcas de porcentaje -->
+                <text x="18" y="155" font-size="9" fill="#999" font-family="'Source Sans 3', sans-serif">0%</text>
+                <text x="150" y="6" font-size="9" fill="#999" font-family="'Source Sans 3', sans-serif" text-anchor="middle">50%</text>
+                <text x="282" y="155" font-size="9" fill="#999" font-family="'Source Sans 3', sans-serif" text-anchor="end">100%</text>
+
+                <!-- Aguja -->
+                <g transform="translate(150, 150)">
+                    <line x1="0" y1="0" x2="0" y2="-95"
+                          stroke="{color}" stroke-width="3.5" stroke-linecap="round"
+                          transform="rotate({angle})"/>
+                    <circle cx="0" cy="0" r="8" fill="{color}" stroke="#FFF" stroke-width="2"/>
+                </g>
+
+                <!-- Valor central -->
+                <text x="150" y="130" font-size="28" font-weight="700" fill="{color}"
+                      font-family="'Source Sans 3', sans-serif" text-anchor="middle">{pct_text}</text>
+            </svg>
+
+            <h2 style='color:{color}; margin:0.75rem 0 0.25rem; font-size:2rem; font-weight:700;
+                        font-family:"Source Sans 3", sans-serif;'>{nivel_triple}</h2>
+            <p style='color:#666; margin:0.25rem 0; font-size:1rem;
+                       font-family:"Source Sans 3", sans-serif;'>Nivel de Riesgo de Ansiedad</p>
+            <p style='color:#2E2E2E; margin:0.5rem 0 0; font-size:0.9rem;
+                       font-family:"Source Sans 3", sans-serif;'>
+                Modelo: <strong>{model_name}</strong></p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -231,14 +293,6 @@ def _mostrar_evaluacion_completa(registro):
         st.markdown("---")
         mostrar_shap_analysis(model, X_for_model, genero)
 
-    # ── Features y DataFrame (expandibles) ────────────────────────
-    st.markdown("---")
-    with st.expander("📊 Ver Features Transformadas"):
-        if X_for_model is not None:
-            st.dataframe(X_for_model, use_container_width=True, hide_index=True)
-    with st.expander("📊 Ver DataFrame Completo"):
-        mostrar_dataframe_actual()
-
     # ── Nota clínica ──────────────────────────────────────────────
     st.markdown("""
     <div style='margin-top:1.5rem; padding:1rem; background:#FFF9E6; border-radius:8px; border-left:4px solid #FFC107;'>
@@ -256,11 +310,13 @@ def _mostrar_evaluacion_completa(registro):
         try:
             pdf_bytes = generar_pdf_resultados(resultados, registro)
             nombre = registro.get('nombre', 'paciente') if registro else 'paciente'
-            fecha = datetime.now().strftime('%Y%m%d')
+            # Extraer apellido para nombre del archivo
+            partes = nombre.strip().split()
+            apellido = partes[-1] if len(partes) > 1 else partes[0]
             st.download_button(
                 label="📥 Descargar Reporte en PDF",
                 data=pdf_bytes,
-                file_name=f"ANXRISK_Reporte_{nombre}_{fecha}.pdf",
+                file_name=f"ANX_{apellido}.pdf",
                 mime="application/pdf",
                 type="primary",
                 use_container_width=True,
@@ -884,7 +940,9 @@ def generar_pdf_resultados(resultados, registro):
 
     # Datos del profesional evaluador (capturados en Demográficos)
     nombre_prof = st.session_state.get('_prof_nombre', '') or st.session_state.get('prof_nombre', '') or '____________________'
-    cedula_prof = st.session_state.get('_prof_registro', '') or st.session_state.get('prof_registro', '') or '_______________'
+    cargo_prof = st.session_state.get('_prof_cargo', '') or st.session_state.get('prof_cargo', '')
+    institucion_prof = st.session_state.get('_prof_institucion', '') or st.session_state.get('prof_institucion', '')
+    tp_prof = st.session_state.get('_prof_tp', '') or st.session_state.get('prof_tp', '') or '_______________'
 
     # Nombre del paciente
     nombre_paciente = registro.get('nombre', '____________________') if registro else '____________________'
@@ -894,9 +952,13 @@ def generar_pdf_resultados(resultados, registro):
         ["_________________________", "_________________________"],
         ["Firma del Profesional", "Firma del Paciente"],
         [f"Nombre: {nombre_prof}", f"Nombre: {nombre_paciente}"],
-        [f"Cédula Prof.: {cedula_prof}", "Documento: __________________"],
-        [f"Fecha: {fecha_firma}", f"Fecha: {fecha_firma}"],
     ]
+    if cargo_prof:
+        firma_data.append([f"Cargo: {cargo_prof}", ""])
+    if institucion_prof:
+        firma_data.append([f"Institución: {institucion_prof}", ""])
+    firma_data.append([f"T.P.: {tp_prof}", "Documento: __________________"])
+    firma_data.append([f"Fecha: {fecha_firma}", f"Fecha: {fecha_firma}"])
     ft = Table(firma_data, colWidths=[240, 240])
     ft.setStyle(TableStyle([
         ('ALIGN',   (0, 0), (-1, -1), 'CENTER'),

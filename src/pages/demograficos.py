@@ -7,24 +7,23 @@ from src.utils.calculos import (
     transformar_genero_a_binario,
     transformar_educacion_a_binaria,
 )
-from src.utils.dataframe_manager import agregar_o_actualizar_registro, mostrar_dataframe_actual
+from src.utils.dataframe_manager import agregar_o_actualizar_registro
 
 
 def mostrar_demograficos():
-    """
-    Muestra y gestiona el formulario de datos demográficos.
-    Retorna un diccionario con los datos del paciente o None si no están completos.
-    """
+    """Muestra y gestiona el formulario de datos demográficos."""
 
     # CSS general
     with open("src/assets/styles/main.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-    # Título de página
-    st.markdown(
-        "<h1 style='text-align: center;'>Datos Demográficos</h1>",
-        unsafe_allow_html=True
-    )
+    # Page header
+    st.markdown("""
+    <div class="anxrisk-page-header">
+        <h1>Datos Demográficos</h1>
+        <p>Información base del paciente para la estratificación de riesgo</p>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Estado inicial de sesión
     if "datos_demograficos" not in st.session_state:
@@ -33,146 +32,135 @@ def mostrar_demograficos():
     # Si ya existen datos, mostrarlos
     if st.session_state["datos_demograficos"] is not None:
         datos = st.session_state["datos_demograficos"]
-        st.success("Datos demográficos ya registrados")
+        st.success("Datos demográficos registrados correctamente")
 
         col1, col2 = st.columns(2)
-
         with col1:
-            st.info(f" **Nombre:** {datos['nombre']}")
-            st.info(f" **Edad:** {datos['edad']} años")
-
+            st.metric(label="Nombre", value=datos['nombre'])
+            st.metric(label="Edad", value=f"{datos['edad']} años")
         with col2:
-            st.info(f" **Género:** {datos['genero']}")
-            st.info(f" **Años de educación:** {datos['años_educacion']} años")
+            st.metric(label="Género", value=datos['genero'])
+            st.metric(label="Educación", value=f"{datos['años_educacion']} años")
+
+        # Mostrar datos del profesional evaluador si fueron ingresados
+        prof_nombre = st.session_state.get('_prof_nombre', '') or st.session_state.get('prof_nombre', '')
+        prof_cargo = st.session_state.get('_prof_cargo', '') or st.session_state.get('prof_cargo', '')
+        prof_institucion = st.session_state.get('_prof_institucion', '') or st.session_state.get('prof_institucion', '')
+        prof_tp = st.session_state.get('_prof_tp', '') or st.session_state.get('prof_tp', '')
+        if any([prof_nombre, prof_cargo, prof_institucion, prof_tp]):
+            st.markdown("##### 👨‍⚕️ Profesional Evaluador")
+            pcol1, pcol2 = st.columns(2)
+            with pcol1:
+                if prof_nombre:
+                    st.metric(label="Profesional", value=prof_nombre)
+                if prof_cargo:
+                    st.metric(label="Cargo / Especialidad", value=prof_cargo)
+            with pcol2:
+                if prof_institucion:
+                    st.metric(label="Institución", value=prof_institucion)
+                if prof_tp:
+                    st.metric(label="Tarjeta Profesional", value=prof_tp)
 
         st.markdown("---")
-        st.markdown("### Vista de Datos en DataFrame")
-        with st.expander("Ver DataFrame completo"):
-            mostrar_dataframe_actual()
 
         col_edit, col_next = st.columns(2)
         with col_edit:
             if st.button("Editar datos"):
                 st.session_state["datos_demograficos"] = None
+                # Restaurar datos del profesional a las keys de widget para que aparezcan pre-llenados
+                st.session_state["prof_nombre"] = st.session_state.get("_prof_nombre", "")
+                st.session_state["prof_cargo"] = st.session_state.get("_prof_cargo", "")
+                st.session_state["prof_institucion"] = st.session_state.get("_prof_institucion", "")
+                st.session_state["prof_tp"] = st.session_state.get("_prof_tp", "")
                 st.rerun()
-
         with col_next:
-            if st.button("Siguiente →"):
+            if st.button("Siguiente", key="demo_next", type="primary"):
                 st.session_state.pagina_actual = "LTE-12"
                 st.rerun()
 
         return datos
 
-    # -------- FORMULARIO ---------
-    # Estilos locales para fondo blanco y minimalista (anulan temporalmente el tema global)
-    st.markdown(
-        """
-        <style>
-        /* Hacer el contenedor principal blanco y minimalista para esta página */
-        .block-container {
-            background: #ffffff !important;
-            border-radius: 10px !important;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
-            padding: 24px !important;
-        }
-        /* Etiquetas y entradas limpias */
-        .stTextInput > label, .stNumberInput > label, .stSelectbox > label {
-            color: #2E2E2E !important;
-            font-weight: 600 !important;
-        }
-        /* Ocultar labels vacíos */
-        .stTextInput > label:empty, .stNumberInput > label:empty {
-            display: none !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+    # ── FORMULARIO ──
+    st.markdown("#### Complete la información del paciente:")
 
-    st.markdown("#### Complete la información:")
+    nombre = st.text_input("Nombre completo", placeholder="Nombre completo del paciente *", key="nombre_completo")
 
-    # Nombre (encabezando, ocupa full-width)
-    nombre = st.text_input("", placeholder="Nombre completo *", key="nombre_completo")
-
-    # Crear dos columnas para Edad / Género
     col1, col2 = st.columns(2)
-
     with col1:
         edad = st.number_input(
-            "Edad *",
-            min_value=0,
-            max_value=120,
-            step=1,
-            value=0,
-            help="Debe ser mayor a 0",
-            key="edad"
+            "Edad *", min_value=0, max_value=120, step=1,
+            value=None, placeholder="Ingrese la edad",
+            help="Debe ser mayor a 0", key="edad",
         )
-
     with col2:
         genero = st.selectbox("Género *", ["Seleccionar", "Masculino", "Femenino"], key="genero")
 
-    # Máximo permitido para años de educación
-    max_educacion = max(0, edad - 5)
+    max_educacion = max(0, (edad or 0) - 5)
 
-    # Años de educación (ocupa full-width debajo)
-    if edad < 5:
+    if edad is None or edad < 5:
         años_educacion = st.number_input(
-            "Años de educación formal *",
-            min_value=0,
-            max_value=0,
-            value=0,
-            disabled=True,
-            help="No aplica educación formal a esta edad",
-            key="educacion",
+            "Años de educación formal *", min_value=0, max_value=0,
+            value=None, disabled=True, placeholder="—",
+            help="Ingrese primero la edad del paciente", key="educacion",
         )
     else:
-        # Si el usuario había ingresado antes un valor mayor al nuevo máximo, forzarlo al máximo permitido
-        if "educacion" in st.session_state and st.session_state.get("educacion", 0) > max_educacion:
+        if "educacion" in st.session_state and (st.session_state.get("educacion") or 0) > max_educacion:
             st.session_state["educacion"] = max_educacion
-
         años_educacion = st.number_input(
-            "Años de educación formal *",
-            min_value=0,
-            max_value=max_educacion,
-            value=st.session_state.get("educacion", 0),
-            step=1,
-            help=f"Máximo permitido: {max_educacion} años (edad - 5)",
-            key="educacion",
+            "Años de educación formal *", min_value=0, max_value=max_educacion,
+            value=None, step=1, placeholder="Ingrese los años",
+            help=f"Máximo permitido: {max_educacion} años (edad − 5)", key="educacion",
         )
 
-    # Validación en tiempo real y control del botón guardar
-    live_errores = []
-    if not nombre.strip():
-        live_errores.append("El nombre completo es obligatorio")
-    if genero == "Seleccionar":
-        live_errores.append("Debe seleccionar un género")
-    # Solo validar educación si la edad es válida (mayor a 0)
-    if edad > 0:
-        if años_educacion < 0:
-            live_errores.append("Los años de educación no pueden ser negativos")
-        elif años_educacion > max_educacion:
-            live_errores.append(f"Los años de educación ({años_educacion}) no pueden ser más de {max_educacion} años (edad - 5)")
+    # ── DATOS DEL PROFESIONAL EVALUADOR ──
+    st.markdown("---")
+    st.markdown("""
+    <div class="anxrisk-card" style="border-left: 4px solid var(--primary);">
+        <h3>👨‍⚕️ Datos del Profesional Evaluador</h3>
+        <p style="font-size: 0.9375rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+            Complete estos datos para que aparezcan en el reporte PDF con espacio para su firma.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    if live_errores:
-        st.error(" No se puede guardar. Corrija los siguientes errores:")
-        for e in live_errores:
-            st.markdown(f"- {e}")
+    prof_col1, prof_col2 = st.columns(2)
+    with prof_col1:
+        prof_nombre = st.text_input(
+            "Nombre del profesional", key="prof_nombre",
+            placeholder="Dr(a). Nombre Apellido",
+        )
+        prof_cargo = st.text_input(
+            "Cargo / Especialidad", key="prof_cargo",
+            placeholder="Psiquiatra / Psicólogo clínico",
+        )
+    with prof_col2:
+        prof_institucion = st.text_input(
+            "Institución", key="prof_institucion",
+            placeholder="Hospital / Consultorio / IPS",
+        )
+        prof_tp = st.text_input(
+            "Tarjeta Profesional", key="prof_tp",
+            placeholder="TP-XXXXX",
+        )
 
-    # Botón de guardar (deshabilitado si hay errores en tiempo real)
-    guardar = st.button("Guardar datos", disabled=bool(live_errores))
+    # Botón de guardar
+    guardar = st.button("Guardar datos", type="primary")
 
     if guardar:
-        # Validaciones finales (seguridad)
         errores = []
         if not nombre.strip():
             errores.append("El nombre completo es obligatorio.")
         if genero == "Seleccionar":
             errores.append("Debe seleccionar un género.")
-        if años_educacion > max_educacion:
+        if edad is None or edad <= 0:
+            errores.append("La edad debe ser mayor a 0.")
+        if años_educacion is None:
+            errores.append("Los años de educación formal son obligatorios.")
+        elif años_educacion > max_educacion:
             errores.append(f"Los años de educación no pueden ser mayores a {max_educacion}.")
 
         if errores:
-            st.error(" No se pudieron guardar los datos:")
+            st.error("Corrija los siguientes errores:")
             for e in errores:
                 st.markdown(f"- {e}")
             return None
@@ -187,14 +175,16 @@ def mostrar_demograficos():
         }
 
         st.session_state["datos_demograficos"] = datos
+
+        # Guardar datos del profesional en claves persistentes
+        # (las keys de widget se eliminan cuando el widget deja de renderizarse)
+        st.session_state["_prof_nombre"] = st.session_state.get("prof_nombre", "")
+        st.session_state["_prof_cargo"] = st.session_state.get("prof_cargo", "")
+        st.session_state["_prof_institucion"] = st.session_state.get("prof_institucion", "")
+        st.session_state["_prof_tp"] = st.session_state.get("prof_tp", "")
+
         agregar_o_actualizar_registro(datos, tipo_datos="demograficos")
-
-        st.success(f"✅ Datos guardados correctamente")
+        st.success("✅ Datos guardados correctamente")
         st.rerun()
-
-    # Mostrar DataFrame actual en un expander para monitoreo desde el formulario
-    st.markdown("---")
-    with st.expander("Ver DataFrame completo"):
-        mostrar_dataframe_actual()
 
     return None

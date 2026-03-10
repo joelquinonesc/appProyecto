@@ -28,7 +28,7 @@ if 'pagina_actual' not in st.session_state:
     st.session_state.pagina_actual = "Home"
 
 # Definir el orden de las páginas para la barra de progreso
-ORDEN_PAGINAS = ["Datos demograficos", "LTE-12", "SF-12 Física", "SF-12 Mental", "Ansiedad (HADS)", "Ansiedad (ZSAS)", "Datos Genéticos"]
+ORDEN_PAGINAS = ["Datos demograficos", "LTE-12", "SF-12 Física", "SF-12 Mental", "Ansiedad (HADS)", "Ansiedad (ZSAS)", "Resultados"]
 
 # Configuración de la barra lateral
 st.sidebar.title("Progreso de la Evaluación")
@@ -48,6 +48,7 @@ def obtener_indice_pagina():
         # handle a few known legacy labels
         legacy_map = {
             'SF-12 Salud': 'SF-12 Física',
+            'resultados': 'Resultados',
         }
         mapped = legacy_map.get(pagina)
         if mapped and mapped in ORDEN_PAGINAS:
@@ -98,9 +99,9 @@ elif st.session_state.pagina_actual == "Datos Genéticos":
         st.session_state.pagina_actual = "Ansiedad (ZSAS)"
         st.rerun()
     datos_geneticos.mostrar_datos_geneticos()
-elif st.session_state.pagina_actual == "resultados":
-    if st.session_state.get('resultados', {}).get('datos_geneticos') is None:
-        st.session_state.pagina_actual = "Datos Genéticos"
+elif st.session_state.pagina_actual in ("resultados", "Resultados"):
+    if st.session_state.get('resultados', {}).get('zsas') is None:
+        st.session_state.pagina_actual = "Ansiedad (ZSAS)"
         st.rerun()
     resultados.mostrar_resultados()
 
@@ -112,7 +113,7 @@ if st.session_state.pagina_actual != "Home":
     # Contar páginas completadas (no items en el diccionario)
     resultado = st.session_state.get('resultados', {})
     completados = 0
-    total_secciones = 6  # datos_demograficos, eventos_vitales, sf12, hads, zsas, datos_geneticos
+    total_secciones = 5  # datos_demograficos, eventos_vitales, sf12, hads, zsas
     if resultado.get('datos_demograficos'):
         completados += 1
     if resultado.get('eventos_vitales'):
@@ -122,8 +123,6 @@ if st.session_state.pagina_actual != "Home":
     if resultado.get('hads'):
         completados += 1
     if resultado.get('zsas'):
-        completados += 1
-    if resultado.get('datos_geneticos'):
         completados += 1
     st.sidebar.markdown(f"**Cuestionarios completados:** {completados} de {total_secciones}")
 
