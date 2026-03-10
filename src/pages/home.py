@@ -224,48 +224,40 @@ def mostrar_home():
         unsafe_allow_html=True
     )
 
-    # ── Datos del Profesional que valida ──────────────────────────
+    # --- Datos del psiquiatra que valida ---
     st.markdown("---")
-    st.markdown("### 🩺 Datos del Profesional")
     st.markdown(
-        "<p style='font-size: 1rem; color: #555;'>Ingrese los datos del profesional de salud mental que validará los reportes de esta sesión.</p>",
+        "<h4 style='text-align:center; color:#2E2E2E; margin-bottom:.5rem;'>"
+        "🩺 Datos del Psiquiatra que Valida</h4>",
         unsafe_allow_html=True,
     )
-    p1, p2 = st.columns(2)
-    with p1:
-        nombre_profesional = st.text_input(
-            "Nombre completo del profesional *",
-            value=st.session_state.get('datos_profesional', {}).get('nombre', ''),
+    pc1, pc2 = st.columns(2)
+    with pc1:
+        psiq_nombre = st.text_input(
+            "Nombre completo del psiquiatra *",
+            value=st.session_state.get('psiquiatra_nombre', ''),
+            key="input_psiq_nombre",
             placeholder="Ej: Dr. Juan Pérez",
-            key="home_nombre_profesional",
         )
-    with p2:
-        cedula_profesional = st.text_input(
-            "Cédula / Registro profesional *",
-            value=st.session_state.get('datos_profesional', {}).get('cedula', ''),
-            placeholder="Ej: TP-12345678",
-            key="home_cedula_profesional",
+    with pc2:
+        psiq_cedula = st.text_input(
+            "Cédula profesional *",
+            value=st.session_state.get('psiquiatra_cedula', ''),
+            key="input_psiq_cedula",
+            placeholder="Ej: 12345678",
         )
-
-    # Guardar datos del profesional en session_state al escribir
-    if nombre_profesional.strip() and cedula_profesional.strip():
-        st.session_state['datos_profesional'] = {
-            'nombre': nombre_profesional.strip(),
-            'cedula': cedula_profesional.strip(),
-        }
-
-    profesional_completo = bool(nombre_profesional.strip()) and bool(cedula_profesional.strip())
-    if not profesional_completo:
-        st.warning("⚠️ Complete los datos del profesional para poder iniciar la evaluación.")
-
-    st.markdown("---")
 
     # Botón principal centrado
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button("Empezar Análisis ➜", key="start_button", width='stretch', disabled=not profesional_completo):
-            st.session_state.pagina_actual = "Datos demograficos"
-            st.rerun()
+        if st.button("Empezar Análisis ➜", key="start_button", width='stretch'):
+            if not psiq_nombre.strip() or not psiq_cedula.strip():
+                st.error("⚠️ Ingrese el nombre y la cédula profesional del psiquiatra para continuar.")
+            else:
+                st.session_state['psiquiatra_nombre'] = psiq_nombre.strip()
+                st.session_state['psiquiatra_cedula'] = psiq_cedula.strip()
+                st.session_state.pagina_actual = "Datos demograficos"
+                st.rerun()
     
     # Botón de análisis masivo
     col1, col2, col3 = st.columns([1, 2, 1])
