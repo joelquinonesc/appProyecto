@@ -122,7 +122,7 @@ def _mostrar_seccion_pregenerada(registro):
     """Muestra resumen de cuestionarios, pregunta genética y botón para evaluar."""
 
     st.markdown("""
-    <div style="background:#E8F5E9; padding:1.25rem; border-radius:8px; border-left:4px solid #4CAF50; margin-bottom:1.5rem;">
+    <div style="background:#E3F2FD; padding:1.25rem; border-radius:8px; border-left:4px solid #2B87D1; margin-bottom:1.5rem;">
         <p style="color:#2E2E2E; margin:0; font-size:1rem;">
             <strong>✅ Todos los cuestionarios han sido completados.</strong><br>
             Antes de generar la evaluación de riesgo, indique si dispone de datos genéticos del paciente.
@@ -191,7 +191,7 @@ def _mostrar_evaluacion_completa(registro):
     model_name = resultados.get('modelo_usado', '')
 
     if prob_alto is not None:
-        color = "#F44336" if nivel_triple == 'Alto' else "#FFB74D" if nivel_triple == 'Moderado' else "#4CAF50"
+        color = "#F44336" if nivel_triple == 'Alto' else "#FFB74D" if nivel_triple == 'Moderado' else "#2B87D1"
         st.markdown(f"""
         <div style='background:#FFF; padding:2.5rem; border-radius:12px;
                     box-shadow:0 3px 12px rgba(0,0,0,.08); border:1px solid #D1D1D1;
@@ -209,14 +209,14 @@ def _mostrar_evaluacion_completa(registro):
     _mostrar_resumen_cuestionarios()
 
     # ── Genética ──────────────────────────────────────────────────
-    st.markdown("<h4 style='color:#4CAF50; font-size:1.2rem; margin-top:1.5rem;'>🧬 Perfil Genético</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>🧬 Perfil Genético</h4>", unsafe_allow_html=True)
     gen = resultados.get('datos_geneticos')
     if gen:
         gc1, gc2, gc3 = st.columns(3)
         for col, name, key in [(gc1, 'PRKCA', 'prkca'), (gc2, 'TCF4', 'tcf4'), (gc3, 'CDH20', 'cdh20')]:
             with col:
                 st.markdown(f"""
-                <div style='background:#F5F5F5; padding:1rem; border-radius:8px; border-left:3px solid #4CAF50;'>
+                <div style='background:#F5F5F5; padding:1rem; border-radius:8px; border-left:3px solid #2B87D1;'>
                     <p style='color:#666; margin:0; font-size:.9rem;'>Gen {name}</p>
                     <p style='color:#2E2E2E; margin:0; font-size:1.3rem; font-weight:700;'>{gen[key]}</p>
                 </div>""", unsafe_allow_html=True)
@@ -297,7 +297,7 @@ def _mostrar_resumen_cuestionarios():
     registro = obtener_registro_actual()
 
     # Demográficos
-    st.markdown("<h4 style='color:#4CAF50; font-size:1.2rem; margin-top:1.5rem;'>👤 Datos Demográficos</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>👤 Datos Demográficos</h4>", unsafe_allow_html=True)
     demo = resultados.get('datos_demograficos') or st.session_state.get('datos_demograficos')
     if demo:
         d1, d2, d3 = st.columns(3)
@@ -312,7 +312,7 @@ def _mostrar_resumen_cuestionarios():
             st.metric("Educación", f"{demo.get('años_educacion', '-')} años")
 
     # LTE-12
-    st.markdown("<h4 style='color:#4CAF50; font-size:1.2rem; margin-top:1.5rem;'>📅 Eventos Vitales (LTE-12)</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>📅 Eventos Vitales (LTE-12)</h4>", unsafe_allow_html=True)
     try:
         ev = resultados['eventos_vitales']
         st.metric("Eventos estresantes", ev.get('total', '-'))
@@ -320,7 +320,7 @@ def _mostrar_resumen_cuestionarios():
         st.info("Datos LTE-12 no disponibles")
 
     # SF-12
-    st.markdown("<h4 style='color:#4CAF50; font-size:1.2rem; margin-top:1.5rem;'>🏥 Salud SF-12</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>🏥 Salud SF-12</h4>", unsafe_allow_html=True)
     try:
         sf12 = resultados['sf12']
         s1, s2 = st.columns(2)
@@ -342,7 +342,7 @@ def _mostrar_resumen_cuestionarios():
         st.info("Datos SF-12 no disponibles")
 
     # HADS
-    st.markdown("<h4 style='color:#4CAF50; font-size:1.2rem; margin-top:1.5rem;'>😰 Ansiedad HADS</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>😰 Ansiedad HADS</h4>", unsafe_allow_html=True)
     try:
         hads = resultados['hads']
         h1, h2 = st.columns(2)
@@ -354,7 +354,7 @@ def _mostrar_resumen_cuestionarios():
         st.info("Datos HADS no disponibles")
 
     # ZSAS
-    st.markdown("<h4 style='color:#4CAF50; font-size:1.2rem; margin-top:1.5rem;'>😟 Ansiedad de Zung (ZSAS)</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>😟 Ansiedad de Zung (ZSAS)</h4>", unsafe_allow_html=True)
     try:
         zsas = resultados['zsas']
         z1, z2 = st.columns(2)
@@ -542,7 +542,7 @@ def mostrar_shap_analysis(model, X, genero):
         top_names = [feature_names[i] for i in top_idx]
 
         fig, ax = plt.subplots(figsize=(10, 8))
-        bar_c = ['#DC3545' if v > 0 else '#28A745' for v in top_vals]
+        bar_c = ['#DC3545' if v > 0 else '#2B87D1' for v in top_vals]
         ax.barh(range(len(top_vals)), top_vals, color=bar_c, alpha=0.8, edgecolor='black', linewidth=0.5)
         ax.set_yticks(range(len(top_vals)))
         ax.set_yticklabels(top_names, fontsize=10)
@@ -553,7 +553,7 @@ def mostrar_shap_analysis(model, X, genero):
         from matplotlib.patches import Patch
         ax.legend(handles=[
             Patch(facecolor='#DC3545', alpha=0.8, edgecolor='black', label='Aumenta Riesgo'),
-            Patch(facecolor='#28A745', alpha=0.8, edgecolor='black', label='Disminuye Riesgo'),
+            Patch(facecolor='#2B87D1', alpha=0.8, edgecolor='black', label='Disminuye Riesgo'),
         ], loc='lower right', fontsize=10)
         plt.tight_layout()
         st.pyplot(fig)
@@ -564,7 +564,7 @@ def mostrar_shap_analysis(model, X, genero):
             <p style='color:#2E2E2E; margin:0; font-weight:600;'>📊 Interpretación:</p>
             <ul style='margin:.5rem 0 0 1rem;'>
                 <li style='color:#DC3545;'>🔴 Barras rojas (→): Factores que <strong>AUMENTAN</strong> el riesgo</li>
-                <li style='color:#28A745;'>🟢 Barras verdes (←): Factores que <strong>DISMINUYEN</strong> el riesgo</li>
+                <li style='color:#2B87D1;'>🟢 Barras verdes (←): Factores que <strong>DISMINUYEN</strong> el riesgo</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -579,7 +579,7 @@ def mostrar_shap_analysis(model, X, genero):
 def _mostrar_interpretacion_shap(shap_arr, feature_names, X, top_indices):
     st.markdown("""
     <div style='background:#FFF; padding:1.5rem; border-radius:8px; border:1px solid #E0E0E0; margin-top:1rem;'>
-        <h4 style='color:#2E2E2E; margin-top:0; border-bottom:2px solid #4CAF50; padding-bottom:.5rem;'>
+        <h4 style='color:#2E2E2E; margin-top:0; border-bottom:2px solid #2B87D1; padding-bottom:.5rem;'>
             🔍 Cómo se Llegó a Esta Predicción
         </h4>
     </div>
@@ -589,7 +589,7 @@ def _mostrar_interpretacion_shap(shap_arr, feature_names, X, top_indices):
         feat = feature_names[idx]
         sv = shap_arr[0][idx]
         fv = X.iloc[0, idx]
-        color = "#DC3545" if sv > 0 else "#28A745"
+        color = "#DC3545" if sv > 0 else "#2B87D1"
         efecto = "aumenta" if sv > 0 else "disminuye"
         icono = "⬆️" if sv > 0 else "⬇️"
         interp = obtener_interpretacion_feature(feat, fv)
@@ -667,7 +667,7 @@ def generar_pdf_resultados(resultados, registro):
     C_SEC  = colors.HexColor('#5DA5C8')
     C_TXT  = colors.HexColor('#2E2E2E')
     C_BG   = colors.HexColor('#F8F9FA')
-    C_OK   = colors.HexColor('#4CAF50')
+    C_OK   = colors.HexColor('#2B87D1')
     C_WARN = colors.HexColor('#FFC107')
     C_DANG = colors.HexColor('#DC3545')
 
@@ -834,7 +834,7 @@ def generar_pdf_resultados(resultados, registro):
             t_names = [feat_names[i] for i in t_idx]
 
             fig, ax = plt.subplots(figsize=(7, 5), dpi=120)
-            bc = ['#DC3545' if v > 0 else '#28A745' for v in t_vals]
+            bc = ['#DC3545' if v > 0 else '#2B87D1' for v in t_vals]
             ax.barh(range(len(t_vals)), t_vals, color=bc, alpha=0.85, edgecolor='black', linewidth=0.4)
             ax.set_yticks(range(len(t_vals)))
             ax.set_yticklabels(t_names, fontsize=8)
