@@ -23,7 +23,7 @@ def mostrar_sf12_fisica():
     st.markdown("""
     <div class="anxrisk-card">
         <h3>Evaluación de la Salud Física</h3>
-        <p style="margin-bottom: 0.75rem;">
+        <p style="margin-bottom: 0.75rem; text-align: center;">
             El <strong>SF-12 (Short Form-12)</strong> es un cuestionario de calidad de vida validado
             internacionalmente. El componente físico (PCS) evalúa la percepción sobre el estado de
             salud física, las limitaciones funcionales y el impacto en actividades cotidianas.

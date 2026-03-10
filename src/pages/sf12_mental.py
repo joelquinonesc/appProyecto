@@ -25,7 +25,7 @@ def mostrar_sf12_mental():
     st.markdown("""
     <div class="anxrisk-card">
         <h3>Evaluación de la Salud Mental</h3>
-        <p style="margin-bottom: 0.75rem;">
+        <p style="margin-bottom: 0.75rem; text-align: center;">
             El componente mental (MCS) del <strong>SF-12</strong> evalúa aspectos clave del bienestar
             emocional y mental, incluyendo el estado emocional, la vitalidad, las limitaciones en
             actividades por problemas emocionales y la salud mental percibida.

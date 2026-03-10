@@ -216,33 +216,28 @@ def _mostrar_evaluacion_completa(registro):
         angle = -90 + (prob_alto * 180)
         pct_text = f"{prob_alto:.1%}"
 
-        st.markdown(f"""
+        import streamlit.components.v1 as components
+        gauge_html = f"""
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet">
         <div style='background:#FFF; padding:2rem 2rem 1.5rem; border-radius:16px;
                     box-shadow:0 4px 20px rgba(0,0,0,.08); border:1px solid #E0E0E0;
-                    margin:1.5rem auto; text-align:center; max-width:560px;'>
+                    margin:0 auto; text-align:center; max-width:560px;
+                    font-family:"Source Sans 3", sans-serif;'>
 
-            <!-- Tacómetro SVG -->
             <svg viewBox="0 0 300 180" style="width:100%; max-width:380px; margin:0 auto; display:block;">
-                <!-- Arco de fondo gris -->
                 <path d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="#E8E8E8" stroke-width="22" stroke-linecap="round"/>
-                <!-- Zona BAJO (0–30%) -->
                 <path d="M 30 150 A 120 120 0 0 1 79.47 52.92" fill="none" stroke="#2B87D1" stroke-width="22" stroke-linecap="round"/>
-                <!-- Zona MODERADO (30–60%) -->
                 <path d="M 79.47 52.92 A 120 120 0 0 1 187.08 35.87" fill="none" stroke="#FFB74D" stroke-width="22"/>
-                <!-- Zona ALTO (60–100%) -->
                 <path d="M 187.08 35.87 A 120 120 0 0 1 270 150" fill="none" stroke="#F44336" stroke-width="22" stroke-linecap="round"/>
 
-                <!-- Etiquetas -->
                 <text x="28" y="172" font-size="11" fill="#2B87D1" font-weight="600" font-family="'Source Sans 3', sans-serif">Bajo</text>
                 <text x="150" y="18" font-size="11" fill="#FFB74D" font-weight="600" font-family="'Source Sans 3', sans-serif" text-anchor="middle">Moderado</text>
                 <text x="272" y="172" font-size="11" fill="#F44336" font-weight="600" font-family="'Source Sans 3', sans-serif" text-anchor="end">Alto</text>
 
-                <!-- Marcas de porcentaje -->
                 <text x="18" y="155" font-size="9" fill="#999" font-family="'Source Sans 3', sans-serif">0%</text>
                 <text x="150" y="6" font-size="9" fill="#999" font-family="'Source Sans 3', sans-serif" text-anchor="middle">50%</text>
                 <text x="282" y="155" font-size="9" fill="#999" font-family="'Source Sans 3', sans-serif" text-anchor="end">100%</text>
 
-                <!-- Aguja -->
                 <g transform="translate(150, 150)">
                     <line x1="0" y1="0" x2="0" y2="-95"
                           stroke="{color}" stroke-width="3.5" stroke-linecap="round"
@@ -250,7 +245,6 @@ def _mostrar_evaluacion_completa(registro):
                     <circle cx="0" cy="0" r="8" fill="{color}" stroke="#FFF" stroke-width="2"/>
                 </g>
 
-                <!-- Valor central -->
                 <text x="150" y="130" font-size="28" font-weight="700" fill="{color}"
                       font-family="'Source Sans 3', sans-serif" text-anchor="middle">{pct_text}</text>
             </svg>
@@ -263,12 +257,13 @@ def _mostrar_evaluacion_completa(registro):
                        font-family:"Source Sans 3", sans-serif;'>
                 Modelo: <strong>{model_name}</strong></p>
         </div>
-        """, unsafe_allow_html=True)
+        """
+        components.html(gauge_html, height=420, scrolling=False)
 
     # ── Resumen de cuestionarios ──────────────────────────────────
-    st.markdown("---")
-    st.markdown("<h3 style='color:#2E2E2E; text-align:center; margin-bottom:1.5rem;'>📋 Resumen de la Evaluación</h3>", unsafe_allow_html=True)
-    _mostrar_resumen_cuestionarios()
+    st.markdown("<div style='height:1rem;'></div>", unsafe_allow_html=True)
+    with st.expander("📋 Resumen de la Evaluación — Ver detalles de cuestionarios", expanded=False):
+        _mostrar_resumen_cuestionarios()
 
     # ── Genética ──────────────────────────────────────────────────
     st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>🧬 Perfil Genético</h4>", unsafe_allow_html=True)
@@ -352,72 +347,100 @@ def _mostrar_resumen_cuestionarios():
     resultados = st.session_state.get('resultados', {})
     registro = obtener_registro_actual()
 
+    # Plantilla de tarjeta métrica con tipografía Illumina
+    _MC = """
+    <div style="background:#FFF; padding:1rem 1.25rem; border-radius:8px;
+                border-left:3px solid #2B87D1; margin-bottom:0.75rem;
+                box-shadow:0 1px 4px rgba(0,0,0,.06);">
+        <p style="color:#666; margin:0 0 0.25rem; font-size:0.85rem;
+                  font-family:'Source Sans 3','Source Sans Pro',sans-serif;">{label}</p>
+        <p style="color:#2E2E2E; margin:0; font-size:1.4rem; font-weight:700;
+                  font-family:'Source Sans 3','Source Sans Pro',sans-serif;">{value}</p>
+    </div>
+    """
+    _MC_CAP = """
+    <div style="background:#FFF; padding:1rem 1.25rem; border-radius:8px;
+                border-left:3px solid #2B87D1; margin-bottom:0.75rem;
+                box-shadow:0 1px 4px rgba(0,0,0,.06);">
+        <p style="color:#666; margin:0 0 0.25rem; font-size:0.85rem;
+                  font-family:'Source Sans 3','Source Sans Pro',sans-serif;">{label}</p>
+        <p style="color:#2E2E2E; margin:0; font-size:1.4rem; font-weight:700;
+                  font-family:'Source Sans 3','Source Sans Pro',sans-serif;">{value}</p>
+        <p style="color:#999; margin:0.25rem 0 0; font-size:0.8rem;
+                  font-family:'Source Sans 3','Source Sans Pro',sans-serif;">{caption}</p>
+    </div>
+    """
+
     # Demográficos
-    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>👤 Datos Demográficos</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem; font-family:\"Source Sans 3\",sans-serif;'>👤 Datos Demográficos</h4>", unsafe_allow_html=True)
     demo = resultados.get('datos_demograficos') or st.session_state.get('datos_demograficos')
     if demo:
         d1, d2, d3 = st.columns(3)
         with d1:
-            st.metric("Edad", f"{demo.get('edad', '-')} años")
+            st.markdown(_MC.format(label="Edad", value=f"{demo.get('edad', '-')} años"), unsafe_allow_html=True)
         with d2:
             g = demo.get('genero', '-')
             if isinstance(g, int):
                 g = "Masculino" if g == 0 else "Femenino"
-            st.metric("Género", g)
+            st.markdown(_MC.format(label="Género", value=g), unsafe_allow_html=True)
         with d3:
-            st.metric("Educación", f"{demo.get('años_educacion', '-')} años")
+            st.markdown(_MC.format(label="Educación", value=f"{demo.get('años_educacion', '-')} años"), unsafe_allow_html=True)
 
     # LTE-12
-    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>📅 Eventos Vitales (LTE-12)</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem; font-family:\"Source Sans 3\",sans-serif;'>📅 Eventos Vitales (LTE-12)</h4>", unsafe_allow_html=True)
     try:
         ev = resultados['eventos_vitales']
-        st.metric("Eventos estresantes", ev.get('total', '-'))
+        st.markdown(_MC.format(label="Eventos estresantes", value=ev.get('total', '-')), unsafe_allow_html=True)
     except KeyError:
         st.info("Datos LTE-12 no disponibles")
 
     # SF-12
-    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>🏥 Salud SF-12</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem; font-family:\"Source Sans 3\",sans-serif;'>🏥 Salud SF-12</h4>", unsafe_allow_html=True)
     try:
         sf12 = resultados['sf12']
         s1, s2 = st.columns(2)
         with s1:
             pf = sf12.get('puntaje_fisico')
             if pf is not None:
-                st.metric("Componente Físico", f"{pf:.1f}")
                 qf = sf12.get('cuartil_fisica')
-                if qf:
-                    st.caption(_obtener_mensaje_cuartil_fisica(qf))
+                cap = _obtener_mensaje_cuartil_fisica(qf) if qf else ""
+                if cap:
+                    st.markdown(_MC_CAP.format(label="Componente Físico", value=f"{pf:.1f}", caption=cap), unsafe_allow_html=True)
+                else:
+                    st.markdown(_MC.format(label="Componente Físico", value=f"{pf:.1f}"), unsafe_allow_html=True)
         with s2:
             pm = sf12.get('puntaje_mental')
             if pm is not None:
-                st.metric("Componente Mental", f"{pm:.1f}")
                 qm = sf12.get('cuartil_mental')
-                if qm:
-                    st.caption(_obtener_mensaje_cuartil_mental(qm))
+                cap = _obtener_mensaje_cuartil_mental(qm) if qm else ""
+                if cap:
+                    st.markdown(_MC_CAP.format(label="Componente Mental", value=f"{pm:.1f}", caption=cap), unsafe_allow_html=True)
+                else:
+                    st.markdown(_MC.format(label="Componente Mental", value=f"{pm:.1f}"), unsafe_allow_html=True)
     except KeyError:
         st.info("Datos SF-12 no disponibles")
 
     # HADS
-    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>😰 Ansiedad HADS</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem; font-family:\"Source Sans 3\",sans-serif;'>😰 Ansiedad HADS</h4>", unsafe_allow_html=True)
     try:
         hads = resultados['hads']
         h1, h2 = st.columns(2)
         with h1:
-            st.metric("Puntaje", hads.get('puntaje', '-'))
+            st.markdown(_MC.format(label="Puntaje", value=hads.get('puntaje', '-')), unsafe_allow_html=True)
         with h2:
-            st.metric("Nivel", hads.get('nivel', '-'))
+            st.markdown(_MC.format(label="Nivel", value=hads.get('nivel', '-')), unsafe_allow_html=True)
     except KeyError:
         st.info("Datos HADS no disponibles")
 
     # ZSAS
-    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem;'>😟 Ansiedad de Zung (ZSAS)</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem; font-family:\"Source Sans 3\",sans-serif;'>😟 Ansiedad de Zung (ZSAS)</h4>", unsafe_allow_html=True)
     try:
         zsas = resultados['zsas']
         z1, z2 = st.columns(2)
         with z1:
-            st.metric("Puntaje bruto", zsas.get('total', '-'))
+            st.markdown(_MC.format(label="Puntaje bruto", value=zsas.get('total', '-')), unsafe_allow_html=True)
         with z2:
-            st.metric("Nivel", zsas.get('nivel', '-'))
+            st.markdown(_MC.format(label="Nivel", value=zsas.get('nivel', '-')), unsafe_allow_html=True)
     except KeyError:
         st.info("Datos ZSAS no disponibles")
 
@@ -795,13 +818,71 @@ def generar_pdf_resultados(resultados, registro):
     elems.append(Spacer(1, 0.3 * inch))
 
     # ══════════ 2. LTE-12 ══════════
-    elems.append(Paragraph("2. Eventos Vitales (LTE-12)", head_s))
+    elems.append(Paragraph("2. Eventos Vitales Estresantes (LTE-12)", head_s))
     ev = resultados.get('eventos_vitales', {})
-    elems.append(_tbl([
-        ["Indicador", "Valor"],
-        ["Total de eventos significativos", str(ev.get('total', '—'))],
-        ["Eventos impacto moderado-alto", str(ev.get('impacto_moderado_alto', '—'))],
-    ], cw=[250, 230]))
+
+    # Lista de los 12 eventos del LTE
+    lte_preguntas = [
+        "Enfermedad, lesión o agresión grave propia",
+        "Enfermedad/lesión/agresión grave de un familiar cercano",
+        "Muerte de padres, hijos o pareja/cónyuge",
+        "Muerte de amigo cercano u otro familiar",
+        "Separación por problemas matrimoniales",
+        "Ruptura de relación estable",
+        "Problema grave con amigo, vecino o familiar",
+        "Desempleo o búsqueda sin éxito (>1 mes)",
+        "Despido laboral",
+        "Crisis económica grave",
+        "Problemas con la policía o tribunal",
+        "Robo o pérdida de objeto de valor",
+    ]
+    respuestas_ev = ev.get('respuestas', [])
+    total_ev = ev.get('total', sum(r for r in respuestas_ev if r == 1) if respuestas_ev else 0)
+    eventos_si = [(i + 1, lte_preguntas[i]) for i, r in enumerate(respuestas_ev) if r == 1 and i < len(lte_preguntas)]
+
+    # Tabla de detalle: cada evento con Sí/No
+    ev_table_data = [["#", "Evento Vital", "Presente"]]
+    for i, pregunta in enumerate(lte_preguntas):
+        resp_val = respuestas_ev[i] if i < len(respuestas_ev) else 0
+        ev_table_data.append([str(i + 1), pregunta, "Sí" if resp_val == 1 else "No"])
+
+    ev_tbl = Table(ev_table_data, colWidths=[30, 370, 80])
+    ev_tbl.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), C_PRIM),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('FONTNAME',  (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE',  (0, 0), (-1, 0), 9),
+        ('FONTSIZE',  (0, 1), (-1, -1), 9),
+        ('ALIGN',     (0, 0), (0, -1), 'CENTER'),
+        ('ALIGN',     (1, 0), (1, -1), 'LEFT'),
+        ('ALIGN',     (2, 0), (2, -1), 'CENTER'),
+        ('VALIGN',    (0, 0), (-1, -1), 'MIDDLE'),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ('TOPPADDING',    (0, 0), (-1, -1), 5),
+        ('BACKGROUND', (0, 1), (-1, -1), C_BG),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#CCC')),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [C_BG, colors.white]),
+    ]))
+    # Resaltar filas con "Sí" en rojo suave
+    for row_idx, (i, pregunta) in enumerate([(i, lte_preguntas[i]) for i in range(len(lte_preguntas))], start=1):
+        resp_val = respuestas_ev[i] if i < len(respuestas_ev) else 0
+        if resp_val == 1:
+            ev_tbl.setStyle(TableStyle([
+                ('TEXTCOLOR', (2, row_idx), (2, row_idx), C_DANG),
+                ('FONTNAME',  (2, row_idx), (2, row_idx), 'Helvetica-Bold'),
+            ]))
+    elems.append(ev_tbl)
+
+    # Resumen al pie
+    elems.append(Spacer(1, 0.1 * inch))
+    clasif = ev.get('clasificacion', '—')
+    clasif_texto = {0: "Sin eventos significativos", 1: "Nivel moderado", 2: "Nivel alto"}.get(clasif, str(clasif))
+    elems.append(Paragraph(
+        f"<b>Total de eventos reportados:</b> {total_ev} de 12 &nbsp;&nbsp;|&nbsp;&nbsp; "
+        f"<b>Clasificación:</b> {clasif_texto}",
+        norm_s,
+    ))
+
     elems.append(Spacer(1, 0.3 * inch))
 
     # ══════════ 3. SF-12 ══════════

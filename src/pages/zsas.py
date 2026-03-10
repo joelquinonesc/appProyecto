@@ -18,7 +18,7 @@ def mostrar_zsas():
     st.markdown("""
     <div class="anxrisk-card">
         <h3>Contexto clínico</h3>
-        <p style="margin-bottom: 0.75rem;">
+        <p style="margin-bottom: 0.75rem; text-align: center;">
             La <strong>Escala de Ansiedad de Zung (ZSAS)</strong> es una herramienta ampliamente
             utilizada que evalúa tanto los aspectos afectivos como somáticos de la ansiedad. Con
             20 ítems, proporciona una evaluación comprensiva de síntomas físicos y emocionales.

@@ -4,9 +4,6 @@
    Versión: 2.1 - Fondo Gris Profesional
    ========================================================= */
 
-/* Google Fonts — tipografía Illumina-style */
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
-
 /* ============================================
    1. VARIABLES CSS - Sistema de Diseño
    ============================================ */
@@ -57,7 +54,7 @@
     --space-2xl: 4rem;     /* 64px */
     
     /* Tipografía */
-    --font-family: 'Source Sans 3', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     --font-size-xs: 0.75rem;   /* 12px */
     --font-size-sm: 0.875rem;  /* 14px */
     --font-size-base: 1rem;    /* 16px */
@@ -96,41 +93,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Forzar tipografía Illumina en elementos Streamlit de TEXTO (sin afectar íconos) */
-.stApp > div,
-.stApp p,
-.stApp span:not([data-testid="stIconMaterial"]):not([data-testid="stIcon"]):not([data-testid="stExpanderToggleIcon"]):not([class*="material"]):not([class*="icon"]),
-.stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6,
-.stApp label,
-.stApp li,
-.stApp td, .stApp th,
-.stApp input, .stApp textarea, .stApp select,
-[data-testid="stSidebar"] p,
-[data-testid="stSidebar"] span:not([data-testid="stIconMaterial"]):not([data-testid="stIcon"]):not([data-testid="stExpanderToggleIcon"]):not([class*="material"]):not([class*="icon"]),
-[data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3,
-[data-testid="stSidebar"] label,
-[data-testid="stSidebar"] li,
-[data-testid="stSidebar"] td, [data-testid="stSidebar"] th,
-.stMarkdown,
-.stText,
-.stButton > button,
-.stSelectbox,
-.stRadio,
-.stMetricValue,
-.stMetricLabel,
-.stMetricDelta,
-div[data-testid="stMetricValue"],
-div[data-testid="stMetricLabel"],
-div[data-testid="stMetricDelta"],
-.stAlert,
-.stCaption,
-.stInfo,
-.stWarning,
-.stSuccess,
-.stError {
-    font-family: var(--font-family) !important;
-}
-
 /* ASEGURAR TEXTO NEGRO EN AUTOCOMPLETADO DEL NAVEGADOR */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -155,12 +117,10 @@ label,
    ============================================ */
 .stApp {
     background-color: #E8E8E8 !important;
-    font-family: var(--font-family) !important;
 }
 
 .main {
     background-color: #E8E8E8 !important;
-    font-family: var(--font-family) !important;
 }
 
 /* Eliminar todos los espacios superiores */
@@ -170,14 +130,12 @@ label,
     margin-top: 0 !important;
     max-width: 1400px !important;
     background-color: #E8E8E8 !important;
-    font-family: var(--font-family) !important;
 }
 
 section.main {
     padding-top: 0 !important;
     margin-top: 0 !important;
     background-color: #E8E8E8 !important;
-    font-family: var(--font-family) !important;
 }
 
 section.main > div,
@@ -535,7 +493,7 @@ div[data-testid="stForm"] {
 .stTextInput > div > div > input,
 .stNumberInput > div > div > input,
 .stNumberInput input {
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     border-radius: var(--radius-sm) !important;
     border: 1px solid var(--color-border) !important;
@@ -549,7 +507,7 @@ div[data-testid="stForm"] {
 .stNumberInput > div > div > input:hover,
 .stNumberInput input:hover {
     border-color: var(--color-primary) !important;
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
 }
 
@@ -559,7 +517,7 @@ div[data-testid="stForm"] {
     border-color: var(--color-primary) !important;
     box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
     outline: none !important;
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
 }
 
@@ -569,7 +527,7 @@ input[type="number"],
 input[type="email"],
 input[type="password"],
 input {
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     color: #2E2E2E !important;
 }
@@ -579,7 +537,7 @@ input {
 .stNumberInput input,
 div[data-testid="stTextInput"] input,
 div[data-testid="stNumberInput"] input {
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     color: #2E2E2E !important;
 }
@@ -591,7 +549,7 @@ div[data-testid="stNumberInput"] input {
 .stNumberInput > div > div,
 .stTextInput > div > div > div,
 .stNumberInput > div > div > div {
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
 }
 
@@ -605,7 +563,7 @@ div[data-testid="stNumberInput"] input {
 /* Input en focus */
 .stTextInput input:focus,
 .stNumberInput input:focus {
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     color: #2E2E2E !important;
 }
@@ -613,7 +571,7 @@ div[data-testid="stNumberInput"] input {
 /* Selectbox con fondo blanco y texto negro */
 .stSelectbox select,
 .stSelectbox div[role="button"] {
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     color: #2E2E2E !important;
 }
@@ -621,13 +579,13 @@ div[data-testid="stNumberInput"] input {
 /* Contenedores de number input con fondo blanco */
 .stNumberInput > div,
 .stNumberInput > div > div {
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
 }
 
 /* Botones de incremento/decremento del number input */
 .stNumberInput button {
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     color: #2E2E2E !important;
     border: none !important;
@@ -644,14 +602,14 @@ div[data-testid="stNumberInput"] input {
 }
 
 .stNumberInput > div > div {
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
 }
 
 /* Selectbox */
 .stSelectbox > div > div,
 .stSelectbox > div > div > div {
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     border-radius: var(--radius-sm) !important;
     border: 1px solid var(--color-border) !important;
@@ -661,14 +619,14 @@ div[data-testid="stNumberInput"] input {
 
 .stSelectbox > div > div:hover {
     border-color: var(--color-primary) !important;
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
 }
 
 .stSelectbox > div > div:focus-within {
     border-color: var(--color-primary) !important;
     box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
-    background: transparent !important;
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
 }
 
@@ -676,12 +634,12 @@ div[data-testid="stNumberInput"] input {
 .stSelectbox div[data-baseweb="select"] > div,
 .stSelectbox div[data-baseweb="select"] span {
     color: #2E2E2E !important;
-    background: transparent !important;
+    background: #FFFFFF !important;
 }
 
 /* Opciones del dropdown del selectbox */
 div[role="listbox"] {
-    background: transparent !important;
+    background: #FFFFFF !important;
     border: 1px solid var(--color-border) !important;
     border-radius: var(--radius-sm) !important;
     box-shadow: var(--shadow-md) !important;
@@ -689,7 +647,7 @@ div[role="listbox"] {
 
 div[role="option"] {
     color: #2E2E2E !important;
-    background: transparent !important;
+    background: #FFFFFF !important;
     padding: 0.75rem 1rem !important;
     transition: background-color var(--transition-fast) !important;
 }
@@ -706,38 +664,23 @@ div[role="option"][aria-selected="true"] {
 }
 
 /* Radio buttons y checkboxes */
-.stRadio {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-}
-
 .stRadio > label {
     color: var(--color-text-primary) !important;
     font-weight: 500 !important;
     font-size: var(--font-size-base) !important;
     margin-bottom: var(--space-sm) !important;
-    text-align: center !important;
-    width: 100% !important;
 }
 
 .stRadio > div {
-    background: transparent !important;
+    background: #FFFFFF !important;
     padding: 0.5rem !important;
     border-radius: var(--radius-sm) !important;
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
 }
 
 .stRadio > div[role="radiogroup"] {
     gap: 1rem !important;
     display: flex !important;
     flex-direction: row !important;
-    justify-content: center !important;
-    align-items: center !important;
-    flex-wrap: wrap !important;
-    width: 100% !important;
 }
 
 .stRadio > div[role="radiogroup"] > label {
@@ -751,23 +694,21 @@ div[role="option"][aria-selected="true"] {
     font-weight: 500 !important;
     min-width: 80px !important;
     text-align: center !important;
-    flex-grow: 0 !important;
-    flex-shrink: 0 !important;
 }
 
 .stRadio > div[role="radiogroup"] > label:hover {
-    border-color: var(--color-primary) !important;
+    border-color: #4CAF50 !important;
     background: #F5F5F5 !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 2px 8px rgba(43,135,209,0.15) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
 }
 
 .stRadio > div[role="radiogroup"] > label[data-checked="true"] {
-    background: var(--color-primary) !important;
-    border-color: var(--color-primary) !important;
+    background: #4CAF50 !important;
+    border-color: #4CAF50 !important;
     color: #FFFFFF !important;
     font-weight: 600 !important;
-    box-shadow: 0 2px 8px rgba(43, 135, 209, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3) !important;
 }
 
 /* Ocultar el círculo de radio nativo */
@@ -775,42 +716,9 @@ div[role="option"][aria-selected="true"] {
     display: none !important;
 }
 
-/* Centrar el contenedor del widget radio dentro de columnas */
-div[data-testid="column"] .stRadio {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
-}
-
-div[data-testid="column"] .stElementContainer,
-div[data-testid="column"] [data-testid="stElementContainer"] {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-}
-
-div[data-testid="stElementContainer"]:has(.stRadio) {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-}
-
-/* Forzar centrado en horizontal blocks (columnas de Streamlit) */
-div[data-testid="stHorizontalBlock"] {
-    align-items: center !important;
-}
-
-div[data-testid="column"] > div {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    width: 100% !important;
-}
-
 /* Contenedor de preguntas */
 .question-container {
-    background: transparent !important;
+    background: #FFFFFF !important;
     padding: 1rem 1.5rem !important;
     margin: 0.75rem 0 !important;
     border-radius: 8px !important;
@@ -819,76 +727,316 @@ div[data-testid="column"] > div {
 }
 
 .question-container:hover {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1) !important;
+}
+
+/* ============================================
+   10. NOTA DE CONFIDENCIALIDAD
+   ============================================ */
+.confidentiality-note {
+    background: linear-gradient(135deg, var(--color-surface-variant) 0%, #E9ECEF 100%);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    text-align: center;
+    border: 1px solid var(--color-border);
+    margin-top: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+    animation: fadeIn 1.2s ease-out;
+    color: var(--color-text-primary);
+}
+
+.confidentiality-note::before {
+    content: '🔒';
+    display: block;
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-sm);
+}
+
+.confidentiality-note p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin: var(--space-xs) 0;
+    line-height: 1.6;
+}
+
+/* ============================================
+   11. FORMULARIOS Y CONTROLES
+   ============================================ */
+
+/* Títulos de páginas */
+h1[class*="st-"] {
+    color: #2E2E2E !important;
+    font-size: var(--font-size-3xl) !important;
+    font-weight: 700 !important;
+    text-align: center;
+    margin-bottom: var(--space-lg) !important;
+}
+
+/* Subtítulos de secciones */
+h3[class*="st-"] {
+    color: #2E2E2E !important;
+    font-size: var(--font-size-xl) !important;
+    font-weight: 600 !important;
+    margin-top: var(--space-lg) !important;
+    margin-bottom: var(--space-md) !important;
+}
+
+/* Contenedor de formulario */
+div[data-testid="stForm"] {
+    background: var(--color-surface) !important;
+    padding: var(--space-xl) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-md) !important;
+    border: 1px solid var(--color-border) !important;
+    margin: var(--space-md) 0 !important;
+}
+
+/* Inputs de texto y selectores */
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input,
+.stNumberInput input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--color-border) !important;
+    transition: all var(--transition-fast) !important;
+    padding: 0.75rem 1rem !important;
+    font-size: var(--font-size-base) !important;
+    color: #2E2E2E !important;
+}
+
+.stTextInput > div > div > input:hover,
+.stNumberInput > div > div > input:hover,
+.stNumberInput input:hover {
     border-color: var(--color-primary) !important;
-    box-shadow: 0 2px 8px rgba(43, 135, 209, 0.1) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stNumberInput > div > div > input:focus,
+.stNumberInput input:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
+    outline: none !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* FORZAR FONDO BLANCO Y TEXTO NEGRO EN TODOS LOS INPUTS */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Inputs dentro de contenedores de Streamlit */
+.stTextInput input,
+.stNumberInput input,
+div[data-testid="stTextInput"] input,
+div[data-testid="stNumberInput"] input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Todos los divs que contienen inputs */
+.stTextInput > div,
+.stNumberInput > div,
+.stTextInput > div > div,
+.stNumberInput > div > div,
+.stTextInput > div > div > div,
+.stNumberInput > div > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Placeholder text */
+.stTextInput input::placeholder,
+.stNumberInput input::placeholder {
+    color: #999999 !important;
+    opacity: 0.7 !important;
+}
+
+/* Input en focus */
+.stTextInput input:focus,
+.stNumberInput input:focus {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Selectbox con fondo blanco y texto negro */
+.stSelectbox select,
+.stSelectbox div[role="button"] {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+}
+
+/* Contenedores de number input con fondo blanco */
+.stNumberInput > div,
+.stNumberInput > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Botones de incremento/decremento del number input */
+.stNumberInput button {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+    border: none !important;
+}
+
+.stNumberInput button:hover {
+    background: #F5F5F5 !important;
+    background-color: #F5F5F5 !important;
+}
+
+/* Forzar todos los elementos dentro de stNumberInput */
+.stNumberInput * {
+    background-color: transparent !important;
+}
+
+.stNumberInput > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Selectbox */
+.stSelectbox > div > div,
+.stSelectbox > div > div > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--color-border) !important;
+    transition: all var(--transition-fast) !important;
+    color: #2E2E2E !important;
+}
+
+.stSelectbox > div > div:hover {
+    border-color: var(--color-primary) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+.stSelectbox > div > div:focus-within {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(43, 135, 209, 0.1) !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Texto dentro del selectbox */
+.stSelectbox div[data-baseweb="select"] > div,
+.stSelectbox div[data-baseweb="select"] span {
+    color: #2E2E2E !important;
+    background: #FFFFFF !important;
+}
+
+/* Opciones del dropdown del selectbox */
+div[role="listbox"] {
+    background: #FFFFFF !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+div[role="option"] {
+    color: #2E2E2E !important;
+    background: #FFFFFF !important;
+    padding: 0.75rem 1rem !important;
+    transition: background-color var(--transition-fast) !important;
+}
+
+div[role="option"]:hover {
+    background: #F5F8FB !important;
+    background-color: #F5F8FB !important;
+}
+
+div[role="option"][aria-selected="true"] {
+    background: #E3F2FD !important;
+    background-color: #E3F2FD !important;
+    font-weight: 600 !important;
+}
+
+/* Radio buttons y checkboxes */
+.stRadio > label {
+    color: var(--color-text-primary) !important;
+    font-weight: 500 !important;
+    font-size: var(--font-size-base) !important;
+    margin-bottom: var(--space-sm) !important;
+}
+
+.stRadio > div {
+    background: #FFFFFF !important;
+    padding: 0.5rem !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+.stRadio > div[role="radiogroup"] {
+    gap: 1rem !important;
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.stRadio > div[role="radiogroup"] > label {
+    background: #FFFFFF !important;
+    padding: 0.75rem 1.5rem !important;
+    border: 2px solid #D1D1D1 !important;
+    border-radius: var(--radius-sm) !important;
+    cursor: pointer !important;
+    transition: all var(--transition-fast) !important;
+    color: #2E2E2E !important;
+    font-weight: 500 !important;
+    min-width: 80px !important;
+    text-align: center !important;
+}
+
+.stRadio > div[role="radiogroup"] > label:hover {
+    border-color: #4CAF50 !important;
+    background: #F5F5F5 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+.stRadio > div[role="radiogroup"] > label[data-checked="true"] {
+    background: #4CAF50 !important;
+    border-color: #4CAF50 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3) !important;
+}
+
+/* Ocultar el círculo de radio nativo */
+.stRadio input[type="radio"] {
+    display: none !important;
+}
+
+/* Contenedor de preguntas */
+.question-container {
+    background: #FFFFFF !important;
+    padding: 1rem 1.5rem !important;
+    margin: 0.75rem 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid #E0E0E0 !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.question-container:hover {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1) !important;
 }
 
 /* ============================================
    13. ANIMACIONES
    ============================================ */
-
-/* FORZAR TIPOGRAFÍA SOURCE SANS 3 EN MÉTRICAS Y WIDGETS */
-[data-testid="stMetric"],
-[data-testid="stMetricValue"],
-[data-testid="stMetricLabel"],
-[data-testid="stMetricDelta"],
-[data-testid="stMetric"] [data-testid="stMetricValue"],
-[data-testid="stMetric"] [data-testid="stMetricLabel"],
-[data-testid="stMetric"] [data-testid="stMetricDelta"],
-.stMetric,
-[data-testid="stCaptionContainer"],
-[data-testid="stCaptionContainer"] p,
-.stAlert p,
-div[data-testid="stMarkdownContainer"] p,
-div[data-testid="stMarkdownContainer"] span:not([data-testid="stIconMaterial"]):not([data-testid="stIcon"]):not([data-testid="stExpanderToggleIcon"]):not([class*="material"]):not([class*="icon"]),
-div[data-testid="stMarkdownContainer"] h1,
-div[data-testid="stMarkdownContainer"] h2,
-div[data-testid="stMarkdownContainer"] h3,
-div[data-testid="stMarkdownContainer"] h4,
-div[data-testid="stMarkdownContainer"] h5,
-div[data-testid="stMarkdownContainer"] h6,
-div[data-testid="stMarkdownContainer"] li,
-div[data-testid="stMarkdownContainer"] td,
-div[data-testid="stMarkdownContainer"] th,
-div[data-testid="stMarkdownContainer"] label,
-.stSuccess p,
-.stInfo p,
-.stWarning p,
-.stError p {
-    font-family: 'Source Sans 3', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
-}
-
-/* Valor del metric (el número grande) */
-[data-testid="stMetricValue"] {
-    font-family: 'Source Sans 3', 'Source Sans Pro', sans-serif !important;
-    font-weight: 700 !important;
-    color: #2E2E2E !important;
-}
-
-/* Label del metric */
-[data-testid="stMetricLabel"] {
-    font-family: 'Source Sans 3', 'Source Sans Pro', sans-serif !important;
-    font-weight: 500 !important;
-    color: #666 !important;
-}
-
-/* Captions */
-[data-testid="stCaptionContainer"] p {
-    font-family: 'Source Sans 3', 'Source Sans Pro', sans-serif !important;
-}
-
-/* Tabs */
-button[data-baseweb="tab"],
-[role="tablist"] button {
-    font-family: 'Source Sans 3', 'Source Sans Pro', sans-serif !important;
-}
-
-/* Toggle */
-.stCheckbox label span,
-.stToggle label span {
-    font-family: 'Source Sans 3', 'Source Sans Pro', sans-serif !important;
-}
-
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -1123,29 +1271,29 @@ button[data-baseweb="tab"],
 
 /* Additional CSS variables used by ANXRISK components */
 :root {
-    --primary:        #2B87D1;
-    --primary-light:  #64B5F6;
-    --primary-soft:   #BBDEFB;
-    --primary-hover:  #1F6DB5;
-    --surface:        #E8E8E8;
+    --primary:        #D4911D;
+    --primary-light:  #E8A832;
+    --primary-soft:   #FDE8C4;
+    --primary-hover:  #B87A14;
+    --surface:        #F0EDEA;
     --surface-card:   #FFFFFF;
-    --text-primary:   #2E2E2E;
-    --text-secondary: #666666;
-    --border:         #D1D1D1;
-    --border-focus:   #2B87D1;
+    --text-primary:   #2D2D2D;
+    --text-secondary: #6B6B6B;
+    --border:         #D4D0CC;
+    --border-focus:   #D4911D;
     --success:        #059669;
     --success-bg:     rgba(5, 150, 105, 0.10);
     --warning:        #D97706;
     --warning-bg:     rgba(217, 119, 6, 0.10);
     --danger:         #DC2626;
     --danger-bg:      rgba(220, 38, 38, 0.10);
-    --info:           #2196F3;
-    --info-bg:        rgba(33, 150, 243, 0.10);
-    --accent:         #2B87D1;
+    --info:           #4A90C4;
+    --info-bg:        rgba(74, 144, 196, 0.10);
+    --accent:         #D4911D;
     --accent-genetic: #7C3AED;
     --accent-genetic-bg: rgba(124, 58, 237, 0.08);
     --shadow-hover:   0 4px 12px rgba(0,0,0,0.08);
-    --font-sans:      'Source Sans 3', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-sans:      'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono:      'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
     --ease:           0.2s ease;
     --ease-slow:      0.35s ease;
@@ -1208,7 +1356,7 @@ button[data-baseweb="tab"],
     border-radius: 28px;
     box-shadow:
         0 12px 40px rgba(0, 0, 0, 0.25),
-        0 0 0 1px rgba(43, 135, 209, 0.25),
+        0 0 0 1px rgba(212, 145, 29, 0.15),
         inset 0 1px 0 rgba(255,255,255,0.05);
     position: relative;
     overflow: hidden;
@@ -1221,7 +1369,7 @@ button[data-baseweb="tab"],
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(ellipse at 30% 20%, rgba(43, 135, 209, 0.12) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 30% 20%, rgba(212, 145, 29, 0.08) 0%, transparent 60%);
     pointer-events: none;
 }
 
@@ -1280,7 +1428,7 @@ button[data-baseweb="tab"],
     width: 48px;
     height: 48px;
     margin: 0 auto var(--space-4);
-    background: rgba(43, 135, 209, 0.10);
+    background: rgba(212, 145, 29, 0.08);
     border-radius: var(--radius-md, 12px);
     display: flex;
     align-items: center;
@@ -1654,25 +1802,4 @@ button[data-baseweb="tab"],
     .anxrisk-result-header {
         padding: var(--space-6);
     }
-}
-
-/* ============================================
-   FIX: Restaurar fuente de íconos Material Symbols
-   (Streamlit usa icon-font para flechas de expander,
-    toggles, selectbox, etc. — NUNCA sobreescribir)
-   ============================================ */
-.stApp [data-testid="stExpanderToggleIcon"],
-.stApp [data-testid="stExpanderToggleIcon"] *,
-.stApp [data-testid="stIcon"],
-.stApp [data-testid="stIcon"] *,
-.stApp [data-testid="stIconMaterial"],
-.stApp [data-testid="stIconMaterial"] *,
-.stApp span[class*="material-symbols"],
-.stApp span[class*="material-icons"],
-.stApp [data-testid="stExpander"] summary span[class*="material"],
-[data-testid="stSidebar"] [data-testid="stIcon"],
-[data-testid="stSidebar"] [data-testid="stIcon"] *,
-[data-testid="stSidebar"] [data-testid="stIconMaterial"],
-[data-testid="stSidebar"] [data-testid="stIconMaterial"] * {
-    font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Icons', sans-serif !important;
 }

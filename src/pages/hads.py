@@ -18,12 +18,12 @@ def mostrar_hads():
     st.markdown("""
     <div class="anxrisk-card">
         <h3>¿Por qué evaluamos la ansiedad con HADS?</h3>
-        <p style="margin-bottom: 0.75rem;">
+        <p style="margin-bottom: 0.75rem; text-align: center;">
             La <strong>Escala HADS (Hospital Anxiety and Depression Scale)</strong> es una herramienta clínica validada
             internacionalmente que evalúa la presencia y severidad de síntomas de ansiedad. Esta escala se enfoca en
             manifestaciones emocionales y psicológicas de la ansiedad, complementando otras evaluaciones.
         </p>
-        <p style="margin-bottom: 0.75rem;">
+        <p style="margin-bottom: 0.75rem; text-align: center;">
             Los resultados nos ayudan a comprender la intensidad de sus síntomas ansiosos y su impacto en su vida diaria.
         </p>
         <p style="font-size: 0.9375rem; color: var(--text-secondary); font-style: italic; text-align: center; margin-bottom: 0.5rem;">

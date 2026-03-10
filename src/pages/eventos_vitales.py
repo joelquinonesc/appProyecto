@@ -18,12 +18,12 @@ def mostrar_eventos_vitales():
     st.markdown("""
     <div class="anxrisk-card">
         <h3>Contexto clínico</h3>
-        <p style="margin-bottom: 0.75rem;">
+        <p style="margin-bottom: 0.75rem; text-align: center;">
             Los eventos estresantes recientes pueden precipitar o agravar síntomas de ansiedad,
             según el modelo <strong>diathesis-stress</strong>. Evaluarlos ayuda a personalizar
             intervenciones y prevenir cronificación.
         </p>
-        <p style="margin-bottom: 0.75rem;">
+        <p style="margin-bottom: 0.75rem; text-align: center;">
             La <strong>Lista de Experiencias Amenazantes (LTE-12)</strong> mide 12 eventos
             comunes con impacto a largo plazo.
         </p>

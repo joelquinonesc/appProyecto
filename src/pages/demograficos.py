@@ -34,13 +34,24 @@ def mostrar_demograficos():
         datos = st.session_state["datos_demograficos"]
         st.success("Datos demográficos registrados correctamente")
 
+        _METRIC_CARD = """
+        <div style="background:#FFF; padding:1rem 1.25rem; border-radius:8px;
+                    border-left:3px solid #2B87D1; margin-bottom:0.75rem;
+                    box-shadow:0 1px 4px rgba(0,0,0,.06);">
+            <p style="color:#666; margin:0 0 0.25rem; font-size:0.85rem;
+                      font-family:'Source Sans 3','Source Sans Pro',sans-serif;">{label}</p>
+            <p style="color:#2E2E2E; margin:0; font-size:1.4rem; font-weight:700;
+                      font-family:'Source Sans 3','Source Sans Pro',sans-serif;">{value}</p>
+        </div>
+        """
+
         col1, col2 = st.columns(2)
         with col1:
-            st.metric(label="Nombre", value=datos['nombre'])
-            st.metric(label="Edad", value=f"{datos['edad']} años")
+            st.markdown(_METRIC_CARD.format(label="Nombre", value=datos['nombre']), unsafe_allow_html=True)
+            st.markdown(_METRIC_CARD.format(label="Edad", value=f"{datos['edad']} años"), unsafe_allow_html=True)
         with col2:
-            st.metric(label="Género", value=datos['genero'])
-            st.metric(label="Educación", value=f"{datos['años_educacion']} años")
+            st.markdown(_METRIC_CARD.format(label="Género", value=datos['genero']), unsafe_allow_html=True)
+            st.markdown(_METRIC_CARD.format(label="Educación", value=f"{datos['años_educacion']} años"), unsafe_allow_html=True)
 
         # Mostrar datos del profesional evaluador si fueron ingresados
         prof_nombre = st.session_state.get('_prof_nombre', '') or st.session_state.get('prof_nombre', '')
@@ -48,18 +59,18 @@ def mostrar_demograficos():
         prof_institucion = st.session_state.get('_prof_institucion', '') or st.session_state.get('prof_institucion', '')
         prof_tp = st.session_state.get('_prof_tp', '') or st.session_state.get('prof_tp', '')
         if any([prof_nombre, prof_cargo, prof_institucion, prof_tp]):
-            st.markdown("##### 👨‍⚕️ Profesional Evaluador")
+            st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem; font-family:\"Source Sans 3\",sans-serif;'>👨‍⚕️ Profesional Evaluador</h4>", unsafe_allow_html=True)
             pcol1, pcol2 = st.columns(2)
             with pcol1:
                 if prof_nombre:
-                    st.metric(label="Profesional", value=prof_nombre)
+                    st.markdown(_METRIC_CARD.format(label="Profesional", value=prof_nombre), unsafe_allow_html=True)
                 if prof_cargo:
-                    st.metric(label="Cargo / Especialidad", value=prof_cargo)
+                    st.markdown(_METRIC_CARD.format(label="Cargo / Especialidad", value=prof_cargo), unsafe_allow_html=True)
             with pcol2:
                 if prof_institucion:
-                    st.metric(label="Institución", value=prof_institucion)
+                    st.markdown(_METRIC_CARD.format(label="Institución", value=prof_institucion), unsafe_allow_html=True)
                 if prof_tp:
-                    st.metric(label="Tarjeta Profesional", value=prof_tp)
+                    st.markdown(_METRIC_CARD.format(label="Tarjeta Profesional", value=prof_tp), unsafe_allow_html=True)
 
         st.markdown("---")
 
