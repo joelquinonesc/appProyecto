@@ -876,27 +876,34 @@ def generar_pdf_resultados(resultados, registro):
         "No sustituye la valoración profesional.", norm_s,
     ))
 
-    # ══════════ FIRMA DEL PSIQUIATRA QUE VALIDA ══════════
+    # ══════════ FIRMA DEL PROFESIONAL Y PACIENTE ══════════
     elems.append(Spacer(1, 1.2 * inch))
     elems.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#CCC'), spaceAfter=15))
 
     fecha_firma = datetime.now().strftime('%d/%m/%Y')
+
+    # Datos del profesional desde session_state (capturados en Home)
+    datos_prof = st.session_state.get('datos_profesional', {})
+    nombre_prof = datos_prof.get('nombre', '____________________')
+    cedula_prof = datos_prof.get('cedula', '_______________')
+
+    # Nombre del paciente
+    nombre_paciente = registro.get('nombre', '____________________') if registro else '____________________'
+
     firma_data = [
-        [""],
-        ["_________________________"],
-        ["Firma del Psiquiatra"],
-        [""],
-        ["Nombre: Breyner Joel Quiñones Castro"],
-        ["Cédula Prof.: _______________"],
-        [f"Fecha: {fecha_firma}"],
+        ["", ""],
+        ["_________________________", "_________________________"],
+        ["Firma del Profesional", "Firma del Paciente"],
+        [f"Nombre: {nombre_prof}", f"Nombre: {nombre_paciente}"],
+        [f"Cédula Prof.: {cedula_prof}", "Documento: __________________"],
+        [f"Fecha: {fecha_firma}", f"Fecha: {fecha_firma}"],
     ]
-    ft = Table(firma_data, colWidths=[300])
+    ft = Table(firma_data, colWidths=[240, 240])
     ft.setStyle(TableStyle([
         ('ALIGN',   (0, 0), (-1, -1), 'CENTER'),
         ('VALIGN',  (0, 0), (-1, -1), 'TOP'),
         ('FONTSIZE', (0, 0), (-1, -1), 9),
-        ('FONTNAME', (0, 2), (0, 2), 'Helvetica-Bold'),
-        ('FONTNAME', (0, 4), (0, 4), 'Helvetica-Bold'),
+        ('FONTNAME', (0, 2), (-1, 2), 'Helvetica-Bold'),
         ('TOPPADDING',    (0, 0), (-1, -1), 4),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
         ('TEXTCOLOR', (0, 0), (-1, -1), C_TXT),
