@@ -4,8 +4,8 @@
 # scikit-learn fijado para reproducibilidad de métricas (Patente §0022)
 # Demás paquetes con versión mínima compatible
 
-# Framework principal
-streamlit>=1.29.0
+# Framework principal — fijado para consistencia visual con CSS personalizado
+streamlit==1.29.0
 
 # Análisis de datos
 pandas>=2.1.0
