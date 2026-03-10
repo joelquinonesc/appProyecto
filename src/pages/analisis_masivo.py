@@ -13,14 +13,12 @@ from src.config import (
     FEATURES_STANDARD,
     FEATURES_EXTENDED,
     GENOTIPOS_PRKCA,
-    GENOTIPOS_TCF4,
     GENOTIPOS_CDH20,
     THRESHOLD_LOW,
     THRESHOLD_HIGH,
 )
 from src.utils.calculos import (
     transformar_edad_a_grupo,
-    transformar_educacion_a_binaria,
     transformar_lte12_a_clasificacion,
     transformar_sf12_fisica_a_cuartil,
     transformar_sf12_mental_a_cuartil,
@@ -57,14 +55,12 @@ def mostrar_analisis_masivo():
         'nombre': ['Juan Pérez', 'María García', 'Carlos López'],
         'edad': [45, 38, 52],
         'genero': ['Masculino', 'Femenino', 'Masculino'],
-        'años_educacion': [12, 16, 14],
         'hads_score': [8, 5, 12],
         'zsas_score': [42, 28, 55],
         'sf12_fisica': [35.5, 48.2, 32.1],
         'sf12_mental': [42.1, 50.3, 38.5],
         'lte12_count': [3, 1, 4],
         'prkca': ['C/T', 'T/T', ''],
-        'tcf4': ['A/T', 'A/A', ''],
         'cdh20': ['G/A', 'G/G', '']
     })
 
@@ -83,20 +79,18 @@ def mostrar_analisis_masivo():
         | **nombre** | Nombre completo del paciente |
         | **edad** | Edad en años (1–120) |
         | **genero** | Masculino o Femenino |
-        | **años_educacion** | Años de educación formal |
         | **hads_score** | Puntuación HADS (0–42, >8 indica riesgo) |
         | **zsas_score** | Puntuación ZSAS (20–80, >36 indica riesgo) |
         | **sf12_fisica** | Puntuación SF-12 Física (0–100) |
         | **sf12_mental** | Puntuación SF-12 Mental (0–100) |
         | **lte12_count** | Eventos vitales estresantes (0–12) |
         | **prkca** | *(opcional)* Genotipo: T/T, C/T, C/C |
-        | **tcf4** | *(opcional)* Genotipo: A/A, A/T, T/T |
         | **cdh20** | *(opcional)* Genotipo: A/A, A/G, G/G |
         """)
         st.markdown("""
         <div class="anxrisk-note">
-            <p>Si las columnas genéticas están vacías o contienen "N/A", se usa el <strong>modelo estándar (13 features)</strong>.
-            Si contienen valores válidos, se usa el <strong>modelo extendido (22 features)</strong>.</p>
+            <p>Si las columnas genéticas están vacías o contienen "N/A", se usa el <strong>modelo estándar (12 features)</strong>.
+            Si contienen valores válidos, se usa el <strong>modelo extendido (18 features)</strong>.</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -135,7 +129,7 @@ def mostrar_analisis_masivo():
             df = pd.read_csv(uploaded_file)
 
             columnas_requeridas = [
-                'nombre', 'edad', 'genero', 'años_educacion', 'hads_score',
+                'nombre', 'edad', 'genero', 'hads_score',
                 'zsas_score', 'sf12_fisica', 'sf12_mental', 'lte12_count'
             ]
             columnas_faltantes = [col for col in columnas_requeridas if col not in df.columns]
@@ -187,7 +181,6 @@ def mostrar_analisis_masivo():
                     tiene_gen = _paciente_tiene_genetica(row)
 
                     edad24 = transformar_edad_a_grupo(int(row['edad']))
-                    aefgroups = transformar_educacion_a_binaria(int(row['años_educacion']))
 
                     lte12_clasif = transformar_lte12_a_clasificacion(int(row['lte12_count']))
                     lte12_0 = 1 if lte12_clasif == 0 else 0
@@ -210,34 +203,29 @@ def mostrar_analisis_masivo():
                         'Paciente': row['nombre'],
                         'Modelo': 'Extendido' if tiene_gen else 'Estándar',
                         '1-EDAD24': edad24,
-                        '2-AEFGROUPS': aefgroups,
-                        '3-LTE12_0': lte12_0,
-                        '4-LTE12_1': lte12_1,
-                        '5-LTE12_2': lte12_2,
-                        '6-SF12F_Q1': sf12f_q1,
-                        '7-SF12F_Q2': sf12f_q2,
-                        '8-SF12F_Q3': sf12f_q3,
-                        '9-SF12F_Q4': sf12f_q4,
-                        '10-SF12M_Q1': sf12m_q1,
-                        '11-SF12M_Q2': sf12m_q2,
-                        '12-SF12M_Q3': sf12m_q3,
-                        '13-SF12M_Q4': sf12m_q4,
+                        '2-LTE12_0': lte12_0,
+                        '3-LTE12_1': lte12_1,
+                        '4-LTE12_2': lte12_2,
+                        '5-SF12F_Q1': sf12f_q1,
+                        '6-SF12F_Q2': sf12f_q2,
+                        '7-SF12F_Q3': sf12f_q3,
+                        '8-SF12F_Q4': sf12f_q4,
+                        '9-SF12M_Q1': sf12m_q1,
+                        '10-SF12M_Q2': sf12m_q2,
+                        '11-SF12M_Q3': sf12m_q3,
+                        '12-SF12M_Q4': sf12m_q4,
                     }
 
                     if tiene_gen:
                         prkca_val = str(row.get('prkca', ''))
-                        tcf4_val = str(row.get('tcf4', ''))
                         cdh20_val = str(row.get('cdh20', ''))
                         feat.update({
-                            '14-PRKCA_C/C': 1 if prkca_val == 'C/C' else 0,
-                            '15-PRKCA_C/T': 1 if prkca_val == 'C/T' else 0,
-                            '16-PRKCA_T/T': 1 if prkca_val == 'T/T' else 0,
-                            '17-TCF4_A/A': 1 if tcf4_val == 'A/A' else 0,
-                            '18-TCF4_A/T': 1 if tcf4_val == 'A/T' else 0,
-                            '19-TCF4_T/T': 1 if tcf4_val == 'T/T' else 0,
-                            '20-CDH20_A/A': 1 if cdh20_val == 'A/A' else 0,
-                            '21-CDH20_A/G': 1 if cdh20_val in ('A/G', 'G/A') else 0,
-                            '22-CDH20_G/G': 1 if cdh20_val == 'G/G' else 0,
+                            '13-PRKCA_C/C': 1 if prkca_val == 'C/C' else 0,
+                            '14-PRKCA_C/T': 1 if prkca_val == 'C/T' else 0,
+                            '15-PRKCA_T/T': 1 if prkca_val == 'T/T' else 0,
+                            '16-CDH20_A/A': 1 if cdh20_val == 'A/A' else 0,
+                            '17-CDH20_A/G': 1 if cdh20_val in ('A/G', 'G/A') else 0,
+                            '18-CDH20_G/G': 1 if cdh20_val == 'G/G' else 0,
                         })
 
                     features_detallados.append(feat)
@@ -247,29 +235,27 @@ def mostrar_analisis_masivo():
 
                 with st.expander("Explicación de los Features"):
                     st.markdown("""
-                    **Binarias Transformadas (2):**
+                    **Binaria Transformada (1):**
                     - 1: **EDAD24** — 0 si edad ≤ 24 años, 1 si edad > 24
-                    - 2: **AEFGROUPS** — 0 si años educación ≤ 14, 1 si ≥ 15
 
                     **LTE-12 (3 features one-hot):**
-                    - 3: **LTE12_0** — 1 si 0 eventos estresantes
-                    - 4: **LTE12_1** — 1 si 1 evento estresante
-                    - 5: **LTE12_2** — 1 si 2 o más eventos estresantes
+                    - 2: **LTE12_0** — 1 si 0 eventos estresantes
+                    - 3: **LTE12_1** — 1 si 1 evento estresante
+                    - 4: **LTE12_2** — 1 si 2 o más eventos estresantes
 
                     **SF-12 Física (4 features one-hot):**
-                    - 6–9: **SF12F_Q1 a Q4** — Cuartiles según umbrales:
+                    - 5–8: **SF12F_Q1 a Q4** — Cuartiles según umbrales:
                       Q1: ≤15 | Q2: 15<x≤17 | Q3: 17<x≤19 | Q4: >19
 
                     **SF-12 Mental (4 features one-hot):**
-                    - 10–13: **SF12M_Q1 a Q4** — Cuartiles según umbrales:
+                    - 9–12: **SF12M_Q1 a Q4** — Cuartiles según umbrales:
                       Q1: ≤15 | Q2: ≤18 | Q3: ≤21 | Q4: ≥22
 
                     **Panel Genético *(solo modelo extendido)*:**
-                    - 14–16: **PRKCA** — C/C, C/T, T/T (one-hot)
-                    - 17–19: **TCF4** — A/A, A/T, T/T (one-hot)
-                    - 20–22: **CDH20** — A/A, A/G, G/G (one-hot)
+                    - 13–15: **PRKCA** — C/C, C/T, T/T (one-hot)
+                    - 16–18: **CDH20** — A/A, A/G, G/G (one-hot)
 
-                    **Modelo Estándar: 13 Features** | **Modelo Extendido: 22 Features**
+                    **Modelo Estándar: 12 Features** | **Modelo Extendido: 18 Features**
                     """)
 
                 # Statistics
@@ -322,8 +308,8 @@ def mostrar_analisis_masivo():
                     from scripts.shap_integration_masivo import main_shap_integration
 
                     shap_result = main_shap_integration(
-                        df[['nombre', 'edad', 'años_educacion', 'lte12_count',
-                            'sf12_fisica', 'sf12_mental', 'prkca', 'tcf4', 'cdh20']]
+                        df[['nombre', 'edad',  'lte12_count',
+                            'sf12_fisica', 'sf12_mental', 'prkca', 'cdh20']]
                     )
                     shap_progress.progress(100)
 
@@ -405,7 +391,7 @@ def mostrar_analisis_masivo():
 
 def _paciente_tiene_genetica(row):
     """Detecta si un registro CSV tiene datos genéticos válidos."""
-    for col in ('prkca', 'tcf4', 'cdh20'):
+    for col in ('prkca', 'cdh20'):
         val = str(row.get(col, '')).strip()
         if val == '' or val.lower() in ('n/a', 'na', 'nan', 'none', '-'):
             return False
@@ -423,7 +409,6 @@ def calcular_riesgo_paciente(row):
         tiene_gen = _paciente_tiene_genetica(row)
 
         edad24 = transformar_edad_a_grupo(int(row['edad']))
-        aefgroups = transformar_educacion_a_binaria(int(row['años_educacion']))
 
         lte12_clasif = transformar_lte12_a_clasificacion(int(row['lte12_count']))
         lte12_0 = 1 if lte12_clasif == 0 else 0
@@ -443,7 +428,7 @@ def calcular_riesgo_paciente(row):
         sf12m_q4 = 1 if sf12m_cuartil == 4 else 0
 
         base_features = [
-            edad24, aefgroups,
+            edad24,
             lte12_0, lte12_1, lte12_2,
             sf12f_q1, sf12f_q2, sf12f_q3, sf12f_q4,
             sf12m_q1, sf12m_q2, sf12m_q3, sf12m_q4,
@@ -451,16 +436,12 @@ def calcular_riesgo_paciente(row):
 
         if tiene_gen:
             prkca_val = str(row['prkca']).strip()
-            tcf4_val = str(row['tcf4']).strip()
             cdh20_val = str(row['cdh20']).strip()
 
             gen_features = [
                 1 if prkca_val == 'C/C' else 0,
                 1 if prkca_val == 'C/T' else 0,
                 1 if prkca_val == 'T/T' else 0,
-                1 if tcf4_val == 'A/A' else 0,
-                1 if tcf4_val == 'A/T' else 0,
-                1 if tcf4_val == 'T/T' else 0,
                 1 if cdh20_val == 'A/A' else 0,
                 1 if cdh20_val in ('A/G', 'G/A') else 0,
                 1 if cdh20_val == 'G/G' else 0,
@@ -490,7 +471,6 @@ def calcular_riesgo_paciente(row):
             'nombre': row['nombre'],
             'edad': int(row['edad']),
             'genero': row['genero'],
-            'años_educacion': int(row['años_educacion']),
             'hads_score': float(row['hads_score']),
             'zsas_score': float(row['zsas_score']),
             'sf12_fisica': float(row['sf12_fisica']),
@@ -503,11 +483,9 @@ def calcular_riesgo_paciente(row):
 
         if tiene_gen:
             resultado['prkca'] = str(row['prkca'])
-            resultado['tcf4'] = str(row['tcf4'])
             resultado['cdh20'] = str(row['cdh20'])
         else:
             resultado['prkca'] = 'N/A'
-            resultado['tcf4'] = 'N/A'
             resultado['cdh20'] = 'N/A'
 
         return resultado
@@ -518,14 +496,12 @@ def calcular_riesgo_paciente(row):
             'nombre': row.get('nombre', 'Error'),
             'edad': row.get('edad', 0),
             'genero': row.get('genero', 'Desconocido'),
-            'años_educacion': row.get('años_educacion', 0),
             'hads_score': row.get('hads_score', 0),
             'zsas_score': row.get('zsas_score', 0),
             'sf12_fisica': row.get('sf12_fisica', 0),
             'sf12_mental': row.get('sf12_mental', 0),
             'lte12_count': row.get('lte12_count', 0),
             'prkca': row.get('prkca', 'N/A'),
-            'tcf4': row.get('tcf4', 'N/A'),
             'cdh20': row.get('cdh20', 'N/A'),
             'riesgo_predicho': 0.0,
             'categoria_riesgo': 'Error',

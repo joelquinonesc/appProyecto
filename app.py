@@ -104,15 +104,15 @@ def _pagina_completada(pagina):
 # Brand
 st.sidebar.markdown("""
 <div class="anxrisk-sidebar-brand">
-    <div style="width: 52px; height: 52px; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center; background: #FFFFFF; border-radius: 14px; border: 1px solid rgba(0,51,160,0.12); box-shadow: 0 4px 16px rgba(0,51,160,0.1);">
+    <div style="width: 52px; height: 52px; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 0 20px rgba(0,180,216,0.2);">
         <svg width="32" height="32" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
             <text x="36" y="54" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif"
-                  font-size="50" font-weight="bold" fill="#0033A0" letter-spacing="-2">A</text>
+                  font-size="50" font-weight="bold" fill="#00B4D8" letter-spacing="-2">A</text>
             <polyline points="6,36 18,36 22,28 27,44 32,24 37,48 42,28 47,44 52,36 66,36"
-                      stroke="#00B4D8" stroke-width="2.2" stroke-linecap="round"
-                      stroke-linejoin="round" fill="none" opacity="0.9"/>
-            <circle cx="32" cy="24" r="2" fill="#00B4D8" opacity="0.8"/>
-            <circle cx="37" cy="48" r="2" fill="#00B4D8" opacity="0.8"/>
+                      stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"
+                      stroke-linejoin="round" fill="none" opacity="0.85"/>
+            <circle cx="32" cy="24" r="2" fill="#00E5FF" opacity="0.8"/>
+            <circle cx="37" cy="48" r="2" fill="#00E5FF" opacity="0.8"/>
         </svg>
     </div>
     <h1>ANXRISK</h1>

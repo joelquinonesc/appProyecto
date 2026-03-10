@@ -17,7 +17,6 @@ def inicializar_dataframe():
             'nombre',
             'edad',
             'grupo_edad',
-            'educacion_binaria',
             'lte12_clasificacion',
             'sf12_fisica_cuartil',
             'sf12_fisica_cuartil_label',
@@ -28,7 +27,6 @@ def inicializar_dataframe():
             'hads_zsas_clasificacion',
             'genero',
             'genero_binario',
-            'años_educacion',
             'lte12_puntaje',
             'sf12_fisica',
             'sf12_mental',
@@ -36,7 +34,6 @@ def inicializar_dataframe():
             'hads_depresion',
             'zsas_puntaje',
             'gen_prkca',
-            'gen_tcf4',
             'gen_cdh20'
         ])
         # Sincronizar etiquetas de cuartiles SF-12 si existen puntajes numéricos previos
@@ -70,7 +67,6 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
             'nombre': None,
             'edad': None,
             'grupo_edad': None,
-            'educacion_binaria': None,
             'lte12_clasificacion': None,
             'sf12_fisica_cuartil': None,
             'sf12_fisica_cuartil_label': None,
@@ -79,7 +75,6 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
             'hads_zsas_clasificacion': None,
             'genero': None,
             'genero_binario': None,
-            'años_educacion': None,
             'lte12_puntaje': None,
             'sf12_fisica': None,
             'sf12_mental': None,
@@ -87,7 +82,6 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
             'hads_depresion': None,
             'zsas_puntaje': None,
             'gen_prkca': None,
-            'gen_tcf4': None,
             'gen_cdh20': None
         }
         st.session_state['df_pacientes'] = pd.concat(
@@ -103,10 +97,8 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
         st.session_state['df_pacientes'].at[idx, 'nombre'] = datos.get('nombre')
         st.session_state['df_pacientes'].at[idx, 'edad'] = datos.get('edad')
         st.session_state['df_pacientes'].at[idx, 'grupo_edad'] = datos.get('grupo_edad')
-        st.session_state['df_pacientes'].at[idx, 'educacion_binaria'] = datos.get('educacion_binaria')
         st.session_state['df_pacientes'].at[idx, 'genero'] = datos.get('genero')
         st.session_state['df_pacientes'].at[idx, 'genero_binario'] = datos.get('genero_binario')
-        st.session_state['df_pacientes'].at[idx, 'años_educacion'] = datos.get('años_educacion')
     
     elif tipo_datos == 'eventos_vitales':
         st.session_state['df_pacientes'].at[idx, 'lte12_puntaje'] = datos.get('puntaje_total')
@@ -182,7 +174,6 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
     
     elif tipo_datos == 'geneticos':
         st.session_state['df_pacientes'].at[idx, 'gen_prkca'] = datos.get('prkca')
-        st.session_state['df_pacientes'].at[idx, 'gen_tcf4'] = datos.get('tcf4')
         st.session_state['df_pacientes'].at[idx, 'gen_cdh20'] = datos.get('cdh20')
 
 
@@ -272,19 +263,17 @@ def exportar_dataframe_csv():
     df = obtener_dataframe()
     # Renombrar columnas para exportación
     rename_dict = {
-        'años_educacion': 'AEFGROUPS',
         'lte12_puntaje': 'LTE12',
         'sf12_fisica_cuartil_label': 'SF12F',
         'sf12_mental_cuartil_label': 'SF12M',
         'gen_prkca': 'PRKCA',
-        'gen_tcf4': 'TCF4',
         'gen_cdh20': 'CDH20',
         'grupo_edad': 'edad24',
         'genero': 'genero',
     }
     df = df.rename(columns=rename_dict)
     # Seleccionar solo las columnas finales
-    columnas_finales = ['timestamp', 'nombre', 'genero', 'edad24', 'AEFGROUPS', 'LTE12', 'SF12F', 'SF12M', 'PRKCA', 'TCF4', 'CDH20']
+    columnas_finales = ['timestamp', 'nombre', 'genero', 'edad24', 'LTE12', 'SF12F', 'SF12M', 'PRKCA', 'CDH20']
     df = df[columnas_finales]
     return df.to_csv(index=False).encode('utf-8')
 
@@ -298,12 +287,10 @@ def mostrar_dataframe_actual():
     if len(df) > 0:
         # Renombrar columnas según los requerimientos finales
         rename_dict = {
-            'años_educacion': 'AEFGROUPS',
             'lte12_puntaje': 'LTE12',
             'sf12_fisica_cuartil_label': 'SF12F',
             'sf12_mental_cuartil_label': 'SF12M',
             'gen_prkca': 'PRKCA',
-            'gen_tcf4': 'TCF4',
             'gen_cdh20': 'CDH20',
             'grupo_edad': 'edad24',
             'genero': 'genero',  # Cambiar a genero
@@ -311,7 +298,7 @@ def mostrar_dataframe_actual():
         df = df.rename(columns=rename_dict)
         
         # Seleccionar solo las columnas finales deseadas
-        columnas_finales = ['timestamp', 'nombre', 'genero', 'edad24', 'AEFGROUPS', 'LTE12', 'SF12F', 'SF12M', 'PRKCA', 'TCF4', 'CDH20']
+        columnas_finales = ['timestamp', 'nombre', 'genero', 'edad24', 'LTE12', 'SF12F', 'SF12M', 'PRKCA', 'CDH20']
         df = df[columnas_finales]
         
         st.subheader("📊 Datos Recolectados")
@@ -344,12 +331,12 @@ def obtener_estadisticas():
         'edad_promedio': df['edad'].mean() if df['edad'].notna().any() else None,
         'distribucion_grupos': df['grupo_edad'].value_counts().to_dict() if df['grupo_edad'].notna().any() else None,
         'completitud': {
-            'demograficos': df[['nombre', 'edad', 'genero', 'años_educacion']].notna().all(axis=1).sum(),
+            'demograficos': df[['nombre', 'edad', 'genero']].notna().all(axis=1).sum(),
             'eventos_vitales': df['lte12_puntaje'].notna().sum(),
             'sf12': df[['sf12_fisica', 'sf12_mental']].notna().all(axis=1).sum(),
             'hads': df[['hads_ansiedad', 'hads_depresion']].notna().all(axis=1).sum(),
             'zsas': df['zsas_puntaje'].notna().sum(),
-            'geneticos': df[['gen_prkca', 'gen_tcf4', 'gen_cdh20']].notna().all(axis=1).sum()
+            'geneticos': df[['gen_prkca', 'gen_cdh20']].notna().all(axis=1).sum()
         }
     }
     

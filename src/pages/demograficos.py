@@ -5,7 +5,6 @@ import streamlit as st
 from src.utils.calculos import (
     transformar_edad_a_grupo,
     transformar_genero_a_binario,
-    transformar_educacion_a_binaria,
 )
 from src.utils.dataframe_manager import agregar_o_actualizar_registro
 
@@ -36,7 +35,6 @@ def mostrar_demograficos():
             st.metric(label="Edad", value=f"{datos['edad']} años")
         with col2:
             st.metric(label="Género", value=datos['genero'])
-            st.metric(label="Educación", value=f"{datos['años_educacion']} años")
 
         # Show professional evaluator data if entered
         prof_nombre = st.session_state.get('_prof_nombre', '') or st.session_state.get('prof_nombre', '')
@@ -87,15 +85,6 @@ def mostrar_demograficos():
     with col2:
         genero = st.selectbox("Género *", ["Seleccionar", "Masculino", "Femenino"], key="genero")
 
-    max_educacion = max(0, (edad or 0) - 5)
-
-    if edad is None or edad < 5:
-        años_educacion = st.number_input("Años de educación formal *", min_value=0, max_value=0, value=None, disabled=True, placeholder="Ingrese los años", help="Ingrese primero la edad del paciente", key="educacion")
-    else:
-        if "educacion" in st.session_state and (st.session_state.get("educacion") or 0) > max_educacion:
-            st.session_state["educacion"] = max_educacion
-        años_educacion = st.number_input("Años de educación formal *", min_value=0, max_value=max_educacion, value=None, step=1, placeholder="Ingrese los años", help=f"Máximo permitido: {max_educacion} años (edad - 5)", key="educacion")
-
     # ── DATOS DEL PROFESIONAL EVALUADOR ──
     st.markdown("---")
     st.markdown("""
@@ -125,10 +114,6 @@ def mostrar_demograficos():
             errores.append("Debe seleccionar un género.")
         if edad is None or edad <= 0:
             errores.append("La edad debe ser mayor a 0.")
-        if años_educacion is None:
-            errores.append("Los años de educación formal son obligatorios.")
-        elif años_educacion > max_educacion:
-            errores.append(f"Los años de educación no pueden ser mayores a {max_educacion}.")
 
         if errores:
             st.error("Corrija los siguientes errores:")
@@ -141,8 +126,6 @@ def mostrar_demograficos():
             "edad": edad,
             "grupo_edad": transformar_edad_a_grupo(edad),
             "genero": transformar_genero_a_binario(genero),
-            "años_educacion": años_educacion,
-            "educacion_binaria": transformar_educacion_a_binaria(años_educacion),
         }
 
         st.session_state["datos_demograficos"] = datos

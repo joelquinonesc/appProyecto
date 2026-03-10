@@ -15,7 +15,6 @@ from src.config import (
     FEATURES_STANDARD,
     FEATURES_EXTENDED,
     GENOTIPOS_PRKCA,
-    GENOTIPOS_TCF4,
     GENOTIPOS_CDH20,
 )
 
@@ -114,7 +113,7 @@ def mostrar_resultados():
     try:
         demo_data = st.session_state.resultados.get('datos_demograficos') or st.session_state.get('datos_demograficos')
         if demo_data:
-            demo_col1, demo_col2, demo_col3 = st.columns(3)
+            demo_col1, demo_col2 = st.columns(2)
             with demo_col1:
                 st.metric(label="Edad", value=f"{demo_data['edad']} años")
             with demo_col2:
@@ -123,8 +122,6 @@ def mostrar_resultados():
                 else:
                     genero_texto = demo_data.get('genero', 'No especificado')
                 st.metric(label="Género", value=genero_texto)
-            with demo_col3:
-                st.metric(label="Educación", value=f"{demo_data['años_educacion']} años")
         else:
             st.info("Datos demográficos no disponibles")
     except (KeyError, TypeError):
@@ -194,12 +191,10 @@ def mostrar_resultados():
     st.markdown("<h3>Perfil Genético</h3>", unsafe_allow_html=True)
     genetico_data = st.session_state.resultados.get('datos_geneticos')
     if genetico_data:
-        gen_col1, gen_col2, gen_col3 = st.columns(3)
+        gen_col1, gen_col2 = st.columns(2)
         with gen_col1:
             st.markdown(f'<div class="anxrisk-genetic-tag">PRKCA: {genetico_data["prkca"]}</div>', unsafe_allow_html=True)
         with gen_col2:
-            st.markdown(f'<div class="anxrisk-genetic-tag">TCF4: {genetico_data["tcf4"]}</div>', unsafe_allow_html=True)
-        with gen_col3:
             st.markdown(f'<div class="anxrisk-genetic-tag">CDH20: {genetico_data["cdh20"]}</div>', unsafe_allow_html=True)
     else:
         st.markdown('<div class="anxrisk-note"><p>Módulo genético no utilizado en esta evaluación</p></div>', unsafe_allow_html=True)
@@ -219,18 +214,16 @@ def mostrar_resultados():
 
     # Genetics toggle
     st.markdown("#### Panel genético (opcional)")
-    tiene_genetica = st.toggle("Incluir panel genético (modelo extendido, 22 features)", value=False, key="toggle_genetica")
+    tiene_genetica = st.toggle("Incluir panel genético (modelo extendido, 18 features)", value=False, key="toggle_genetica")
 
     if tiene_genetica:
-        gen_col1, gen_col2, gen_col3 = st.columns(3)
+        gen_col1, gen_col2 = st.columns(2)
         with gen_col1:
             prkca_sel = st.selectbox("Genotipo PRKCA", GENOTIPOS_PRKCA, key="gen_prkca_sel")
         with gen_col2:
-            tcf4_sel = st.selectbox("Genotipo TCF4", GENOTIPOS_TCF4, key="gen_tcf4_sel")
-        with gen_col3:
             cdh20_sel = st.selectbox("Genotipo CDH20", GENOTIPOS_CDH20, key="gen_cdh20_sel")
         st.session_state.resultados['datos_geneticos'] = {
-            'prkca': prkca_sel, 'tcf4': tcf4_sel, 'cdh20': cdh20_sel
+            'prkca': prkca_sel, 'cdh20': cdh20_sel
         }
     else:
         st.session_state.resultados['datos_geneticos'] = None
@@ -245,19 +238,18 @@ def mostrar_resultados():
 
         if tiene_genetica:
             model_path = MODEL_EXTENDED_PATH
-            model_name = "MLP Extendido (22 features)"
+            model_name = "MLP Extendido (18 features)"
         else:
             model_path = MODEL_STANDARD_PATH
-            model_name = "MLP Estándar (13 features)"
+            model_name = "MLP Estándar (12 features)"
 
         try:
             import joblib
             model = joblib.load(model_path)
 
-            from src.utils.calculos import transformar_lte12_a_clasificacion, transformar_sf12_fisica_a_cuartil, transformar_sf12_mental_a_cuartil, transformar_educacion_a_binaria
+            from src.utils.calculos import transformar_lte12_a_clasificacion, transformar_sf12_fisica_a_cuartil, transformar_sf12_mental_a_cuartil
             
             edad24 = registro.get('grupo_edad', 0)
-            aefgroups = transformar_educacion_a_binaria(registro.get('años_educacion', 0))
             
             lte12_clasif = transformar_lte12_a_clasificacion(registro.get('lte12_puntaje', 0))
             lte12_0 = 1 if lte12_clasif == 0 else 0
@@ -277,7 +269,7 @@ def mostrar_resultados():
             sf12m_q4 = 1 if sf12m_cuartil == 4 else 0
             
             features_dict = {
-                'EDAD24': edad24, 'AEFGROUPS': aefgroups,
+                'EDAD24': edad24,
                 'LTE12_0': lte12_0, 'LTE12_1': lte12_1, 'LTE12_2': lte12_2,
                 'SF12F_Q1': sf12f_q1, 'SF12F_Q2': sf12f_q2, 'SF12F_Q3': sf12f_q3, 'SF12F_Q4': sf12f_q4,
                 'SF12M_Q1': sf12m_q1, 'SF12M_Q2': sf12m_q2, 'SF12M_Q3': sf12m_q3, 'SF12M_Q4': sf12m_q4,
@@ -286,14 +278,10 @@ def mostrar_resultados():
             if tiene_genetica:
                 gen_data = st.session_state.resultados['datos_geneticos']
                 prkca = gen_data['prkca']
-                tcf4 = gen_data['tcf4']
                 cdh20 = gen_data['cdh20']
                 features_dict['PRKCA_C/C'] = 1 if prkca == 'C/C' else 0
                 features_dict['PRKCA_C/T'] = 1 if prkca == 'C/T' else 0
                 features_dict['PRKCA_T/T'] = 1 if prkca == 'T/T' else 0
-                features_dict['TCF4_A/A'] = 1 if tcf4 == 'A/A' else 0
-                features_dict['TCF4_A/T'] = 1 if tcf4 == 'A/T' else 0
-                features_dict['TCF4_T/T'] = 1 if tcf4 == 'T/T' else 0
                 features_dict['CDH20_A/A'] = 1 if cdh20 == 'A/A' else 0
                 features_dict['CDH20_A/G'] = 1 if cdh20 == 'A/G' else 0
                 features_dict['CDH20_G/G'] = 1 if cdh20 == 'G/G' else 0
@@ -308,7 +296,7 @@ def mostrar_resultados():
                 if model_features != expected_features:
                     X_for_model = X.reindex(columns=model_features, fill_value=0)
 
-            modo_label = "Extendido (22 features)" if tiene_genetica else "Estándar (13 features)"
+            modo_label = "Extendido (18 features)" if tiene_genetica else "Estándar (12 features)"
             features_display = {'GENERO': genero, **features_dict}
             X_display = pd.DataFrame([features_display])
             st.markdown(f"### Features Transformadas — Modo {modo_label}")
@@ -351,7 +339,7 @@ def mostrar_resultados():
         prob_alto = st.session_state.resultados.get('prob_alto')
         nivel_triple = st.session_state.resultados.get('nivel_triple', 'N/A')
         cached_genetica = st.session_state.resultados.get('tiene_genetica', False)
-        modo_label = "Extendido (22 features)" if cached_genetica else "Estándar (13 features)"
+        modo_label = "Extendido (18 features)" if cached_genetica else "Estándar (12 features)"
 
         _mostrar_resultado_riesgo(nivel_triple, prob_alto, modo_label)
         st.caption("Resultado del cálculo anterior. Pulse el botón para recalcular con nuevos parámetros.")
@@ -672,8 +660,6 @@ def obtener_interpretacion_feature(feature, feature_val):
     """Retorna interpretación clínica de una feature"""
     if feature == "EDAD24":
         return f"Grupo de edad {'> 24 años' if feature_val == 1 else '≤ 24 años'}"
-    elif feature == "AEFGROUPS":
-        return f"Nivel educativo {'superior (≥ 15 años)' if feature_val == 1 else 'básico/secundario (< 15 años)'}"
     elif "SF12F" in feature:
         cuartil = feature.split("_")[1]
         if feature_val == 1:
@@ -689,9 +675,6 @@ def obtener_interpretacion_feature(feature, feature_val):
     elif "PRKCA" in feature:
         genotipo = feature.split("_")[1]
         return f"Genotipo PRKCA {genotipo} {'presente' if feature_val == 1 else 'ausente'} (regulación del estrés)"
-    elif "TCF4" in feature:
-        genotipo = feature.split("_")[1]
-        return f"Genotipo TCF4 {genotipo} {'presente' if feature_val == 1 else 'ausente'} (transcripción neuronal)"
     elif "CDH20" in feature:
         genotipo = feature.split("_")[1]
         return f"Genotipo CDH20 {genotipo} {'presente' if feature_val == 1 else 'ausente'} (conectividad neuronal)"
@@ -863,8 +846,8 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
         # ═══════════════════════════════════════════════════════
         elements.append(Paragraph("1. Datos Demográficos del Paciente", heading_style))
         elements.append(Paragraph(
-            "Los datos demográficos proporcionan contexto clínico fundamental. La edad y el nivel educativo "
-            "son variables predictoras en el modelo: pacientes jóvenes (≤ 24 años) y con menor nivel educativo "
+            "Los datos demográficos proporcionan contexto clínico fundamental. La edad "
+            "es una variable predictora en el modelo: pacientes jóvenes (≤ 24 años) "
             "presentan mayor vulnerabilidad según la evidencia epidemiológica.",
             normal_style
         ))
@@ -876,14 +859,12 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
                 genero_txt = demo_data.get('genero', 'No especificado')
 
             grupo_edad_txt = "> 24 años" if demo_data.get('grupo_edad', 0) == 1 else "≤ 24 años"
-            edu_bin_txt = "Superior (≥ 15 años)" if demo_data.get('educacion_binaria', 0) == 1 else "Básico/Secundario (< 15 años)"
 
             demo_table_data = [
                 ['Variable', 'Valor', 'Codificación modelo'],
                 ['Nombre completo', Paragraph(nombre_paciente, normal_style), '—'],
                 ['Edad', f"{demo_data.get('edad', '-')} años", Paragraph(f"EDAD24 = {demo_data.get('grupo_edad', '-')} ({grupo_edad_txt})", small_style)],
                 ['Género', genero_txt, f"GENERO = {demo_data.get('genero', '-')}"],
-                ['Años de educación', f"{demo_data.get('años_educacion', '-')} años", Paragraph(f"AEFGROUPS = {demo_data.get('educacion_binaria', '-')} ({edu_bin_txt})", small_style)],
             ]
             demo_table = Table(demo_table_data, colWidths=[110, 130, 250])
             demo_table.setStyle(table_style_base)
@@ -1101,8 +1082,8 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
         # ═══════════════════════════════════════════════════════
         elements.append(Paragraph("6. Perfil Genético", heading_style))
         elements.append(Paragraph(
-            "El panel genético evalúa tres polimorfismos de nucleótido único (SNPs) asociados a la vulnerabilidad "
-            "a trastornos de ansiedad: PRKCA (regulación de la respuesta al estrés), TCF4 (transcripción neuronal) "
+            "El panel genético evalúa dos polimorfismos de nucleótido único (SNPs) asociados a la vulnerabilidad "
+            "a trastornos de ansiedad: PRKCA (regulación de la respuesta al estrés) "
             "y CDH20 (conectividad sináptica). La inclusión de estos marcadores refina la predicción del modelo.",
             normal_style
         ))
@@ -1111,14 +1092,13 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
             gen_table_data = [
                 ['Gen / Polimorfismo', 'Genotipo', 'Función'],
                 ['PRKCA (rs2244497)', gen.get('prkca', '-'), 'Regulación de la respuesta al estrés'],
-                ['TCF4 (rs1452789)', gen.get('tcf4', '-'), 'Factor de transcripción neuronal'],
                 ['CDH20 (rs7243203)', gen.get('cdh20', '-'), 'Conectividad neuronal (cadherinas)'],
             ]
             gen_table = Table(gen_table_data, colWidths=[150, 80, 260])
             gen_table.setStyle(table_style_base)
             elements.append(gen_table)
         else:
-            elements.append(Paragraph("Evaluación realizada sin datos genéticos (modo estándar, 13 features).", normal_style))
+            elements.append(Paragraph("Evaluación realizada sin datos genéticos (modo estándar, 12 features).", normal_style))
 
         elements.append(PageBreak())
 
@@ -1138,7 +1118,7 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
         ))
         elements.append(Spacer(1, 0.08 * inch))
         elements.append(Paragraph(
-            "<b>¿Cómo funciona?</b> La capa de entrada recibe las variables clínicas codificadas (edad, educación, "
+            "<b>¿Cómo funciona?</b> La capa de entrada recibe las variables clínicas codificadas (edad, "
             "escalas psicométricas, eventos vitales, y opcionalmente marcadores genéticos). La capa oculta "
             "aplica transformaciones no lineales mediante la función tanh, aprendiendo representaciones abstractas "
             "de los patrones de riesgo. Finalmente, la capa de salida genera una <b>probabilidad continua</b> "
@@ -1159,7 +1139,7 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
         elements.append(Spacer(1, 0.12 * inch))
         modelo_usado = resultados.get('modelo_usado', 'No especificado')
         tiene_genetica = resultados.get('tiene_genetica', False)
-        modo_txt = 'Extendido (22 features)' if tiene_genetica else 'Estándar (13 features)'
+        modo_txt = 'Extendido (18 features)' if tiene_genetica else 'Estándar (12 features)'
 
         arch_table_data = [
             ['Componente', 'Descripción'],
@@ -1256,7 +1236,7 @@ def generar_pdf_resultados(resultados, registro, datos_profesional=None):
                 ['Probabilidad de alto riesgo', f"{prob_alto:.1%}"],
                 ['Clasificación', nivel_triple],
                 ['Modelo utilizado', modelo_usado],
-                ['Modo', 'Extendido (22 features)' if tiene_genetica else 'Estándar (13 features)'],
+                ['Modo', 'Extendido (18 features)' if tiene_genetica else 'Estándar (12 features)'],
             ]
             pred_table = Table(pred_table_data, colWidths=[200, 290])
             pred_table.setStyle(table_style_base)
