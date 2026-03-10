@@ -5,7 +5,7 @@ Flujo:
 1. Tras ZSAS → se muestra resumen + pregunta de genética + botón "Generar Evaluación"
 2. Al presionar el botón → se ejecuta predicción CatBoost + SHAP
 3. Se muestran resultados, gráfico SHAP y botón de descarga PDF (sin HTML)
-4. El PDF incluye portada, cuestionarios, predicción, SHAP y firma del psiquiatra.
+4. El PDF incluye portada, cuestionarios, predicción, SHAP y firma del psiquiatra que valida.
 """
 import streamlit as st
 from src.utils.dataframe_manager import mostrar_dataframe_actual, obtener_registro_actual
@@ -643,7 +643,7 @@ def generar_pdf_resultados(resultados, registro):
     - Genética (si aplica)
     - Predicción de riesgo + umbrales
     - Gráfico SHAP + interpretación textual
-    - Nota clínica + Firma del psiquiatra que valida
+    - Nota clínica + Firma "Validado por" del psiquiatra (con datos ingresados)
     """
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -876,27 +876,31 @@ def generar_pdf_resultados(resultados, registro):
         "No sustituye la valoración profesional.", norm_s,
     ))
 
-    # ══════════ FIRMA DEL PSIQUIATRA QUE VALIDA ══════════
+    # ══════════ VALIDADO POR — FIRMA DEL PSIQUIATRA ══════════
     elems.append(Spacer(1, 1.2 * inch))
     elems.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#CCC'), spaceAfter=15))
 
     fecha_firma = datetime.now().strftime('%d/%m/%Y')
+    nombre_psiq = demo.get('nombre_psiquiatra', '____________________')
+    cedula_psiq = demo.get('cedula_psiquiatra', '_______________')
+
+    validado_s = ParagraphStyle('Validado', parent=norm_s, fontSize=12, textColor=C_PRIM,
+                                 alignment=TA_CENTER, fontName='Helvetica-Bold', leading=16, spaceAfter=20)
+    elems.append(Paragraph("VALIDADO POR", validado_s))
+
     firma_data = [
-        [""],
         ["_________________________"],
         ["Firma del Psiquiatra"],
-        [""],
-        ["Nombre: Breyner Joel Quiñones Castro"],
-        ["Cédula Prof.: _______________"],
+        [f"Nombre: {nombre_psiq}"],
+        [f"Cédula Prof.: {cedula_psiq}"],
         [f"Fecha: {fecha_firma}"],
     ]
     ft = Table(firma_data, colWidths=[300])
     ft.setStyle(TableStyle([
         ('ALIGN',   (0, 0), (-1, -1), 'CENTER'),
         ('VALIGN',  (0, 0), (-1, -1), 'TOP'),
-        ('FONTSIZE', (0, 0), (-1, -1), 9),
-        ('FONTNAME', (0, 2), (0, 2), 'Helvetica-Bold'),
-        ('FONTNAME', (0, 4), (0, 4), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('FONTNAME', (0, 1), (0, 1), 'Helvetica-Bold'),
         ('TOPPADDING',    (0, 0), (-1, -1), 4),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
         ('TEXTCOLOR', (0, 0), (-1, -1), C_TXT),
