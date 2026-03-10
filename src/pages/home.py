@@ -72,7 +72,7 @@ def mostrar_home():
                 </svg>
             </div>
             <h4>Panel Genético</h4>
-            <p>SNPs <em>PRKCA</em>, <em>TCF4</em>, <em>CDH20</em> como módulo opcional</p>
+            <p>SNPs <em>PRKCA</em>, <em>TCF4</em>, <em>CDH20</em> como módulo de confirmación</p>
         </div>
         """, unsafe_allow_html=True)
 
