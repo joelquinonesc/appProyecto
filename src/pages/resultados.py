@@ -643,7 +643,7 @@ def generar_pdf_resultados(resultados, registro):
     - Genética (si aplica)
     - Predicción de riesgo + umbrales
     - Gráfico SHAP + interpretación textual
-    - Nota clínica + Firma del psiquiatra y paciente
+    - Nota clínica + Firma del psiquiatra que valida
     """
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -876,25 +876,27 @@ def generar_pdf_resultados(resultados, registro):
         "No sustituye la valoración profesional.", norm_s,
     ))
 
-    # ══════════ FIRMA DEL PSIQUIATRA Y PACIENTE ══════════
+    # ══════════ FIRMA DEL PSIQUIATRA QUE VALIDA ══════════
     elems.append(Spacer(1, 1.2 * inch))
     elems.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#CCC'), spaceAfter=15))
 
     fecha_firma = datetime.now().strftime('%d/%m/%Y')
     firma_data = [
-        ["", ""],
-        ["_________________________", "_________________________"],
-        ["Firma del Psiquiatra", "Firma del Paciente"],
-        ["Nombre: ____________________", "Nombre: ____________________"],
-        ["Cédula Prof.: _______________", "Documento: __________________"],
-        [f"Fecha: {fecha_firma}", f"Fecha: {fecha_firma}"],
+        [""],
+        ["_________________________"],
+        ["Firma del Psiquiatra"],
+        [""],
+        ["Nombre: Breyner Joel Quiñones Castro"],
+        ["Cédula Prof.: _______________"],
+        [f"Fecha: {fecha_firma}"],
     ]
-    ft = Table(firma_data, colWidths=[240, 240])
+    ft = Table(firma_data, colWidths=[300])
     ft.setStyle(TableStyle([
         ('ALIGN',   (0, 0), (-1, -1), 'CENTER'),
         ('VALIGN',  (0, 0), (-1, -1), 'TOP'),
         ('FONTSIZE', (0, 0), (-1, -1), 9),
-        ('FONTNAME', (0, 2), (-1, 2), 'Helvetica-Bold'),
+        ('FONTNAME', (0, 2), (0, 2), 'Helvetica-Bold'),
+        ('FONTNAME', (0, 4), (0, 4), 'Helvetica-Bold'),
         ('TOPPADDING',    (0, 0), (-1, -1), 4),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
         ('TEXTCOLOR', (0, 0), (-1, -1), C_TXT),
