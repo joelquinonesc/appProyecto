@@ -150,7 +150,7 @@ p {
 }
 
 /* Hide Streamlit branding */
-header[data-testid="stHeader"],
+/* Hide toolbar / deploy / menu / footer but keep header for sidebar toggle */
 div[data-testid="stToolbar"],
 .stDeployButton,
 #MainMenu,
@@ -158,6 +158,45 @@ footer {
     display: none !important;
     height: 0 !important;
     visibility: hidden !important;
+}
+
+/* Make header transparent so sidebar collapse/expand button remains accessible */
+header[data-testid="stHeader"] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Sidebar collapse button (inside sidebar — white icon on dark bg) */
+button[data-testid="stSidebarCollapseButton"],
+button[data-testid="baseButton-headerNoPadding"] {
+    color: rgba(255, 255, 255, 0.85) !important;
+    background: transparent !important;
+    border: none !important;
+    visibility: visible !important;
+    display: flex !important;
+}
+button[data-testid="stSidebarCollapseButton"] svg,
+button[data-testid="baseButton-headerNoPadding"] svg {
+    fill: rgba(255, 255, 255, 0.85) !important;
+    stroke: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Sidebar expand button (in header — dark icon on light bg) */
+button[data-testid="stSidebarExpandButton"],
+button[data-testid="collapsedControl"] {
+    color: var(--primary) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 51, 160, 0.15) !important;
+    border-radius: 8px !important;
+    visibility: visible !important;
+    display: flex !important;
+    box-shadow: 0 2px 8px rgba(0, 16, 41, 0.12) !important;
+}
+button[data-testid="stSidebarExpandButton"] svg,
+button[data-testid="collapsedControl"] svg {
+    fill: var(--primary) !important;
+    stroke: var(--primary) !important;
 }
 
 /* ============================================
