@@ -121,7 +121,7 @@ def _mostrar_seccion_pregenerada(registro):
     <div style="background:#E3F2FD; padding:1.25rem; border-radius:8px; border-left:4px solid #2B87D1; margin-bottom:1.5rem;">
         <p style="color:#2E2E2E; margin:0; font-size:1rem;">
             <strong>✅ Todos los cuestionarios han sido completados.</strong><br>
-            Puede generar la evaluación con el modelo estándar o incluir datos genéticos para mayor precisión.
+            Confirme si desea incluir los datos genéticos y genere la evaluación de riesgo.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -131,44 +131,56 @@ def _mostrar_seccion_pregenerada(registro):
 
     st.markdown("---")
 
-    # ── Toggle genética (opcional) ────────────────────────────────
+    # ── Confirmación de panel genético ──────────────────────────────
     st.markdown("""
     <div class="anxrisk-card">
-        <h3>🧬 Datos Genéticos (Opcional)</h3>
+        <h3>🧬 Confirmación de Datos Genéticos</h3>
         <p style="margin-bottom: 0.75rem;">
-            Si dispone de datos genéticos del paciente, puede incluirlos para utilizar el
-            <strong>modelo extendido (22 features)</strong>. De lo contrario, se usará el
+            Si dispone de los datos genéticos del paciente, active el panel para utilizar el
+            <strong>modelo extendido (22 features)</strong>. De lo contrario, se utilizará el
             <strong>modelo estándar (13 features)</strong>.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
     tiene_genetica = st.toggle(
-        "Incluir panel genético (modelo extendido — 22 features)",
+        "Confirmar inclusión de panel genético (modelo extendido — 22 features)",
         value=False,
         key="toggle_genetica",
     )
 
     if tiene_genetica:
+        # Recuperar genotipos previamente ingresados (si existen)
+        gen_previos = st.session_state.get('resultados', {}).get('datos_geneticos') or {}
+        prkca_prev = gen_previos.get('prkca')
+        tcf4_prev = gen_previos.get('tcf4')
+        cdh20_prev = gen_previos.get('cdh20')
+
+        def _idx(opciones, valor):
+            try:
+                return opciones.index(valor)
+            except (ValueError, AttributeError):
+                return None
+
         st.markdown("""
         <div class="anxrisk-question-card">
-            <div class="anxrisk-question-text">Seleccione los genotipos del paciente:</div>
+            <div class="anxrisk-question-text">Confirme los genotipos del paciente:</div>
         </div>
         """, unsafe_allow_html=True)
         g1, g2, g3 = st.columns(3)
         with g1:
             prkca_sel = st.selectbox("Genotipo PRKCA", GENOTIPOS_PRKCA, key="gen_prkca_sel",
-                                     index=None, placeholder="Seleccione")
+                                     index=_idx(GENOTIPOS_PRKCA, prkca_prev), placeholder="Seleccione")
         with g2:
             tcf4_sel = st.selectbox("Genotipo TCF4", GENOTIPOS_TCF4, key="gen_tcf4_sel",
-                                    index=None, placeholder="Seleccione")
+                                    index=_idx(GENOTIPOS_TCF4, tcf4_prev), placeholder="Seleccione")
         with g3:
             cdh20_sel = st.selectbox("Genotipo CDH20", GENOTIPOS_CDH20, key="gen_cdh20_sel",
-                                     index=None, placeholder="Seleccione")
+                                     index=_idx(GENOTIPOS_CDH20, cdh20_prev), placeholder="Seleccione")
 
         genotipos_completos = all([prkca_sel, tcf4_sel, cdh20_sel])
         if not genotipos_completos:
-            st.warning("Seleccione los 3 genotipos para usar el modelo extendido.")
+            st.warning("Confirme los 3 genotipos para utilizar el modelo extendido.")
     else:
         genotipos_completos = True  # No se requieren genotipos
         prkca_sel = tcf4_sel = cdh20_sel = None
@@ -923,12 +935,34 @@ def generar_pdf_resultados(resultados, registro):
     elems.append(Paragraph("6. Perfil Genético", head_s))
     gen = resultados.get('datos_geneticos')
     if gen:
+        # Determinar si cada genotipo es de riesgo
+        prkca_val = gen.get('prkca', '—')
+        tcf4_val = gen.get('tcf4', '—')
+        cdh20_val = gen.get('cdh20', '—')
+
+        def _riesgo_prkca(g):
+            return "Genotipo de riesgo" if g in ("C/T", "T/T") else "Genotipo sin riesgo asociado"
+
+        def _riesgo_tcf4(g):
+            return "Genotipo de riesgo" if g in ("T/T", "C/T") else "Genotipo sin riesgo asociado"
+
+        def _riesgo_cdh20(g):
+            return "Genotipo asociado a alto riesgo" if g == "G/G" else "Genotipo sin riesgo asociado"
+
         elems.append(_tbl([
-            ["Gen", "Genotipo"],
-            ["PRKCA", gen.get('prkca', '—')],
-            ["TCF4", gen.get('tcf4', '—')],
-            ["CDH20", gen.get('cdh20', '—')],
-        ], cw=[250, 230]))
+            ["Gen", "Genotipo", "Interpretación"],
+            ["PRKCA", prkca_val, _riesgo_prkca(prkca_val)],
+            ["TCF4", tcf4_val, _riesgo_tcf4(tcf4_val)],
+            ["CDH20", cdh20_val, _riesgo_cdh20(cdh20_val)],
+        ], cw=[120, 120, 240]))
+
+        # Nota explicativa sobre genotipos de riesgo
+        elems.append(Spacer(1, 0.1 * inch))
+        elems.append(Paragraph(
+            "<b>Nota:</b> Los genotipos C/T y T/T en PRKCA, T/T y C/T en TCF4, y G/G en CDH20 "
+            "se consideran genotipos asociados a mayor riesgo de ansiedad según la evidencia genética disponible.",
+            norm_s,
+        ))
     else:
         elems.append(Paragraph("Evaluación sin datos genéticos (modo estándar — 13 features).", norm_s))
     elems.append(Spacer(1, 0.3 * inch))

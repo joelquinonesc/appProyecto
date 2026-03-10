@@ -25,7 +25,7 @@ def mostrar_home():
         </div>
         <div class="anxrisk-hero-description">
             Evaluación multimodal con interpretabilidad individual basada en
-            aprendizaje automático. Calibrado en población colombiana adulta.
+            aprendizaje automático.
         </div>
     </div>
     """, unsafe_allow_html=True)
