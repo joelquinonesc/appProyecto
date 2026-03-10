@@ -164,9 +164,10 @@ footer {
    5. SIDEBAR — Illumina Navy Pipeline
    ============================================ */
 section[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #001F5C 0%, #0033A0 100%) !important;
+    background: linear-gradient(180deg, #001029 0%, #002045 40%, #00306A 100%) !important; /* más oscuro para mejor contraste */
     border-right: none !important;
-    box-shadow: 4px 0 20px rgba(0, 31, 92, 0.15) !important;
+    box-shadow: 8px 0 30px rgba(0, 16, 48, 0.45) !important;
+    min-width: 260px !important; /* sidebar ligeramente más ancha */
 }
 
 section[data-testid="stSidebar"] > div {
@@ -176,56 +177,73 @@ section[data-testid="stSidebar"] > div {
 
 section[data-testid="stSidebar"] .stMarkdown p,
 section[data-testid="stSidebar"] .stMarkdown span {
-    color: rgba(255, 255, 255, 0.85) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
 }
 
 section[data-testid="stSidebar"] h1,
 section[data-testid="stSidebar"] h2,
 section[data-testid="stSidebar"] h3 {
     color: #FFFFFF !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
 }
 
 section[data-testid="stSidebar"] .stProgress > div > div > div {
     background: linear-gradient(90deg, var(--accent), #00E5FF) !important;
     border-radius: var(--radius-full) !important;
-    box-shadow: 0 0 12px rgba(0, 180, 216, 0.4) !important;
+    box-shadow: 0 0 16px rgba(0, 180, 216, 0.45) !important;
 }
 
 section[data-testid="stSidebar"] .stProgress > div > div {
-    background: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
     border-radius: var(--radius-full) !important;
 }
 
 section[data-testid="stSidebar"] .stButton > button {
-    background: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(255, 255, 255, 0.12) !important; /* botón más visible */
     color: #FFFFFF !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
     backdrop-filter: blur(10px) !important;
+    padding: 0.6rem 0.9rem !important;
+    border-radius: 8px !important;
 }
 
 section[data-testid="stSidebar"] .stButton > button:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.22) !important;
     border-color: var(--accent) !important;
-    box-shadow: 0 0 12px rgba(0, 180, 216, 0.2) !important;
+    box-shadow: 0 6px 22px rgba(0, 180, 216, 0.15) !important;
 }
 
+/* Primary actions in the sidebar: alto contraste visual */
 section[data-testid="stSidebar"] .stButton > button[kind="primary"],
 section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton-primary"] {
-    background: linear-gradient(135deg, var(--accent), #00E5FF) !important;
-    color: #001F5C !important;
+    background: #FFFFFF !important; /* botón blanco para contraste */
+    color: #001F5C !important; /* texto navy para lectura */
     border: none !important;
     font-weight: 700 !important;
+    box-shadow: 0 6px 20px rgba(0, 31, 92, 0.12) !important;
 }
 
 section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover,
 section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton-primary"]:hover {
-    box-shadow: 0 4px 16px rgba(0, 180, 216, 0.4) !important;
     transform: translateY(-1px) !important;
+    box-shadow: 0 10px 28px rgba(0, 31, 92, 0.16) !important;
 }
 
+/* Links / small text contrast */
+section[data-testid="stSidebar"] a, section[data-testid="stSidebar"] .stText, section[data-testid="stSidebar"] .stExpander {
+    color: rgba(255,255,255,0.92) !important;
+}
+
+/* Active / selected items: accent outline */
+section[data-testid="stSidebar"] .stButton > button[aria-pressed="true"] {
+    outline: 2px solid rgba(0, 180, 216, 0.22) !important;
+    box-shadow: 0 6px 24px rgba(0, 180, 216, 0.12) !important;
+}
+
+/* Sidebar dividers */
 section[data-testid="stSidebar"] hr {
-    border-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    margin: var(--space-4) 0 !important;
 }
 
 /* ============================================
@@ -587,21 +605,21 @@ div[data-testid="stMetric"] div[data-testid="stMetricValue"] { font-family: var(
 .anxrisk-progress-step {
     display: flex; align-items: center; gap: var(--space-3);
     padding: var(--space-2) var(--space-3); font-size: 0.9375rem;
-    color: rgba(255, 255, 255, 0.6); position: relative;
+    color: rgba(255, 255, 255, 0.8); position: relative;
     margin-left: var(--space-2);
 }
 .anxrisk-progress-step::before {
     content: ''; position: absolute; left: 17px; top: -6px;
-    width: 2px; height: calc(100% + 0px); background: rgba(255, 255, 255, 0.12);
+    width: 2px; height: calc(100% + 0px); background: rgba(255, 255, 255, 0.18);
 }
 .anxrisk-progress-step:first-child::before { top: 50%; height: 50%; }
 .anxrisk-progress-step:last-child::before { height: 50%; }
 
 .anxrisk-step-dot {
     width: 14px; height: 14px; border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2); flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.3); flex-shrink: 0;
     transition: all var(--ease-smooth); position: relative; z-index: 1;
-    border: 2px solid transparent;
+    border: 2px solid rgba(255, 255, 255, 0.15);
 }
 .anxrisk-step-dot.active {
     background: var(--accent); border-color: var(--accent);
@@ -613,9 +631,9 @@ div[data-testid="stMetric"] div[data-testid="stMetricValue"] { font-family: var(
     box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
 }
 
-.anxrisk-step-label { font-size: 0.9375rem; color: rgba(255, 255, 255, 0.55); font-weight: 400; }
-.anxrisk-step-label.active { color: #FFFFFF; font-weight: 600; }
-.anxrisk-step-label.completed { color: rgba(255, 255, 255, 0.85); font-weight: 500; }
+.anxrisk-step-label { font-size: 0.9375rem; color: rgba(255, 255, 255, 0.75); font-weight: 400; }
+.anxrisk-step-label.active { color: #FFFFFF; font-weight: 700; text-shadow: 0 0 12px rgba(0, 180, 216, 0.4); }
+.anxrisk-step-label.completed { color: rgba(255, 255, 255, 0.92); font-weight: 500; }
 
 /* Hero — Illumina Gradient */
 .anxrisk-hero {
@@ -808,17 +826,17 @@ div[data-testid="stMetric"] div[data-testid="stMetricValue"] { font-family: var(
 /* Sidebar Brand — Dark */
 .anxrisk-sidebar-brand {
     text-align: center; padding-bottom: var(--space-5);
-    margin-bottom: var(--space-5); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: var(--space-5); border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 .anxrisk-sidebar-brand h1 { font-size: 1.375rem !important; font-weight: 700 !important; color: #FFFFFF !important; letter-spacing: 0.08em; margin-bottom: var(--space-1) !important; }
-.anxrisk-sidebar-brand p { font-size: 0.875rem; color: rgba(255, 255, 255, 0.6); margin: 0; line-height: 1.4; }
+.anxrisk-sidebar-brand p { font-size: 0.875rem; color: rgba(255, 255, 255, 0.82); margin: 0; line-height: 1.4; }
 
 /* Sidebar Model Info */
 .anxrisk-sidebar-model {
-    background: rgba(255, 255, 255, 0.06); border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.1); border-radius: var(--radius-sm);
     padding: var(--space-3) var(--space-4); margin: var(--space-4) 0;
-    font-size: 0.9375rem; color: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.9375rem; color: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* Page Header */
@@ -827,7 +845,7 @@ div[data-testid="stMetric"] div[data-testid="stMetricValue"] { font-family: var(
 .anxrisk-page-header p { text-align: center; color: var(--text-secondary); font-size: 1.125rem; max-width: 600px; margin: 0 auto; }
 
 /* Disclaimer */
-.anxrisk-disclaimer { font-size: 0.875rem; color: rgba(255, 255, 255, 0.5); text-align: center; padding: var(--space-4); line-height: 1.5; }
+.anxrisk-disclaimer { font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); text-align: center; padding: var(--space-4); line-height: 1.5; }
 
 /* Inline Progress */
 .anxrisk-inline-progress { width: 100%; height: 4px; background: var(--border); border-radius: 2px; margin: var(--space-4) 0 var(--space-6); overflow: hidden; }
