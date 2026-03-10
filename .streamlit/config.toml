@@ -5,8 +5,8 @@ showErrorDetails = true
 level = "info"
 
 [theme]
-primaryColor = "#00B4D8"
-backgroundColor = "#FAFBFC"
-secondaryBackgroundColor = "#001029"
-textColor = "#1A1A2E"
+primaryColor = "#D4911D"
+backgroundColor = "#F0EDEA"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#2D2D2D"
 font = "sans serif"

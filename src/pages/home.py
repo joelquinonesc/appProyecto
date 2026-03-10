@@ -1,475 +1,232 @@
 """
-Página de inicio de la aplicación
+Página de inicio — Landing profesional ANXRISK
 """
 import streamlit as st
-import base64
+
 
 def mostrar_home():
-    # --- Cargar estilos CSS globales ---
-    with open("src/assets/styles/main.css", encoding="utf-8") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-    
-    # --- Estilos personalizados para la página Home ---
+    # Hero Section
     st.markdown("""
-    <style>
-        /* Fondo con efecto limewash y degradado moderno */
-        .stApp {
-            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 25%, #A5D6A7 50%, #81C784 75%, #66BB6A 100%);
-            background-attachment: fixed;
-            min-height: 100vh;
-        }
-        
-        /* Capa de textura limewash */
-        .stApp::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(76,175,80,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(255,255,255,0.05) 0%, transparent 40%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        /* Contenedor principal */
-        .main-container {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            margin: 30px auto;
-            max-width: 900px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-        }
-        
-        /* Logo section enhancement */
-        .logo-section {
-            margin: 20px 0 30px 0;
-            animation: fadeInDown 0.8s ease-out;
-        }
-        
-        .logo-section img {
-            max-width: 200px;
-            height: auto;
-            filter: drop-shadow(0 10px 20px rgba(76, 175, 80, 0.2));
-            transition: transform 0.3s ease;
-        }
-        
-        .logo-section img:hover {
-            transform: translateY(-5px);
-        }
-        
-        /* Título welcome */
-        .welcome-title {
-            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin: 30px 0 20px 0;
-            text-align: center;
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
-        
-        /* Texto welcome */
-        .welcome-text {
-            font-size: 1.05rem;
-            line-height: 1.9;
-            color: #2E2E2E;
-            text-align: justify;
-            margin: 25px 0;
-            max-width: 100%;
-        }
-        
-        .welcome-text p {
-            margin: 0;
-            padding: 0;
-        }
-        
-        .animate-fade-in {
-            animation: fadeIn 0.8s ease-in-out;
-        }
-        
-        /* Buttons enhancement */
-        .stButton > button {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%) !important;
-            border: none !important;
-            color: white !important;
-            font-weight: 600 !important;
-            padding: 12px 30px !important;
-            border-radius: 8px !important;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3) !important;
-            transition: all 0.3s ease !important;
-        }
-        
-        .stButton > button:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5) !important;
-        }
-        
-        /* Features grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-        
-        .info-card {
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(165, 214, 167, 0.1) 100%);
-            border: 2px solid rgba(76, 175, 80, 0.3);
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-        
-        .info-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(76, 175, 80, 0.2);
-            border-color: #4CAF50;
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(165, 214, 167, 0.15) 100%);
-        }
-        
-        .info-card h4 {
-            color: #1B5E20;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-        }
-        
-        .info-card p {
-            color: #2E7D32;
-            font-size: 0.95rem;
-        }
-        
-        /* Confidentiality note */
-        .confidentiality-note {
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(165, 214, 167, 0.1) 100%);
-            border-left: 5px solid #4CAF50;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 40px;
-            text-align: center;
-            color: #1B5E20;
-        }
-        
-        .confidentiality-note p {
-            margin: 8px 0;
-            font-size: 0.95rem;
-        }
-        
-        /* Animaciones */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Responsivo */
-        @media (max-width: 768px) {
-            .main-container {
-                padding: 20px;
-                margin: 15px;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # --- Logo centrado ---
-    with open("src/assets/img/logo.png", "rb") as f:
-        logo_data = base64.b64encode(f.read()).decode()
-    
-    st.markdown(f'''
-    <div class="main-container">
-        <div class="logo-section">
-            <img src="data:image/png;base64,{logo_data}" alt="AnxRisk Logo">
+    <div class="anxrisk-hero animate-fade-in">
+        <div class="anxrisk-logo">
+            <svg width="56" height="56" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <text x="36" y="54" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif"
+                      font-size="50" font-weight="bold" fill="#00E5FF" letter-spacing="-2">A</text>
+                <polyline points="6,36 18,36 22,28 27,44 32,24 37,48 42,28 47,44 52,36 66,36"
+                          stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"
+                          stroke-linejoin="round" fill="none" opacity="0.9"/>
+                <circle cx="32" cy="24" r="2.5" fill="#00E5FF" opacity="0.9"/>
+                <circle cx="37" cy="48" r="2.5" fill="#00E5FF" opacity="0.9"/>
+            </svg>
+        </div>
+        <div class="anxrisk-hero-title">ANXRISK</div>
+        <div class="anxrisk-hero-subtitle">
+            Sistema de Estratificación del Riesgo de Trastornos de Ansiedad
+        </div>
+        <div class="anxrisk-hero-description">
+            Evaluación multimodal con interpretabilidad individual basada en
+            aprendizaje automático. Calibrado en población colombiana adulta.
         </div>
     </div>
-    ''', unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-    # Título de bienvenida
-    st.markdown(
-        "<h2 style='text-align: center; background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;'>Bienvenido a nuestra herramienta de análisis integral para la evaluación del riesgo de ansiedad.</h2>",
-        unsafe_allow_html=True
-    )
-
-    # Texto de bienvenida
-    st.markdown(
-        "<p style='font-size: 1.25rem; line-height: 1.8; text-align: justify;'>Esta aplicación combina datos demográficos, psicosociales, clínicos y marcadores genéticos específicos para proporcionar una evaluación personalizada de su perfil de riesgo. Los trastornos de ansiedad afectan a millones de personas en todo el mundo. Según la OMS, más de mil millones viven con trastornos de salud mental, siendo la ansiedad uno de los más frecuentes. Detectar tempranamente el riesgo permite intervenir antes de que los síntomas afecten la calidad de vida.</p>",
-        unsafe_allow_html=True
-    )
-
-    # --- Datos del psiquiatra que valida ---
-    st.markdown("---")
-    st.markdown(
-        "<h4 style='text-align:center; color:#2E2E2E; margin-bottom:.5rem;'>"
-        "🩺 Datos del Psiquiatra que Valida</h4>",
-        unsafe_allow_html=True,
-    )
-    pc1, pc2 = st.columns(2)
-    with pc1:
-        psiq_nombre = st.text_input(
-            "Nombre completo del psiquiatra *",
-            value=st.session_state.get('psiquiatra_nombre', ''),
-            key="input_psiq_nombre",
-            placeholder="Ej: Dr. Juan Pérez",
-        )
-    with pc2:
-        psiq_cedula = st.text_input(
-            "Cédula profesional *",
-            value=st.session_state.get('psiquiatra_cedula', ''),
-            key="input_psiq_cedula",
-            placeholder="Ej: 12345678",
-        )
-
-    # Botón principal centrado
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("Empezar Análisis ➜", key="start_button", width='stretch'):
-            if not psiq_nombre.strip() or not psiq_cedula.strip():
-                st.error("⚠️ Ingrese el nombre y la cédula profesional del psiquiatra para continuar.")
-            else:
-                st.session_state['psiquiatra_nombre'] = psiq_nombre.strip()
-                st.session_state['psiquiatra_cedula'] = psiq_cedula.strip()
-                st.session_state.pagina_actual = "Datos demograficos"
-                st.rerun()
-    
-    # Botón de análisis masivo
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("📊 Análisis Masivo (CSV)", key="batch_button", width='stretch'):
+    # Two main action buttons
+    col_spacer_l, col_btn1, col_btn2, col_spacer_r = st.columns([1, 2, 2, 1])
+    with col_btn1:
+        if st.button("Iniciar Evaluación Individual", key="start_button", type="primary", use_container_width=True):
+            st.session_state.pagina_actual = "Datos demograficos"
+            st.rerun()
+    with col_btn2:
+        if st.button("Análisis Masivo (CSV)", key="batch_button", use_container_width=True):
             st.session_state.pagina_actual = "Análisis Masivo"
             st.rerun()
-    
-    # Botón de ayuda/guía de uso
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("📖 Ver Guía de Uso", key="guide_button", width='stretch'):
-            st.session_state.mostrar_guia = True
-            st.rerun()
-    
-    # Mostrar guía en una sección expandible
-    if st.session_state.get('mostrar_guia', False):
-        with st.expander("📖 Guía de Uso - ANXRISK (Click para cerrar)", expanded=True):
-            st.markdown("""
-            ### 1. Introducción a la Aplicación
-            ANXRISK es una herramienta integral que evalúa tu riesgo de ansiedad combinando múltiples fuentes de datos:
-            - **Datos demográficos:** Edad, género, educación
-            - **Datos psicosociales:** Eventos vitales estresantes
-            - **Datos clínicos:** Cuestionarios validados de ansiedad y salud
-            - **Datos genéticos:** Marcadores genéticos asociados a la ansiedad
-            
-            ⚠️ **Nota:** Esta herramienta proporciona un análisis preliminar y debe ser interpretada por profesionales de la salud mental.
-            
-            ### 2. Paso a Paso de la Evaluación
-            
-            **Paso 1: Datos Demográficos**
-            1. Ingresa tu nombre completo
-            2. Proporciona tu edad (entre 1 y 120 años)
-            3. Selecciona tu género (Masculino/Femenino)
-            4. Indica tus años de educación formal
-            
-            ⚠️ **Restricción de Educación:** El máximo de años de educación permitido es tu edad menos 5 años. Por ejemplo, a los 20 años, máximo 15 años de educación.
-            
-            **Paso 2: Eventos Vitales (LTE-12)**
-            Indica si has experimentado recientemente alguno de estos 12 eventos estresantes:
-            - Muerte de un ser querido
-            - Ruptura de relación importante
-            - Pérdida o cambio de trabajo
-            - Problemas financieros serios
-            - Diagnóstico de enfermedad grave
-            - Y más...
-            
-            ✓ **Tip:** Piensa en los últimos 6-12 meses al responder estas preguntas.
-            
-            *Escala validada epidemiológicamente:* Brugha, T., Bebbington, P., Tennant, C., & Hurry, J. (1985). The List of Threatening Experiences: a subset of 12 life event categories with considerable long-term contextual threat. Psychological Medicine, 15(1), 189-194.
-            
-            **Paso 3: SF-12 - Salud Física**
-            Evalúa tu percepción de salud física respondiendo sobre:
-            - Estado general de salud
-            - Limitaciones en actividades físicas
-            - Problemas de salud en trabajo/actividades
-            - Dolor corporal y energía
-            
-            *Escala validada internacionalmente:* Ware, J. E., Kosinski, M., & Keller, S. D. (1996). A 12-item short-form health survey: construction of scales and preliminary tests of reliability and validity. Medical Care, 34(3), 220-233.
-            
-            **Paso 4: SF-12 - Salud Mental**
-            Evalúa tu bienestar emocional respondiendo sobre:
-            - Estado emocional general
-            - Vitalidad y energía mental
-            - Limitaciones emocionales en actividades
-            - Salud mental percibida
-            
-            *Escala validada internacionalmente:* Ware, J. E., Kosinski, M., & Keller, S. D. (1996). A 12-item short-form health survey: construction of scales and preliminary tests of reliability and validity. Medical Care, 34(3), 220-233.
-            
-            **Paso 5: HADS - Escala de Ansiedad**
-            Responde 7 preguntas sobre síntomas de ansiedad de los últimos 7 días. La escala mide:
-            - Tensión y nerviosismo
-            - Preocupaciones
-            - Miedo y pánico
-            
-            *Escala validada clínicamente:* Zigmond, A. S., & Snaith, R. P. (1983). The hospital anxiety and depression scale. Acta Psychiatrica Scandinavica, 67(6), 361-370.
-            
-            **Paso 6: ZSAS - Escala de Zung**
-            Contesta 20 preguntas sobre síntomas ansiosos. Esta escala evalúa:
-            - Síntomas afectivos (emocionales)
-            - Síntomas somáticos (físicos)
-            
-            *Escala ampliamente utilizada y validada:* Zung, W. W. (1971). A rating instrument for anxiety disorders. Psychosomatics, 12(6), 371-379.
-            
-            **Paso 7: Datos Genéticos**
-            Indica si tienes antecedentes genéticos en los siguientes marcadores asociados a ansiedad:
-            - **Gen *PRKCA*:** Relacionado con la regulación emocional
-            - **Gen *TCF4*:** Asociado con predisposición a trastornos psiquiátricos
-            - **Gen *CDH20*:** Vinculado con neurotransmisores y comportamiento
-            
-            ### 3. Interpretación de Resultados
-            
-            **¿Qué es SHAP y por qué se utiliza?**
-            
-            SHAP (SHapley Additive exPlanations) es un método matemático que explica cómo cada factor contribuye a tu predicción de riesgo de ansiedad. Es como un "desglose detallado" que muestra qué preguntas y características fueron más importantes en el resultado final.
-            
-            **¿Por qué es importante?** La mayoría de herramientas de inteligencia artificial actúan como "cajas negras" - te dan un resultado pero no te explican por qué. SHAP cambia esto: te permite ver exactamente qué factores subieron o bajaron tu riesgo, dándote transparencia y comprensión sobre el resultado.
-            
-            **¿Cómo interpretar los gráficos SHAP?**
-            - **Barras hacia la derecha (rojo):** Factores que AUMENTARON tu riesgo de ansiedad
-            - **Barras hacia la izquierda (verde):** Factores que DISMINUYERON tu riesgo de ansiedad
-            - **Tamaño de la barra:** Qué tan importante fue cada factor (barras más largas = mayor impacto)
-            - **Base:** El valor inicial de riesgo (promedio de la población)
-            - **Resultado final:** El riesgo predicho después de considerar todos los factores
-            
-            **Ejemplo:**
-            Si tu gráfico SHAP muestra:
-            - Barra roja grande para "síntomas ansiosos altos (HADS)" → Esto aumentó significativamente tu riesgo
-            - Barra verde pequeña para "buena salud mental (SF-12)" → Esto redujo un poco tu riesgo
-            - El riesgo final es MODERADO → Significa que los factores de riesgo pesan más que los protectores
-            
-            **¿Qué información se usa para calcular SHAP?**
-            El modelo usa información de:
-            - Tu edad, género y educación
-            - Eventos vitales estresantes (LTE-12)
-            - Síntomas de ansiedad (HADS y ZSAS)
-            - Salud física y mental percibida (SF-12)
-            - Marcadores genéticos (*PRKCA*, *TCF4*, *CDH20*)
-            
-            Luego, SHAP calcula cuánto cada uno de estos contribuyó a tu predicción final.
-            
-            **Escala de Riesgo del Modelo**
-            | Nivel de Riesgo | Rango de Puntuación | Descripción |
-            |---|---|---|
-            | **Bajo** | 0.00 - 0.29 | Bajo riesgo de trastorno de ansiedad |
-            | **Moderado** | 0.30 - 0.59 | Riesgo moderado; se recomienda monitoreo |
-            | **Alto** | 0.60 - 1.00 | Riesgo alto; se recomienda evaluación profesional |
-            
-            **HADS y ZSAS**
-            | Escala | Puntuación Bajo Riesgo | Puntuación Alto Riesgo |
-            |---|---|---|
-            | HADS | < 8 | ≥ 8 |
-            | ZSAS | < 36 | ≥ 36 |
-            
-            **SF-12**
-            El SF-12 se interpreta por cuartiles (Q1-Q4):
-            - **Q1 (Muy Baja):** Limitaciones significativas en salud
-            - **Q2 (Baja):** Salud por debajo del promedio
-            - **Q3 (Moderada):** Salud en nivel intermedio
-            - **Q4 (Excelente):** Muy buen nivel de salud
-            
-            ### 4. Exportar Resultados
-            Al finalizar la evaluación, puedes descargar un reporte HTML con todos tus resultados:
-            1. Completa todos los cuestionarios
-            2. Ve a la sección de Resultados
-            3. Haz clic en "Descargar Reporte HTML"
-            4. Opcionalmente, convierte el HTML a PDF usando tu navegador (Archivo → Imprimir → Guardar como PDF)
-            
-            ### 5. Privacidad y Confidencialidad
-            🔒 **Seguridad de Datos:** Todos tus datos son confidenciales y se utilizan exclusivamente con fines investigativos. Esta herramienta está destinada a la investigación y debe ser interpretada por profesionales de la salud.
-            
-            ### 6. Preguntas Frecuentes
-            
-            **¿Cuánto tiempo toma completar la evaluación?**
-            Generalmente entre 20-30 minutos, dependiendo de la velocidad de lectura y respuesta.
-            
-            **¿Puedo pausar y continuar después?**
-            Sí, tus datos se guardan automáticamente al completar cada sección. Puedes volver a cualquier momento.
-            
-            **¿Qué significa "riesgo moderado"?**
-            Significa que existen factores presentes que sugieren un riesgo moderado de ansiedad. Se recomienda monitoreo continuo y posible consulta con un profesional de salud mental.
-            
-            **¿Los genes definen si tendré ansiedad?**
-            No. Los genes son solo un factor de riesgo. La ansiedad resulta de la interacción entre factores genéticos, ambientales, psicosociales y clínicos.
-            
-            **¿Puede reemplazar una evaluación profesional?**
-            No. Esta herramienta es de apoyo y debe complementarse con una evaluación profesional de un psicólogo o psiquiatra.
-            """)
-            
-            if st.button("Cerrar Guía", key="close_guide"):
-                st.session_state.mostrar_guia = False
-                st.rerun()
-    
-    # Espaciado antes de las tarjetas
+
     st.markdown("<div style='height: 2rem;'></div>", unsafe_allow_html=True)
 
-    # Características principales
-    st.markdown('<div class="features-grid">', unsafe_allow_html=True)
+    # Feature cards — 3 columns
     col1, col2, col3 = st.columns(3)
 
     with col1:
         st.markdown("""
-        <div class="info-card">
-            <h4>Evaluación Integral</h4>
-            <p>Cuestionarios clínicos validados</p>
+        <div class="anxrisk-feature-card">
+            <div class="anxrisk-feature-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                    <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+            </div>
+            <h4>Evaluación Clínica</h4>
+            <p>LTE-12, SF-12, HADS y ZSAS integrados en flujo secuencial validado</p>
         </div>
         """, unsafe_allow_html=True)
 
     with col2:
         st.markdown("""
-        <div class="info-card">
-            <h4>🧬 Análisis Genético</h4>
-            <p>Basado en marcadores <i>PRKCA</i>, <i>TCF4</i> y <i>CDH20</i></p>
+        <div class="anxrisk-feature-card">
+            <div class="anxrisk-feature-icon" style="background: var(--accent-genetic-bg);">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-genetic);">
+                    <path d="M2 15c6.667-6 13.333 0 20-6"/>
+                    <path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/>
+                    <path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/>
+                    <path d="M17 6l-2.5-2.5"/><path d="M14 8l-1-1"/>
+                    <path d="M7 18l2.5 2.5"/><path d="M10 16l1 1"/>
+                </svg>
+            </div>
+            <h4>Panel Genético</h4>
+            <p>SNPs <em>PRKCA</em>, <em>TCF4</em>, <em>CDH20</em> como módulo opcional</p>
         </div>
         """, unsafe_allow_html=True)
 
     with col3:
         st.markdown("""
-        <div class="info-card">
-            <h4>Resultados Detallados</h4>
-            <p>Reporte personalizado con interpretación</p>
+        <div class="anxrisk-feature-card">
+            <div class="anxrisk-feature-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                    <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+                    <line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+            </div>
+            <h4>Interpretabilidad</h4>
+            <p>Análisis SHAP individual con reportes exportables en PDF</p>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("</div>", unsafe_allow_html=True)
-
-   
-
-    # Nota final de confidencialidad
+    # Stats bar — Model description
     st.markdown("""
-    <div class="confidentiality-note">
-        <p>Sus datos son confidenciales y utilizados exclusivamente con fines investigativos.</p>
-        <p>Esta herramienta está destinada a la investigación y debe ser interpretada por profesionales de la salud.</p>
+    <div class="anxrisk-stats-bar animate-slide-up">
+        <div class="anxrisk-stat">
+            <div class="anxrisk-stat-value">CatBoost</div>
+            <div class="anxrisk-stat-label">Gradient Boosting</div>
+        </div>
+        <div class="anxrisk-stat">
+            <div class="anxrisk-stat-value">SHAP</div>
+            <div class="anxrisk-stat-label">Interpretabilidad Individual</div>
+        </div>
+        <div class="anxrisk-stat">
+            <div class="anxrisk-stat-value">ROC</div>
+            <div class="anxrisk-stat-label">Validación Clínica</div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
+
+    # Guide button
+    col_g1, col_g2, col_g3 = st.columns([1, 2, 1])
+    with col_g2:
+        if st.button("Ver Guía de Uso", key="guide_button", use_container_width=True):
+            st.session_state.mostrar_guia = True
+            st.rerun()
+
+    # Guide expander
+    if st.session_state.get('mostrar_guia', False):
+        with st.expander("Guía de Uso — ANXRISK", expanded=True):
+            st.markdown("""
+### 1. Introducción
+ANXRISK es una herramienta integral que evalúa el riesgo de ansiedad combinando múltiples fuentes de datos:
+- **Datos demográficos:** Edad, género, educación
+- **Datos psicosociales:** Eventos vitales estresantes (LTE-12)
+- **Datos clínicos:** Cuestionarios validados SF-12, HADS, ZSAS
+- **Datos genéticos (opcional):** Marcadores *PRKCA*, *TCF4*, *CDH20*
+
+> Esta herramienta es de apoyo a la decisión clínica y debe ser interpretada por profesionales de salud mental.
+
+### 2. Flujo de Evaluación
+
+| Paso | Instrumento | Descripción |
+|------|------------|-------------|
+| 1 | Datos Demográficos | Nombre, edad, género, años de educación |
+| 2 | LTE-12 | 12 eventos vitales estresantes (Brugha et al., 1985) |
+| 3 | SF-12 Física | Componente físico del SF-12 (Ware et al., 1996) |
+| 4 | SF-12 Mental | Componente mental del SF-12 |
+| 5 | HADS | 7 ítems de ansiedad (Zigmond & Snaith, 1983) |
+| 6 | ZSAS | 20 ítems de ansiedad de Zung (1971) |
+
+### 3. Interpretación de Resultados
+
+| Nivel | Rango | Recomendación |
+|-------|-------|---------------|
+| **Bajo** | 0.00 – 0.29 | Sin intervención inmediata requerida |
+| **Moderado** | 0.30 – 0.59 | Monitoreo y evaluación de seguimiento |
+| **Alto** | 0.60 – 1.00 | Evaluación profesional recomendada |
+
+### 4. Análisis SHAP
+SHAP (SHapley Additive exPlanations) muestra cómo cada factor contribuye a la predicción:
+- **Barras rojas (derecha):** Factores que aumentan el riesgo
+- **Barras verdes (izquierda):** Factores que disminuyen el riesgo
+- El tamaño de la barra indica la magnitud del impacto
+
+### 5. Privacidad y Protección de Datos
+Todos los datos son confidenciales y se procesan exclusivamente en la sesión del navegador, 
+conforme a la **Ley 1581 de 2012** (Protección de Datos Personales) y el **Decreto 1377 de 2013** (Habeas Data). 
+No se almacena información en servidores externos. Consulte la Política de Tratamiento de Datos al pie de esta página.
+            """)
+
+            if st.button("Cerrar Guía", key="close_guide"):
+                st.session_state.mostrar_guia = False
+                st.rerun()
+
+    # Confidentiality & Habeas Data footer
+    st.markdown("""
+    <div class="anxrisk-card" style="margin-top: 2rem; text-align: center; border-left: 3px solid var(--accent);">
+        <p style="margin-bottom: 0.5rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                 stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary); vertical-align: middle; margin-right: 6px;">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            <strong>Protección de Datos Personales</strong>
+        </p>
+        <p style="font-size: 0.9375rem; color: var(--text-secondary); margin-bottom: 0;">
+            Sus datos personales y de salud serán tratados conforme a la 
+            <strong>Ley 1581 de 2012</strong> (Régimen General de Protección de Datos Personales) 
+            y su Decreto Reglamentario 1377 de 2013 (Habeas Data). 
+            La información suministrada es de carácter confidencial, se procesa exclusivamente 
+            en la sesión del navegador y no se almacena en servidores externos.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Expandable Habeas Data policy
+    with st.expander("Ver Política de Tratamiento de Datos Personales"):
+        st.markdown("""
+### Política de Tratamiento de Datos Personales — ANXRISK
+
+#### 1. Responsable del Tratamiento
+ANXRISK es una herramienta de apoyo a la decisión clínica desarrollada con fines 
+académicos e investigativos. El responsable del tratamiento de los datos es el 
+profesional de salud mental que utiliza la herramienta.
+
+#### 2. Finalidad del Tratamiento
+Los datos personales y de salud recopilados se utilizan exclusivamente para:
+- Realizar la evaluación del riesgo de trastornos de ansiedad
+- Generar reportes clínicos individuales con análisis de interpretabilidad
+- Apoyar la toma de decisiones clínicas del profesional de salud
+
+#### 3. Datos Recopilados
+- **Datos de identificación:** Nombre (opcional), edad, género
+- **Datos de salud:** Respuestas a cuestionarios clínicos validados (LTE-12, SF-12, HADS, ZSAS)
+- **Datos genéticos (opcional):** Genotipos PRKCA, TCF4, CDH20
+
+#### 4. Tratamiento y Seguridad
+- Los datos se procesan **exclusivamente en la sesión del navegador** del usuario
+- **No se almacenan** datos personales en servidores externos ni bases de datos permanentes
+- Al cerrar la sesión del navegador, todos los datos se eliminan automáticamente
+- Los reportes descargados (PDF) quedan bajo la custodia del profesional responsable
+
+#### 5. Derechos del Titular
+De acuerdo con la Ley 1581 de 2012, el titular de los datos tiene derecho a:
+- **Conocer, actualizar y rectificar** sus datos personales
+- **Solicitar prueba** de la autorización otorgada
+- **Ser informado** sobre el uso que se ha dado a sus datos
+- **Revocar** la autorización y/o solicitar la supresión de los datos
+- **Acceder gratuitamente** a los datos personales objeto de tratamiento
+
+#### 6. Marco Legal
+Esta política se rige por:
+- **Ley 1581 de 2012** — Régimen General de Protección de Datos Personales (Colombia)
+- **Decreto 1377 de 2013** — Reglamentario de la Ley 1581 de 2012
+- **Ley 1266 de 2008** — Habeas Data
+- **Resolución 8430 de 1993** — Investigación en salud
+
+#### 7. Consentimiento
+Al utilizar esta herramienta, el profesional de salud declara que cuenta con la 
+autorización previa, expresa e informada del paciente para el tratamiento de sus 
+datos personales y de salud, conforme a la normatividad vigente.
+        """)
