@@ -202,24 +202,8 @@ section[data-testid="stSidebar"] > div:first-child {
     padding: var(--space-6) var(--space-4) !important;
 }
 
-/* Force sidebar text to be light — scoped to content elements only */
-section[data-testid="stSidebar"] .stMarkdown,
-section[data-testid="stSidebar"] .stMarkdown p,
-section[data-testid="stSidebar"] .stMarkdown span,
-section[data-testid="stSidebar"] .stMarkdown div,
-section[data-testid="stSidebar"] .stMarkdown li,
-section[data-testid="stSidebar"] .stMarkdown strong,
-section[data-testid="stSidebar"] .stMarkdown em,
-section[data-testid="stSidebar"] .stMarkdown a,
-section[data-testid="stSidebar"] .stMarkdown h1,
-section[data-testid="stSidebar"] .stMarkdown h2,
-section[data-testid="stSidebar"] .stMarkdown h3,
-section[data-testid="stSidebar"] .stText,
-section[data-testid="stSidebar"] .element-container p,
-section[data-testid="stSidebar"] .element-container span,
-section[data-testid="stSidebar"] .element-container div,
-section[data-testid="stSidebar"] .element-container label,
-section[data-testid="stSidebar"] label {
+/* Force sidebar text to be light — wildcard but excludes toggle buttons */
+section[data-testid="stSidebar"] *:not(button[data-testid="stSidebarCollapseButton"]):not(button[data-testid="baseButton-headerNoPadding"]):not(button[data-testid="stBaseButton-headerNoPadding"]):not(svg):not(path):not(line):not(polyline):not(circle):not(rect) {
     color: rgba(255, 255, 255, 0.92) !important;
 }
 
