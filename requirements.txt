@@ -12,7 +12,8 @@ pandas>=2.1.0
 numpy>=1.26.0
 
 # Machine Learning — scikit-learn FIJADO para reproducibilidad del modelo
-scikit-learn==1.3.2
+# Modelos entrenados con scikit-learn 1.6.1 (verificado en .joblib)
+scikit-learn==1.6.1
 joblib>=1.3.0
 shap>=0.44.0
 
