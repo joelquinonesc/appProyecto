@@ -42,7 +42,7 @@ def mostrar_analisis_masivo():
         'lte12_count': [3, 1, 4],
         'prkca': ['C/T', 'T/T', 'C/C'],
         'tcf4': ['A/T', 'A/A', 'T/T'],
-        'cdh20': ['G/A', 'G/G', 'A/A']
+        'cdh20': ['A/G', 'G/G', 'A/A']
     })
     
     csv_plantilla = plantilla_df.to_csv(index=False)
@@ -66,7 +66,7 @@ def mostrar_analisis_masivo():
     - **lte12_count**: Número de eventos vitales estresantes (0-12)
     - **prkca**: Genotipo (T/T, C/T, C/C)
     - **tcf4**: Genotipo (A/A, A/T, T/T)
-    - **cdh20**: Genotipo (G/G, G/A, A/A)
+    - **cdh20**: Genotipo (G/G, A/G, A/A)
     """)
     
     st.markdown("---")
@@ -173,7 +173,7 @@ def mostrar_analisis_masivo():
                     
                     # 17-19. CDH20 ONE-HOT (binarios)
                     cdh20_aa = 1 if row['cdh20'] == 'A/A' else 0
-                    cdh20_ag = 1 if row['cdh20'] == 'G/A' else 0
+                    cdh20_ag = 1 if row['cdh20'] == 'A/G' else 0
                     cdh20_gg = 1 if row['cdh20'] == 'G/G' else 0
                     
                     # 20-22. LTE12 ONE-HOT (consistente con calculos.py: 0=0, 1=1, 2+=2)
@@ -247,7 +247,7 @@ def mostrar_analisis_masivo():
                 
                 **CDH20 - One-Hot (3 features binarios):**
                 - 20: **CDH20_A/A** - 1 si genotipo=A/A, 0 si no
-                - 21: **CDH20_A/G** - 1 si genotipo=G/A, 0 si no
+                - 21: **CDH20_A/G** - 1 si genotipo=A/G, 0 si no
                 - 22: **CDH20_G/G** - 1 si genotipo=G/G, 0 si no
                 
                 **TOTAL: 22 Features** → Modelo XGBoost Extendido → Predicción de Riesgo
@@ -417,7 +417,7 @@ def calcular_riesgo_paciente(row):
         
         # 17-19. CDH20 ONE-HOT
         cdh20_aa = 1 if row['cdh20'] == 'A/A' else 0
-        cdh20_ag = 1 if row['cdh20'] == 'G/A' else 0
+        cdh20_ag = 1 if row['cdh20'] == 'A/G' else 0
         cdh20_gg = 1 if row['cdh20'] == 'G/G' else 0
         
         # 20-22. LTE12 ONE-HOT (consistente con calculos.py: 0=0, 1=1, 2+=2)

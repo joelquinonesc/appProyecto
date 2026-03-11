@@ -86,7 +86,7 @@ def mostrar_datos_geneticos():
     st.markdown("<p style='color: #666666; font-size: 0.95rem; font-style: italic; margin-bottom: 0.75rem;'>Asociada con la conectividad neuronal y neurotransmisión</p>", unsafe_allow_html=True)
     cdh20_genotipo = st.selectbox(
         "Seleccione el genotipo para CDH20:",
-        options=["Seleccione una opción", "G/G", "G/A", "A/A"],
+        options=["Seleccione una opción", "G/G", "A/G", "A/A"],
         key="cdh20_select",
         label_visibility="collapsed"
     )

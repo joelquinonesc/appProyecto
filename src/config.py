@@ -31,4 +31,4 @@ FEATURES_EXTENDED = FEATURES_STANDARD + [
 # ── Opciones de genotipos para selectbox ──────────────────────────
 GENOTIPOS_PRKCA = ["T/T", "C/T", "C/C"]
 GENOTIPOS_TCF4 = ["A/A", "A/T", "T/T"]
-GENOTIPOS_CDH20 = ["G/G", "G/A", "A/A"]
+GENOTIPOS_CDH20 = ["G/G", "A/G", "A/A"]

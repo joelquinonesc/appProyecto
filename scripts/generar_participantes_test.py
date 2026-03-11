@@ -91,10 +91,10 @@ def generar_datos_simulados(n_participantes=100):
     # Factor invertido: A/A (val=0) tiene mayor impacto que T/T (val=2)
     factor_tcf4 = 1 + ((2 - tcf4_numeric) * 0.30)  # Invierte la lógica: 0→2, 1→1, 2→0
     
-    # CDH20 (cadherina 20): G/G, G/A, A/A  
+    # CDH20 (cadherina 20): G/G, A/G, A/A  
     # CORREGIDO: Alelo G de riesgo (~25%) - G/G es genotipo de riesgo según modelo entrenado
     cdh20_numeric = np.random.binomial(n=2, p=0.25, size=n_participantes)
-    cdh20 = np.array([['G/G', 'G/A', 'A/A'][val] for val in cdh20_numeric])
+    cdh20 = np.array([['G/G', 'A/G', 'A/A'][val] for val in cdh20_numeric])
     # G/G (val=0) tiene mayor impacto que A/A (val=2)
     factor_cdh20 = 1 + ((2 - cdh20_numeric) * 0.25)  # Invierte la lógica
     
@@ -179,7 +179,7 @@ def generar_datos_simulados(n_participantes=100):
     
     print(f"\n  • CDH20:")
     print(f"    - G/G (riesgo): {sum(cdh20 == 'G/G')} personas ({sum(cdh20 == 'G/G')/n_participantes*100:.1f}%)")
-    print(f"    - G/A (heterocigoto): {sum(cdh20 == 'G/A')} personas ({sum(cdh20 == 'G/A')/n_participantes*100:.1f}%)")
+    print(f"    - A/G (heterocigoto): {sum(cdh20 == 'A/G')} personas ({sum(cdh20 == 'A/G')/n_participantes*100:.1f}%)")
     print(f"    - A/A (protector): {sum(cdh20 == 'A/A')} personas ({sum(cdh20 == 'A/A')/n_participantes*100:.1f}%)")
     
     print("\n📋 EVENTOS VITALES:")

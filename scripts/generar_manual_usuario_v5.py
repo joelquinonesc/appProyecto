@@ -453,7 +453,7 @@ def generar_manual():
         [
             ["PRKCA", "Proteína Quinasa C Alfa", "Regulación del estrés y respuesta emocional", "T/T, C/T, C/C"],
             ["TCF4", "Factor de Transcripción 4", "Desarrollo neuronal y predisposición psiquiátrica", "A/A, A/T, T/T"],
-            ["CDH20", "Cadherina 20", "Conectividad neuronal y neurotransmisión", "G/G, G/A, A/A"],
+            ["CDH20", "Cadherina 20", "Conectividad neuronal y neurotransmisión", "G/G, A/G, A/A"],
         ],
         col_widths=[2, 4.5, 5.5, 4]
     )
