@@ -15,6 +15,7 @@ def inicializar_dataframe():
         st.session_state['df_pacientes'] = pd.DataFrame(columns=[
             'timestamp',
             'nombre',
+            'documento',
             'edad',
             'grupo_edad',
             'educacion_binaria',
@@ -68,6 +69,7 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
         nuevo_registro = {
             'timestamp': session_id,
             'nombre': None,
+            'documento': None,
             'edad': None,
             'grupo_edad': None,
             'educacion_binaria': None,
@@ -101,6 +103,7 @@ def agregar_o_actualizar_registro(datos, tipo_datos='demograficos'):
     # Actualizar datos según el tipo
     if tipo_datos == 'demograficos':
         st.session_state['df_pacientes'].at[idx, 'nombre'] = datos.get('nombre')
+        st.session_state['df_pacientes'].at[idx, 'documento'] = datos.get('documento')
         st.session_state['df_pacientes'].at[idx, 'edad'] = datos.get('edad')
         st.session_state['df_pacientes'].at[idx, 'grupo_edad'] = datos.get('grupo_edad')
         st.session_state['df_pacientes'].at[idx, 'educacion_binaria'] = datos.get('educacion_binaria')

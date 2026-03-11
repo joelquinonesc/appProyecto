@@ -48,6 +48,7 @@ def mostrar_demograficos():
         col1, col2 = st.columns(2)
         with col1:
             st.markdown(_METRIC_CARD.format(label="Nombre", value=datos['nombre']), unsafe_allow_html=True)
+            st.markdown(_METRIC_CARD.format(label="Documento", value=datos.get('documento', '—')), unsafe_allow_html=True)
             st.markdown(_METRIC_CARD.format(label="Edad", value=f"{datos['edad']} años"), unsafe_allow_html=True)
         with col2:
             st.markdown(_METRIC_CARD.format(label="Género", value=datos['genero']), unsafe_allow_html=True)
@@ -95,6 +96,7 @@ def mostrar_demograficos():
     st.markdown("#### Complete la información del paciente:")
 
     nombre = st.text_input("Nombre completo", placeholder="Nombre completo del paciente *", key="nombre_completo")
+    documento = st.text_input("Documento de identidad", placeholder="Número de documento del paciente *", key="documento_paciente")
 
     col1, col2 = st.columns(2)
     with col1:
@@ -161,6 +163,8 @@ def mostrar_demograficos():
         errores = []
         if not nombre.strip():
             errores.append("El nombre completo es obligatorio.")
+        if not documento.strip():
+            errores.append("El documento de identidad es obligatorio.")
         if genero == "Seleccionar":
             errores.append("Debe seleccionar un género.")
         if edad is None or edad <= 0:
@@ -178,6 +182,7 @@ def mostrar_demograficos():
 
         datos = {
             "nombre": nombre,
+            "documento": documento,
             "edad": edad,
             "grupo_edad": transformar_edad_a_grupo(edad),
             "genero": transformar_genero_a_binario(genero),

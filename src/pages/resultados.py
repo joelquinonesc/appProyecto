@@ -397,6 +397,10 @@ def _mostrar_resumen_cuestionarios():
             st.markdown(_MC.format(label="Género", value=g), unsafe_allow_html=True)
         with d3:
             st.markdown(_MC.format(label="Educación", value=f"{demo.get('años_educacion', '-')} años"), unsafe_allow_html=True)
+        # Documento en fila aparte
+        doc_val = demo.get('documento', '-')
+        if doc_val and doc_val != '-':
+            st.markdown(_MC.format(label="Documento de Identidad", value=doc_val), unsafe_allow_html=True)
 
     # LTE-12
     st.markdown("<h4 style='color:#2B87D1; font-size:1.2rem; margin-top:1.5rem; font-family:\"Source Sans 3\",sans-serif;'>📅 Eventos Vitales (LTE-12)</h4>", unsafe_allow_html=True)
@@ -794,6 +798,7 @@ def generar_pdf_resultados(resultados, registro):
     fecha_eval = datetime.now().strftime('%d/%m/%Y — %H:%M')
     demo = resultados.get('datos_demograficos') or st.session_state.get('datos_demograficos') or {}
     nombre_pac = demo.get('nombre', registro.get('nombre', '—')) if registro else demo.get('nombre', '—')
+    documento_pac = demo.get('documento', registro.get('documento', '—')) if registro else demo.get('documento', '—')
     modelo_usado = resultados.get('modelo_usado', '—')
 
     # ══════════ PORTADA ══════════
@@ -804,6 +809,7 @@ def generar_pdf_resultados(resultados, registro):
     elems.append(Spacer(1, 0.2 * inch))
     elems.append(HRFlowable(width="60%", thickness=2, color=C_SEC, spaceAfter=30))
     elems.append(Paragraph(f"<b>Paciente:</b> {nombre_pac}", sub_s))
+    elems.append(Paragraph(f"<b>Documento:</b> {documento_pac}", sub_s))
     elems.append(Paragraph(f"<b>Fecha:</b> {fecha_eval}", sub_s))
     elems.append(Paragraph(f"<b>Modelo:</b> {modelo_usado}", sub_s))
     elems.append(Spacer(1, 1 * inch))
@@ -821,6 +827,7 @@ def generar_pdf_resultados(resultados, registro):
         elems.append(_tbl([
             ["Campo", "Valor"],
             ["Nombre", nombre_pac],
+            ["Documento", documento_pac],
             ["Edad", f"{demo.get('edad', '—')} años"],
             ["Género", g],
             ["Nivel educativo", edu_lbl],
@@ -1061,6 +1068,7 @@ def generar_pdf_resultados(resultados, registro):
 
     # Nombre del paciente
     nombre_paciente = registro.get('nombre', '____________________') if registro else '____________________'
+    documento_paciente = documento_pac if documento_pac and documento_pac != '—' else '__________________'
 
     firma_data = [
         ["", ""],
@@ -1072,7 +1080,7 @@ def generar_pdf_resultados(resultados, registro):
         firma_data.append([f"Cargo: {cargo_prof}", ""])
     if institucion_prof:
         firma_data.append([f"Institución: {institucion_prof}", ""])
-    firma_data.append([f"T.P.: {tp_prof}", "Documento: __________________"])
+    firma_data.append([f"T.P.: {tp_prof}", f"Documento: {documento_paciente}"])
     firma_data.append([f"Fecha: {fecha_firma}", f"Fecha: {fecha_firma}"])
     ft = Table(firma_data, colWidths=[240, 240])
     ft.setStyle(TableStyle([
