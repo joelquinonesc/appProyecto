@@ -238,8 +238,8 @@ def _mostrar_evaluacion_completa(registro):
             <svg viewBox="0 0 300 180" style="width:100%; max-width:380px; margin:0 auto; display:block;">
                 <path d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="#E8E8E8" stroke-width="22" stroke-linecap="round"/>
                 <path d="M 30 150 A 120 120 0 0 1 79.47 52.92" fill="none" stroke="#2B87D1" stroke-width="22" stroke-linecap="round"/>
-                <path d="M 79.47 52.92 A 120 120 0 0 1 187.08 35.87" fill="none" stroke="#FFB74D" stroke-width="22"/>
-                <path d="M 187.08 35.87 A 120 120 0 0 1 270 150" fill="none" stroke="#F44336" stroke-width="22" stroke-linecap="round"/>
+                <path d="M 79.47 52.92 A 120 120 0 0 1 220.53 52.92" fill="none" stroke="#FFB74D" stroke-width="22"/>
+                <path d="M 220.53 52.92 A 120 120 0 0 1 270 150" fill="none" stroke="#F44336" stroke-width="22" stroke-linecap="round"/>
 
                 <text x="28" y="172" font-size="11" fill="#2B87D1" font-weight="600" font-family="'Source Sans 3', sans-serif">Bajo</text>
                 <text x="150" y="18" font-size="11" fill="#FFB74D" font-weight="600" font-family="'Source Sans 3', sans-serif" text-anchor="middle">Moderado</text>
