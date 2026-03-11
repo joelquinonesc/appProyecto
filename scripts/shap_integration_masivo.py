@@ -93,7 +93,7 @@ def calcular_shap_values(model, X_background, X_test):
         print("   ✓ Usando TreeExplainer (rápido)")
     except:
         try:
-            # Si es MLP, usar explainer específico
+            # Si no es un modelo basado en árboles, usar KernelExplainer
             explainer = shap.KernelExplainer(model.predict, X_background)
             print("   ✓ Usando KernelExplainer")
         except:

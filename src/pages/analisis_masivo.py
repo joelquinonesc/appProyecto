@@ -135,7 +135,7 @@ def mostrar_analisis_masivo():
                 
                 # Tabla de transformaciones one-hot DETALLADA (22 features)
                 st.markdown("---")
-                st.markdown("### 🔄 Codificación de los 22 Features para el Modelo MLP")
+                st.markdown("### 🔄 Codificación de los 22 Features para el Modelo Naive Bayes")
                 
                 # Importar funciones de transformación (EXACTAS a resultados.py)
                 from src.utils.calculos import transformar_educacion_a_binaria, transformar_sf12_fisica_a_cuartil, transformar_sf12_mental_a_cuartil, transformar_lte12_a_clasificacion
@@ -250,7 +250,7 @@ def mostrar_analisis_masivo():
                 - 21: **CDH20_A/G** - 1 si genotipo=G/A, 0 si no
                 - 22: **CDH20_G/G** - 1 si genotipo=G/G, 0 si no
                 
-                **TOTAL: 22 Features** → Modelo MLP → Predicción de Riesgo
+                **TOTAL: 22 Features** → Modelo Naive Bayes → Predicción de Riesgo
                 """)
                 
                 # Estadísticas
@@ -375,7 +375,7 @@ def mostrar_analisis_masivo():
 def calcular_riesgo_paciente(row):
     """
     Calcula el riesgo de ansiedad para un paciente individual
-    usando el MLP con 22 FEATURES (EXACTO a resultados.py)
+    usando Naive Bayes con 22 FEATURES (EXACTO a resultados.py)
     """
     
     try:
@@ -437,7 +437,7 @@ def calcular_riesgo_paciente(row):
             cdh20_aa, cdh20_ag, cdh20_gg
         ]])
         
-        # Usar el modelo MLP
+        # Usar el modelo Naive Bayes
         try:
             modelo_path = "src/models/anxrisk_best_extended.joblib"
             modelo = joblib.load(modelo_path)

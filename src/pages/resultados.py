@@ -3,7 +3,7 @@ Página de Resultados de la Evaluación
 ======================================
 Flujo:
 1. Tras ZSAS → se muestra resumen + pregunta de genética + botón "Generar Evaluación"
-2. Al presionar el botón → se ejecuta predicción CatBoost + SHAP
+2. Al presionar el botón → se ejecuta predicción (XGBoost / Naive Bayes) + SHAP
 3. Se muestran resultados, gráfico SHAP y botón de descarga PDF (sin HTML)
 4. El PDF incluye portada, cuestionarios, predicción, SHAP y firma del profesional.
 """
@@ -461,16 +461,16 @@ def _mostrar_resumen_cuestionarios():
 
 
 # ═══════════════════════════════════════════════════════════════════
-# Predicción CatBoost
+# Predicción
 # ═══════════════════════════════════════════════════════════════════
 
 def _ejecutar_prediccion(registro, tiene_genetica):
-    """Carga el modelo CatBoost, construye features y genera predicción."""
+    """Carga el modelo (XGBoost estándar / Naive Bayes extendido), construye features y genera predicción."""
     if not registro:
         return
 
     model_path = MODEL_EXTENDED_PATH if tiene_genetica else MODEL_STANDARD_PATH
-    model_name = "CatBoost Extendido (22 features)" if tiene_genetica else "CatBoost Estándar (13 features)"
+    model_name = "Naive Bayes Extendido (22 features)" if tiene_genetica else "XGBoost Estándar (13 features)"
 
     try:
         import joblib
@@ -588,16 +588,20 @@ def mostrar_shap_analysis(model, X, genero):
         matplotlib.use('Agg')
         import matplotlib.pyplot as plt
 
-        from catboost import CatBoostClassifier
-
         feature_names = list(X.columns)
         X_arr = X.values
 
-        # CatBoost usa TreeExplainer para máximo rendimiento
-        explainer = shap.TreeExplainer(model)
+        # Seleccionar explainer según tipo de modelo
+        try:
+            # TreeExplainer para modelos basados en árboles (XGBoost)
+            explainer = shap.TreeExplainer(model)
+            sv = explainer.shap_values(X_arr)
+        except Exception:
+            # KernelExplainer para otros modelos (Naive Bayes, etc.)
+            explainer = shap.KernelExplainer(model.predict_proba, X_arr)
+            sv = explainer.shap_values(X_arr)
 
-        sv = explainer.shap_values(X_arr)
-        # CatBoost TreeExplainer devuelve lista [clase_0, clase_1] → tomamos clase 1
+        # Si devuelve lista [clase_0, clase_1] → tomamos clase 1
         if isinstance(sv, list):
             sv = sv[1]
 

@@ -202,7 +202,7 @@ def generar_manual():
     add_body(doc, (
         "ANXRISK es un sistema profesional de estratificación del riesgo de trastornos de ansiedad "
         "desarrollado como herramienta de apoyo a la decisión clínica. Combina instrumentos psicométricos "
-        "validados internacionalmente con modelos de aprendizaje automático supervisado (CatBoost) para "
+        "validados internacionalmente con modelos de aprendizaje automático supervisado (XGBoost y Naive Bayes) para "
         "proporcionar una evaluación multimodal con interpretabilidad individual."
     ))
     add_body(doc, (
@@ -288,7 +288,7 @@ def generar_manual():
             ["src/pages/", "Módulos de cada sección del flujo: home, demograficos, eventos_vitales, sf12_fisica, sf12_mental, hads, zsas, datos_geneticos, resultados, analisis_masivo."],
             ["src/utils/calculos.py", "Funciones puras de transformación: edad→grupo, educación→binaria, SF-12→cuartiles, niveles HADS/ZSAS, clasificación de riesgo."],
             ["src/utils/dataframe_manager.py", "Gestor del DataFrame de sesión: almacena, actualiza y exporta datos del paciente."],
-            ["src/models/", "Modelos CatBoost serializados: anxrisk_best_standard.joblib (13 features) y anxrisk_best_extended.joblib (22 features)."],
+            ["src/models/", "Modelos serializados: anxrisk_best_standard.joblib (XGBoost, 13 features) y anxrisk_best_extended.joblib (Naive Bayes, 22 features)."],
             ["src/assets/styles/main.css", "Hoja de estilos CSS para la interfaz."],
             ["data/", "Bases de datos simuladas para pruebas y análisis masivo."],
             ["docs/", "Documentación técnica y manuales."],
@@ -319,7 +319,7 @@ def generar_manual():
             ["5", "Ansiedad (HADS)", "HADS-A", "7 ítems sobre síntomas de ansiedad en la última semana"],
             ["6", "Ansiedad (ZSAS)", "ZSAS", "20 ítems afectivos y somáticos de ansiedad"],
             ["7", "Panel Genético", "SNPs", "Genotipos PRKCA, TCF4, CDH20 (módulo de confirmación)"],
-            ["8", "Resultados", "CatBoost + SHAP", "Predicción, interpretabilidad y descarga de PDF"],
+            ["8", "Resultados", "XGBoost/NB + SHAP", "Predicción, interpretabilidad y descarga de PDF"],
         ],
         col_widths=[1.2, 3.5, 3, 9]
     )
@@ -467,7 +467,7 @@ def generar_manual():
     add_body(doc, (
         "La página de resultados presenta un resumen completo de la evaluación. Tras completar los "
         "cuestionarios clínicos (o también el panel genético), el profesional presiona 'Generar Evaluación' "
-        "para ejecutar la predicción del modelo CatBoost y el análisis SHAP."
+        "para ejecutar la predicción del modelo y el análisis SHAP."
     ))
     add_body(doc, "La página muestra:", bold=True)
     add_bullet(doc, "Resumen de todos los cuestionarios completados con puntajes y clasificaciones.")
@@ -501,12 +501,12 @@ def generar_manual():
     # ══════════════════════════════════════════════════════════════
     add_heading_styled(doc, "7. Modelos de Machine Learning", level=1)
     add_body(doc, (
-        "ANXRISK utiliza exclusivamente modelos CatBoost (Gradient Boosting sobre árboles de decisión) "
-        "entrenados y validados en Google Colab. Los modelos están serializados en formato .joblib y "
-        "se cargan en tiempo de ejecución."
+        "ANXRISK utiliza dos modelos de aprendizaje automático: XGBoost (Gradient Boosting) para el modo estándar "
+        "y Naive Bayes (GaussianNB) para el modo extendido con datos genéticos. Los modelos están serializados "
+        "en formato .joblib y se cargan en tiempo de ejecución."
     ))
 
-    add_heading_styled(doc, "7.1 Modelo Estándar (13 features)", level=2)
+    add_heading_styled(doc, "7.1 Modelo Estándar — XGBoost (13 features)", level=2)
     add_body(doc, "Archivo: src/models/anxrisk_best_standard.joblib", bold=True)
     add_body(doc, "Se utiliza cuando el profesional NO incluye datos genéticos en la evaluación. Las 13 variables son:")
     add_table(doc,
@@ -529,7 +529,7 @@ def generar_manual():
         col_widths=[1, 3, 5, 5]
     )
 
-    add_heading_styled(doc, "7.2 Modelo Extendido (22 features)", level=2)
+    add_heading_styled(doc, "7.2 Modelo Extendido — Naive Bayes (22 features)", level=2)
     add_body(doc, "Archivo: src/models/anxrisk_best_extended.joblib", bold=True)
     add_body(doc, "Se utiliza cuando el profesional SÍ incluye datos genéticos. Incluye las 13 features estándar más 9 variables genéticas (one-hot encoding de los 3 genes):")
     add_table(doc,
@@ -556,8 +556,8 @@ def generar_manual():
     add_heading_styled(doc, "8. Interpretabilidad SHAP", level=1)
     add_body(doc, (
         "ANXRISK utiliza SHAP (SHapley Additive exPlanations) para proporcionar interpretabilidad "
-        "individual de cada predicción. Se emplea TreeExplainer, específicamente optimizado para "
-        "modelos basados en árboles como CatBoost."
+        "individual de cada predicción. Se emplea TreeExplainer para el modelo XGBoost (estándar) "
+        "y KernelExplainer para el modelo Naive Bayes (extendido)."
     ))
     add_body(doc, "¿Cómo leer el gráfico SHAP?", bold=True)
     add_bullet(doc, "Factores que AUMENTAN el riesgo de ansiedad del paciente.", bold_prefix="Barras rojas (derecha): ")
@@ -578,7 +578,7 @@ def generar_manual():
     # ══════════════════════════════════════════════════════════════
     add_heading_styled(doc, "9. Clasificación del Nivel de Riesgo", level=1)
     add_body(doc, (
-        "La probabilidad predicha por el modelo CatBoost se clasifica en tres niveles de riesgo "
+        "La probabilidad predicha por el modelo se clasifica en tres niveles de riesgo "
         "mediante umbrales fijos:"
     ))
     add_table(doc,
@@ -624,20 +624,20 @@ def generar_manual():
     # ══════════════════════════════════════════════════════════════
     add_heading_styled(doc, "11. Dependencias y Versiones", level=1)
     add_body(doc, (
-        "Las versiones de las dependencias están fijadas exactamente a las del entorno de Google Colab "
-        "donde se entrenaron los modelos CatBoost, para garantizar compatibilidad total con los archivos .joblib."
+        "Las versiones de las dependencias están fijadas para garantizar compatibilidad total "
+        "con los archivos .joblib de los modelos entrenados."
     ))
     add_table(doc,
         ["Librería", "Versión", "Propósito"],
         [
             ["Python", "3.12.12", "Lenguaje de programación (runtime.txt)"],
-            ["catboost", "1.2.10", "Modelo de clasificación CatBoost"],
-            ["scikit-learn", "1.6.1", "Preprocesamiento y métricas ML"],
-            ["shap", "0.51.0", "Interpretabilidad individual (TreeExplainer)"],
+            ["xgboost", "≥2.0.0", "Modelo de clasificación XGBoost (estándar)"],
+            ["scikit-learn", "1.6.1", "Preprocesamiento, métricas ML y Naive Bayes (extendido)"],
+            ["shap", "0.51.0", "Interpretabilidad individual (TreeExplainer / KernelExplainer)"],
             ["joblib", "1.5.3", "Serialización/deserialización de modelos"],
             ["numpy", "2.0.2", "Operaciones numéricas"],
             ["pandas", "2.2.2", "Manipulación de DataFrames"],
-            ["scipy", "1.16.3", "Funciones científicas (dependencia de CatBoost)"],
+            ["scipy", "1.16.3", "Funciones científicas"],
             ["streamlit", "≥1.28.0", "Framework web de la aplicación"],
             ["reportlab", "≥4.0.0", "Generación de reportes PDF"],
             ["matplotlib", "≥3.7.0", "Gráficos SHAP"],
@@ -699,8 +699,8 @@ def generar_manual():
         ),
         (
             "¿Qué modelo de machine learning utiliza ANXRISK?",
-            "ANXRISK utiliza exclusivamente CatBoost (Gradient Boosting sobre árboles de decisión). "
-            "No utiliza LightGBM, XGBoost, Random Forest ni ningún otro modelo. "
+            "ANXRISK utiliza dos modelos: XGBoost (Gradient Boosting) para el modo estándar (13 features) "
+            "y Naive Bayes (GaussianNB) para el modo extendido con datos genéticos (22 features). "
             "Los modelos fueron entrenados y validados en Google Colab."
         ),
         (
@@ -739,14 +739,14 @@ def generar_manual():
         ["Categoría", "Cambio", "Detalle"],
         [
             ["Nuevo campo", "Documento de identidad", "Se agregó el campo 'Documento de identidad' al formulario demográfico, al resumen de resultados, a la portada del PDF y a la tabla de datos demográficos del PDF."],
-            ["Limpieza de código", "Eliminación de modelos inexistentes", "Se eliminaron todas las referencias a LightGBM, XGBoost, KernelExplainer y otros modelos que no existen en el proyecto. Solo se usan CatBoost estándar y extendido."],
+            ["Limpieza de código", "Eliminación de modelos inexistentes", "Se eliminaron todas las referencias a modelos obsoletos. Se usa XGBoost para el modelo estándar (13 features) y Naive Bayes para el extendido (22 features)."],
             ["Limpieza de código", "Funciones no usadas eliminadas", "Se eliminaron las funciones transformar_genotipo_prkca, transformar_genotipo_tcf4, transformar_genotipo_cdh20, youden_threshold y validar_años_educacion de calculos.py."],
             ["Limpieza de código", "Imports no usados eliminados", "Se eliminó 'import os' de resultados.py y 'obtener_registro_actual' de datos_geneticos.py. Se eliminó código comentado obsoleto."],
             ["Limpieza de código", "Archivos obsoletos eliminados", "Se eliminaron main.css.bak, main.css.old y directorios __pycache__."],
             ["Documentación", "Docstrings mejorados", "Se agregó docstring de módulo a calculos.py describiendo los 5 bloques funcionales."],
-            ["Dependencias", "Versiones fijadas", "Se fijaron versiones exactas en requirements.txt alineadas con el entorno de Colab donde se entrenaron los modelos: catboost==1.2.10, scikit-learn==1.6.1, shap==0.51.0, numpy==2.0.2, etc."],
+            ["Dependencias", "Versiones fijadas", "Se fijaron versiones en requirements.txt: xgboost>=2.0.0, scikit-learn==1.6.1, shap==0.51.0, numpy==2.0.2, etc."],
             ["Runtime", "Python actualizado", "Se actualizó runtime.txt de python-3.11.0 a python-3.12.12, alineándolo con la versión de Colab."],
-            ["SHAP", "TreeExplainer exclusivo", "Se simplificó la sección SHAP para usar únicamente shap.TreeExplainer(model), eliminando el fallback a KernelExplainer que nunca se necesitó."],
+            ["SHAP", "Explainer adaptativo", "Se usa TreeExplainer para XGBoost y KernelExplainer para Naive Bayes, seleccionándose automáticamente según el tipo de modelo."],
         ],
         col_widths=[3, 4, 9]
     )
