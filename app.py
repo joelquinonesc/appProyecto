@@ -23,8 +23,33 @@ st.set_page_config(
 with open("src/assets/styles/main.css", encoding="utf-8") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Anchor invisible al inicio — fuerza scroll al top vía CSS focus
-st.markdown('<div id="top-anchor" tabindex="-1"></div>', unsafe_allow_html=True)
+# ── Scroll automático al inicio en cada navegación ──
+import streamlit.components.v1 as _components
+_components.html(
+    """
+    <script>
+        // Reintentar varias veces para cubrir tiempos de renderizado distintos
+        var delays = [0, 50, 150, 300];
+        delays.forEach(function(ms) {
+            setTimeout(function(){
+                var d = window.parent.document;
+                // Buscar el contenedor que realmente tiene el scroll
+                var candidates = d.querySelectorAll(
+                    'section.main, [data-testid="stAppViewContainer"], ' +
+                    '[data-testid="stMainBlockContainer"], .main'
+                );
+                candidates.forEach(function(el) {
+                    if (el.scrollHeight > el.clientHeight) {
+                        el.scrollTop = 0;
+                    }
+                });
+                window.parent.scrollTo(0, 0);
+            }, ms);
+        });
+    </script>
+    """,
+    height=0,
+)
 
 # Inicializar el estado de la aplicación
 if 'pagina_actual' not in st.session_state:
@@ -135,33 +160,3 @@ st.sidebar.info("""
 **Nota**: Esta herramienta proporciona un análisis preliminar basado en modelos de aprendizaje automático supervisado.
 Los resultados deben ser interpretados en el contexto clínico completo del paciente y utilizados como apoyo en la toma de decisiones.
 """)
-
-# ── Scroll automático al inicio en cada navegación ──
-# Inyecta un iframe invisible cuyo JS accede al DOM padre de Streamlit.
-# Se usa setTimeout para esperar a que el contenido esté renderizado.
-import streamlit.components.v1 as _components
-_components.html(
-    """
-    <script>
-        setTimeout(function(){
-            // Streamlit envuelve el contenido en un contenedor scrollable
-            var d = window.parent.document;
-            var el = d.querySelector('[data-testid="stMainBlockContainer"]')
-                  || d.querySelector('[data-testid="stAppViewContainer"]')
-                  || d.querySelector('section.main')
-                  || d.querySelector('.main');
-            if (el) el.scrollTop = 0;
-            // También intentar el contenedor con scroll real
-            var scrollContainer = el;
-            while (scrollContainer) {
-                if (scrollContainer.scrollHeight > scrollContainer.clientHeight) {
-                    scrollContainer.scrollTop = 0;
-                }
-                scrollContainer = scrollContainer.parentElement;
-            }
-            window.parent.scrollTo(0, 0);
-        }, 100);
-    </script>
-    """,
-    height=0,
-)
