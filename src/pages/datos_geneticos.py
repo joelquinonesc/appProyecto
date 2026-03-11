@@ -2,7 +2,7 @@
 Sección de Datos Genéticos
 """
 import streamlit as st
-from src.utils.dataframe_manager import agregar_o_actualizar_registro, obtener_registro_actual
+from src.utils.dataframe_manager import agregar_o_actualizar_registro
 
 def mostrar_datos_geneticos():
     # --- Cargar estilos CSS globales ---
@@ -120,11 +120,6 @@ def mostrar_datos_geneticos():
         # Botón deshabilitado si faltan datos
         disabled = not (genotipos_validos and cuestionarios_completos)
     
-    # Mostrar el DataFrame actual también en el formulario de selección de genotipos (opcional, quitar si no se quiere)
-    # st.markdown("---")
-    # with st.expander("Ver DataFrame actual"):
-    #     mostrar_dataframe_actual()
-        
         if st.button("Ver Resultados →", key="btn_calcular_riesgo", type="primary", disabled=disabled, use_container_width=True):
             # Guardar los datos genéticos
             if 'resultados' not in st.session_state:
