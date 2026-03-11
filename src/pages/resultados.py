@@ -8,13 +8,13 @@ Flujo:
 4. El PDF incluye portada, cuestionarios, predicción, SHAP y firma del profesional.
 """
 import streamlit as st
-from src.utils.dataframe_manager import obtener_registro_actual
+from ..utils.dataframe_manager import obtener_registro_actual
 import pandas as pd
 import numpy as np
 from io import BytesIO
 from datetime import datetime
 
-from src.config import (
+from ..config import (
     MODEL_STANDARD_PATH,
     MODEL_EXTENDED_PATH,
     FEATURES_STANDARD,

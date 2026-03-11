@@ -4,7 +4,7 @@ Gestor de DataFrame dinámico para almacenar datos de pacientes
 import pandas as pd
 import streamlit as st
 from datetime import datetime
-from src.utils.calculos import transformar_edad_a_grupo, transformar_sf12_fisica_a_label, transformar_sf12_mental_a_label
+from .calculos import transformar_edad_a_grupo, transformar_sf12_fisica_a_label, transformar_sf12_mental_a_label
 
 
 def inicializar_dataframe():

@@ -2,8 +2,8 @@
 Cuestionario de Eventos Vitales (LTE-12)
 """
 import streamlit as st
-from src.utils.dataframe_manager import agregar_o_actualizar_registro
-from src.utils.calculos import transformar_lte12_a_clasificacion
+from ..utils.dataframe_manager import agregar_o_actualizar_registro
+from ..utils.calculos import transformar_lte12_a_clasificacion
 
 def mostrar_eventos_vitales():
     # Page header

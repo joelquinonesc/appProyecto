@@ -2,12 +2,12 @@
 Formulario de Datos Demográficos
 """
 import streamlit as st
-from src.utils.calculos import (
+from ..utils.calculos import (
     transformar_edad_a_grupo,
     transformar_genero_a_binario,
     transformar_educacion_a_binaria,
 )
-from src.utils.dataframe_manager import agregar_o_actualizar_registro
+from ..utils.dataframe_manager import agregar_o_actualizar_registro
 
 
 def mostrar_demograficos():
