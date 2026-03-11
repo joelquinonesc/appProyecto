@@ -585,8 +585,8 @@ def generar_manual():
         ["Nivel de Riesgo", "Rango de Probabilidad", "Color", "Recomendación Clínica"],
         [
             ["Bajo", "0.00 – 0.29", "🟢 Verde", "Sin intervención inmediata requerida. Seguimiento de rutina."],
-            ["Moderado", "0.30 – 0.59", "🟡 Amarillo", "Monitoreo activo. Evaluación de seguimiento recomendada."],
-            ["Alto", "0.60 – 1.00", "🔴 Rojo", "Evaluación profesional prioritaria. Intervención recomendada."],
+            ["Moderado", "0.30 – 0.69", "🟡 Amarillo", "Monitoreo activo. Evaluación de seguimiento recomendada."],
+            ["Alto", "0.70 – 1.00", "🔴 Rojo", "Evaluación profesional prioritaria. Intervención recomendada."],
         ],
         col_widths=[3, 3.5, 3, 6.5]
     )
@@ -706,7 +706,7 @@ def generar_manual():
         (
             "¿Cómo se determina el nivel de riesgo?",
             "La probabilidad predicha por el modelo se clasifica en tres niveles con umbrales fijos: "
-            "Bajo (< 0.30), Moderado (0.30 – 0.59), Alto (≥ 0.60)."
+            "Bajo (< 0.30), Moderado (0.30 – 0.69), Alto (≥ 0.70)."
         ),
         (
             "¿La edad del paciente afecta la predicción?",

@@ -208,12 +208,12 @@ def generar_datos_simulados(n_participantes=100):
     )
     
     bajo_riesgo = sum(riesgo_simple < 0.3)
-    moderado_riesgo = sum((riesgo_simple >= 0.3) & (riesgo_simple < 0.6))
-    alto_riesgo = sum(riesgo_simple >= 0.6)
+    moderado_riesgo = sum((riesgo_simple >= 0.3) & (riesgo_simple < 0.7))
+    alto_riesgo = sum(riesgo_simple >= 0.7)
     
     print(f"  • Riesgo BAJO (<0.3): {bajo_riesgo} personas ({bajo_riesgo/n_participantes*100:.1f}%)")
-    print(f"  • Riesgo MODERADO (0.3-0.6): {moderado_riesgo} personas ({moderado_riesgo/n_participantes*100:.1f}%)")
-    print(f"  • Riesgo ALTO (>0.6): {alto_riesgo} personas ({alto_riesgo/n_participantes*100:.1f}%)")
+    print(f"  • Riesgo MODERADO (0.3-0.7): {moderado_riesgo} personas ({moderado_riesgo/n_participantes*100:.1f}%)")
+    print(f"  • Riesgo ALTO (>0.7): {alto_riesgo} personas ({alto_riesgo/n_participantes*100:.1f}%)")
     
     print("\n" + "="*70 + "\n")
     

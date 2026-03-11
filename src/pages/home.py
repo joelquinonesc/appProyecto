@@ -144,8 +144,8 @@ ANXRISK es una herramienta integral que evalúa el riesgo de ansiedad combinando
 | Nivel | Rango | Recomendación |
 |-------|-------|---------------|
 | **Bajo** | 0.00 – 0.29 | Sin intervención inmediata requerida |
-| **Moderado** | 0.30 – 0.59 | Monitoreo y evaluación de seguimiento |
-| **Alto** | 0.60 – 1.00 | Evaluación profesional recomendada |
+| **Moderado** | 0.30 – 0.69 | Monitoreo y evaluación de seguimiento |
+| **Alto** | 0.70 – 1.00 | Evaluación profesional recomendada |
 
 ### 4. Análisis SHAP
 SHAP (SHapley Additive exPlanations) muestra cómo cada factor contribuye a la predicción:

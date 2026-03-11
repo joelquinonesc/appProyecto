@@ -50,7 +50,7 @@ QUESTIONNAIRE_CONFIG = {
 ANALYSIS_CONFIG = {
     "risk_thresholds": {
         "low": 0.3,
-        "moderate": 0.6,
+        "moderate": 0.7,
         "high": 0.8
     }
 }

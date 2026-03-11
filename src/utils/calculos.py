@@ -241,8 +241,8 @@ def clasificar_por_youden(proba, umbral, ancho=0.10):
     """Clasifica probabilidad en tres categorías con umbrales fijos.
 
     - Bajo: prob < 0.30
-    - Moderado: 0.30 <= prob < 0.60
-    - Alto: prob >= 0.60
+    - Moderado: 0.30 <= prob < 0.70
+    - Alto: prob >= 0.70
 
     Args:
         proba (float): probabilidad estimada para la clase positiva
@@ -259,7 +259,7 @@ def clasificar_por_youden(proba, umbral, ancho=0.10):
 
     if p < 0.30:
         return 'Bajo'
-    elif p < 0.60:
+    elif p < 0.70:
         return 'Moderado'
     else:
         return 'Alto'

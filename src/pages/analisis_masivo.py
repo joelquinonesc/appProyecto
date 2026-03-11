@@ -449,7 +449,7 @@ def calcular_riesgo_paciente(row):
         # Determinar categoría de riesgo
         if riesgo_predicho < 0.3:
             categoria = "Bajo"
-        elif riesgo_predicho < 0.6:
+        elif riesgo_predicho < 0.7:
             categoria = "Moderado"
         else:
             categoria = "Alto"

@@ -709,13 +709,16 @@ def obtener_interpretacion_feature(feature, feature_val):
         return f"Paciente presenta {d.get(q, q)}" if feature_val == 1 else f"No pertenece a {q}"
     if "PRKCA" in feature:
         g = feature.split("_")[1]
-        return f"Genotipo PRKCA {g} {'presente' if feature_val == 1 else 'ausente'} (regulación del estrés)"
+        riesgo = "aumenta riesgo" if g == "T/T" else "genotipo de referencia"
+        return f"Genotipo PRKCA {g} {'presente' if feature_val == 1 else 'ausente'} (regulación del estrés — {riesgo})"
     if "TCF4" in feature:
         g = feature.split("_")[1]
-        return f"Genotipo TCF4 {g} {'presente' if feature_val == 1 else 'ausente'} (transcripción neuronal)"
+        riesgo = "aumenta riesgo" if g == "T/T" else "genotipo de referencia"
+        return f"Genotipo TCF4 {g} {'presente' if feature_val == 1 else 'ausente'} (transcripción neuronal — {riesgo})"
     if "CDH20" in feature:
         g = feature.split("_")[1]
-        return f"Genotipo CDH20 {g} {'presente' if feature_val == 1 else 'ausente'} (conectividad neuronal)"
+        riesgo = "aumenta riesgo" if g == "G/G" else "genotipo de referencia"
+        return f"Genotipo CDH20 {g} {'presente' if feature_val == 1 else 'ausente'} (conectividad neuronal — {riesgo})"
     if "LTE12" in feature:
         n = feature.split("_")[1]
         d = {"0": "sin eventos vitales estresantes", "1": "1 evento vital estresante", "2": "2+ eventos vitales estresantes"}
@@ -988,8 +991,8 @@ def generar_pdf_resultados(resultados, registro):
         elems.append(_tbl([
             ["Categoría", "Rango"],
             ["Bajo", "0.00 – 0.29"],
-            ["Moderado", "0.30 – 0.59"],
-            ["Alto", "0.60 – 1.00"],
+            ["Moderado", "0.30 – 0.69"],
+            ["Alto", "0.70 – 1.00"],
         ], cw=[200, 280]))
     else:
         elems.append(Paragraph("Probabilidad no disponible.", norm_s))
