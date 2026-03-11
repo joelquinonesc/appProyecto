@@ -70,10 +70,10 @@ def main_shap_integration(df):
 **`procesar_datos_para_modelo(df)`**
 - Convierte datos raw en 22 features (EDAD24, AEFGROUPS, LTE12_0-2, SF12F_Q1-Q4, SF12M_Q1-Q4, PRKCA, TCF4, CDH20)
 - Aplica One-Hot Encoding
-- Mantiene orden exacto del modelo Naive Bayes (extendido)
+- Mantiene orden exacto del modelo XGBoost (extendido)
 
 **`calcular_shap_values(model, X_background, X_test)`**
-- Usa explainer adaptativo (TreeExplainer si es posible, sino KernelExplainer)
+- Usa TreeExplainer (optimizado para modelos XGBoost)
 - Usa background reducido (30 muestras) para rapidez
 - Retorna valores SHAP para cada paciente
 

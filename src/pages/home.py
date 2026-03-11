@@ -94,7 +94,7 @@ def mostrar_home():
     st.markdown("""
     <div class="anxrisk-stats-bar animate-slide-up">
         <div class="anxrisk-stat">
-            <div class="anxrisk-stat-value">XGBoost / Naive Bayes</div>
+            <div class="anxrisk-stat-value">XGBoost</div>
             <div class="anxrisk-stat-label">Machine Learning</div>
         </div>
         <div class="anxrisk-stat">

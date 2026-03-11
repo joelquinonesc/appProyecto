@@ -2,7 +2,7 @@
 Análisis SHAP Completo para Análisis Masivos
 ==============================================
 Genera visualizaciones SHAP para entender la importancia de cada característica
-en las predicciones del modelo Naive Bayes para análisis masivos.
+en las predicciones del modelo XGBoost Extendido para análisis masivos.
 """
 
 import pandas as pd
@@ -25,7 +25,7 @@ def cargar_modelo_y_datos():
     print("="*80)
     
     # Cargar modelo
-    print("\n📦 Cargando modelo Naive Bayes...")
+    print("\n📦 Cargando modelo XGBoost Extendido...")
     model = joblib.load('src/models/anxrisk_best_extended.joblib')
     
     # Cargar datos simulados
@@ -121,22 +121,12 @@ def crear_explicador_shap(model, X):
     print("\n🤖 Creando explicador SHAP...")
     print("⏳ Esto puede tardar 1-2 minutos...")
     
-    bg_data = shap.sample(X, min(100, len(X)))
-    
-    # Usar TreeExplainer si es posible, si no KernelExplainer con P(clase=1)
-    try:
-        explainer = shap.TreeExplainer(model)
-        print("   ✓ Usando TreeExplainer (rápido)")
-        shap_values = explainer.shap_values(X)
-        if isinstance(shap_values, list):
-            shap_values = shap_values[1]
-    except Exception:
-        # KernelExplainer con P(clase=1) para Naive Bayes y otros
-        explainer = shap.KernelExplainer(
-            lambda x: model.predict_proba(x)[:, 1], bg_data
-        )
-        print("   ✓ Usando KernelExplainer (predict_proba clase 1)")
-        shap_values = explainer.shap_values(X)
+    # TreeExplainer para XGBoost (ambos modelos)
+    explainer = shap.TreeExplainer(model)
+    print("   ✓ Usando TreeExplainer (XGBoost)")
+    shap_values = explainer.shap_values(X)
+    if isinstance(shap_values, list):
+        shap_values = shap_values[1]
     
     shap_values = np.array(shap_values)
     if shap_values.ndim == 3:

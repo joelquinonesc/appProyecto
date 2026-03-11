@@ -86,27 +86,13 @@ def calcular_shap_values(model, X_background, X_test):
     """Calcula valores SHAP para los datos de prueba"""
     print("🤖 Calculando valores SHAP...")
     
-    # Usar TreeExplainer si es posible (mucho más rápido), si no usar KernelExplainer
-    try:
-        # Intentar con TreeExplainer (para modelos basados en árboles)
-        explainer = shap.TreeExplainer(model)
-        print("   ✓ Usando TreeExplainer (rápido)")
-        shap_values = explainer.shap_values(X_test)
-        # Si devuelve lista [clase_0, clase_1] → tomamos clase 1
-        if isinstance(shap_values, list):
-            shap_values = shap_values[1]
-    except:
-        try:
-            # KernelExplainer con P(clase=1) para Naive Bayes y otros
-            explainer = shap.KernelExplainer(
-                lambda x: model.predict_proba(x)[:, 1], X_background
-            )
-            print("   ✓ Usando KernelExplainer (predict_proba clase 1)")
-        except:
-            # Fallback: usar permutation explainer (más simple)
-            explainer = shap.PermutationExplainer(model.predict, X_background)
-            print("   ✓ Usando PermutationExplainer")
-        shap_values = explainer.shap_values(X_test)
+    # TreeExplainer para modelos XGBoost (estándar y extendido)
+    explainer = shap.TreeExplainer(model)
+    print("   ✓ Usando TreeExplainer (XGBoost)")
+    shap_values = explainer.shap_values(X_test)
+    # Si devuelve lista [clase_0, clase_1] → tomamos clase 1
+    if isinstance(shap_values, list):
+        shap_values = shap_values[1]
     
     # Asegurar que sea 2D (n_muestras, n_features)
     shap_values = np.array(shap_values)

@@ -202,7 +202,7 @@ def generar_manual():
     add_body(doc, (
         "ANXRISK es un sistema profesional de estratificación del riesgo de trastornos de ansiedad "
         "desarrollado como herramienta de apoyo a la decisión clínica. Combina instrumentos psicométricos "
-        "validados internacionalmente con modelos de aprendizaje automático supervisado (XGBoost y Naive Bayes) para "
+        "validados internacionalmente con modelos de aprendizaje automático supervisado (XGBoost) para "
         "proporcionar una evaluación multimodal con interpretabilidad individual."
     ))
     add_body(doc, (
@@ -288,7 +288,7 @@ def generar_manual():
             ["src/pages/", "Módulos de cada sección del flujo: home, demograficos, eventos_vitales, sf12_fisica, sf12_mental, hads, zsas, datos_geneticos, resultados, analisis_masivo."],
             ["src/utils/calculos.py", "Funciones puras de transformación: edad→grupo, educación→binaria, SF-12→cuartiles, niveles HADS/ZSAS, clasificación de riesgo."],
             ["src/utils/dataframe_manager.py", "Gestor del DataFrame de sesión: almacena, actualiza y exporta datos del paciente."],
-            ["src/models/", "Modelos serializados: anxrisk_best_standard.joblib (XGBoost, 13 features) y anxrisk_best_extended.joblib (Naive Bayes, 22 features)."],
+            ["src/models/", "Modelos serializados: anxrisk_best_standard.joblib (XGBoost, 13 features) y anxrisk_best_extended.joblib (XGBoost, 22 features)."],
             ["src/assets/styles/main.css", "Hoja de estilos CSS para la interfaz."],
             ["data/", "Bases de datos simuladas para pruebas y análisis masivo."],
             ["docs/", "Documentación técnica y manuales."],
@@ -501,8 +501,9 @@ def generar_manual():
     # ══════════════════════════════════════════════════════════════
     add_heading_styled(doc, "7. Modelos de Machine Learning", level=1)
     add_body(doc, (
-        "ANXRISK utiliza dos modelos de aprendizaje automático: XGBoost (Gradient Boosting) para el modo estándar "
-        "y Naive Bayes (GaussianNB) para el modo extendido con datos genéticos. Los modelos están serializados "
+        "ANXRISK utiliza dos modelos de aprendizaje automático basados en XGBoost (Gradient Boosting): "
+        "un modelo estándar con 13 features clínicas y un modelo extendido con 22 features que incluye datos genéticos. "
+        "Los modelos están serializados "
         "en formato .joblib y se cargan en tiempo de ejecución."
     ))
 
@@ -529,7 +530,7 @@ def generar_manual():
         col_widths=[1, 3, 5, 5]
     )
 
-    add_heading_styled(doc, "7.2 Modelo Extendido — Naive Bayes (22 features)", level=2)
+    add_heading_styled(doc, "7.2 Modelo Extendido — XGBoost (22 features)", level=2)
     add_body(doc, "Archivo: src/models/anxrisk_best_extended.joblib", bold=True)
     add_body(doc, "Se utiliza cuando el profesional SÍ incluye datos genéticos. Incluye las 13 features estándar más 9 variables genéticas (one-hot encoding de los 3 genes):")
     add_table(doc,
@@ -556,8 +557,8 @@ def generar_manual():
     add_heading_styled(doc, "8. Interpretabilidad SHAP", level=1)
     add_body(doc, (
         "ANXRISK utiliza SHAP (SHapley Additive exPlanations) para proporcionar interpretabilidad "
-        "individual de cada predicción. Se emplea TreeExplainer para el modelo XGBoost (estándar) "
-        "y KernelExplainer para el modelo Naive Bayes (extendido)."
+        "individual de cada predicción. Se emplea TreeExplainer para ambos modelos XGBoost "
+        "(estándar y extendido)."
     ))
     add_body(doc, "¿Cómo leer el gráfico SHAP?", bold=True)
     add_bullet(doc, "Factores que AUMENTAN el riesgo de ansiedad del paciente.", bold_prefix="Barras rojas (derecha): ")
@@ -631,9 +632,9 @@ def generar_manual():
         ["Librería", "Versión", "Propósito"],
         [
             ["Python", "3.12.12", "Lenguaje de programación (runtime.txt)"],
-            ["xgboost", "≥2.0.0", "Modelo de clasificación XGBoost (estándar)"],
-            ["scikit-learn", "1.6.1", "Preprocesamiento, métricas ML y Naive Bayes (extendido)"],
-            ["shap", "0.51.0", "Interpretabilidad individual (TreeExplainer / KernelExplainer)"],
+            ["xgboost", "≥2.0.0", "Modelo de clasificación XGBoost (estándar y extendido)"],
+            ["scikit-learn", "1.6.1", "Preprocesamiento y métricas de ML"],
+            ["shap", "0.51.0", "Interpretabilidad individual (TreeExplainer)"],
             ["joblib", "1.5.3", "Serialización/deserialización de modelos"],
             ["numpy", "2.0.2", "Operaciones numéricas"],
             ["pandas", "2.2.2", "Manipulación de DataFrames"],
@@ -699,8 +700,8 @@ def generar_manual():
         ),
         (
             "¿Qué modelo de machine learning utiliza ANXRISK?",
-            "ANXRISK utiliza dos modelos: XGBoost (Gradient Boosting) para el modo estándar (13 features) "
-            "y Naive Bayes (GaussianNB) para el modo extendido con datos genéticos (22 features). "
+            "ANXRISK utiliza dos modelos basados en XGBoost (Gradient Boosting): uno estándar (13 features clínicas) "
+            "y uno extendido con datos genéticos (22 features). "
             "Los modelos fueron entrenados y validados en Google Colab."
         ),
         (
@@ -739,14 +740,14 @@ def generar_manual():
         ["Categoría", "Cambio", "Detalle"],
         [
             ["Nuevo campo", "Documento de identidad", "Se agregó el campo 'Documento de identidad' al formulario demográfico, al resumen de resultados, a la portada del PDF y a la tabla de datos demográficos del PDF."],
-            ["Limpieza de código", "Eliminación de modelos inexistentes", "Se eliminaron todas las referencias a modelos obsoletos. Se usa XGBoost para el modelo estándar (13 features) y Naive Bayes para el extendido (22 features)."],
+            ["Limpieza de código", "Eliminación de modelos inexistentes", "Se eliminaron todas las referencias a modelos obsoletos. Se usa XGBoost para ambos modelos: estándar (13 features) y extendido (22 features)."],
             ["Limpieza de código", "Funciones no usadas eliminadas", "Se eliminaron las funciones transformar_genotipo_prkca, transformar_genotipo_tcf4, transformar_genotipo_cdh20, youden_threshold y validar_años_educacion de calculos.py."],
             ["Limpieza de código", "Imports no usados eliminados", "Se eliminó 'import os' de resultados.py y 'obtener_registro_actual' de datos_geneticos.py. Se eliminó código comentado obsoleto."],
             ["Limpieza de código", "Archivos obsoletos eliminados", "Se eliminaron main.css.bak, main.css.old y directorios __pycache__."],
             ["Documentación", "Docstrings mejorados", "Se agregó docstring de módulo a calculos.py describiendo los 5 bloques funcionales."],
             ["Dependencias", "Versiones fijadas", "Se fijaron versiones en requirements.txt: xgboost>=2.0.0, scikit-learn==1.6.1, shap==0.51.0, numpy==2.0.2, etc."],
             ["Runtime", "Python actualizado", "Se actualizó runtime.txt de python-3.11.0 a python-3.12.12, alineándolo con la versión de Colab."],
-            ["SHAP", "Explainer adaptativo", "Se usa TreeExplainer para XGBoost y KernelExplainer para Naive Bayes, seleccionándose automáticamente según el tipo de modelo."],
+            ["SHAP", "Explainer unificado", "Se usa TreeExplainer para ambos modelos XGBoost (estándar y extendido)."],
         ],
         col_widths=[3, 4, 9]
     )

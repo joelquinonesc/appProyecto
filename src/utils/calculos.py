@@ -3,7 +3,7 @@ Funciones de transformación y cálculo para ANXRISK.
 
 Contiene toda la lógica pura (sin dependencias de Streamlit) para convertir
 los datos crudos del paciente en las variables que consumen los modelos
-XGBoost (estándar 13 features) y Naive Bayes (extendido 22 features).
+XGBoost (estándar 13 features) y XGBoost (extendido 22 features).
 
 Bloques:
   1. Transformaciones demográficas (edad, género, educación)

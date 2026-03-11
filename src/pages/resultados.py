@@ -3,7 +3,7 @@ Página de Resultados de la Evaluación
 ======================================
 Flujo:
 1. Tras ZSAS → se muestra resumen + pregunta de genética + botón "Generar Evaluación"
-2. Al presionar el botón → se ejecuta predicción (XGBoost / Naive Bayes) + SHAP
+2. Al presionar el botón → se ejecuta predicción (XGBoost estándar / XGBoost extendido) + SHAP
 3. Se muestran resultados, gráfico SHAP y botón de descarga PDF (sin HTML)
 4. El PDF incluye portada, cuestionarios, predicción, SHAP y firma del profesional.
 """
@@ -465,12 +465,12 @@ def _mostrar_resumen_cuestionarios():
 # ═══════════════════════════════════════════════════════════════════
 
 def _ejecutar_prediccion(registro, tiene_genetica):
-    """Carga el modelo (XGBoost estándar / Naive Bayes extendido), construye features y genera predicción."""
+    """Carga el modelo (XGBoost estándar / XGBoost extendido), construye features y genera predicción."""
     if not registro:
         return
 
     model_path = MODEL_EXTENDED_PATH if tiene_genetica else MODEL_STANDARD_PATH
-    model_name = "Naive Bayes Extendido (22 features)" if tiene_genetica else "XGBoost Estándar (13 features)"
+    model_name = "XGBoost Extendido (22 features)" if tiene_genetica else "XGBoost Estándar (13 features)"
 
     try:
         import joblib
@@ -591,26 +591,12 @@ def mostrar_shap_analysis(model, X, genero):
         feature_names = list(X.columns)
         X_arr = X.values
 
-        # Seleccionar explainer según tipo de modelo
-        try:
-            # TreeExplainer para modelos basados en árboles (XGBoost)
-            explainer = shap.TreeExplainer(model)
-            sv = explainer.shap_values(X_arr)
-            # Si devuelve lista [clase_0, clase_1] → tomamos clase 1
-            if isinstance(sv, list):
-                sv = sv[1]
-        except Exception:
-            # KernelExplainer para otros modelos (Naive Bayes, etc.)
-            # Necesitamos un background representativo; usamos muestras sintéticas
-            # en lugar de X_arr (usar la misma muestra produce SHAP = 0)
-            np.random.seed(42)
-            n_bg = 50
-            bg_data = np.random.randint(0, 2, size=(n_bg, X_arr.shape[1])).astype(float)
-            # Usamos lambda para obtener solo P(clase=1) → SHAP values 2D directamente
-            explainer = shap.KernelExplainer(
-                lambda x: model.predict_proba(x)[:, 1], bg_data
-            )
-            sv = explainer.shap_values(X_arr, nsamples=200)
+        # TreeExplainer para ambos modelos XGBoost (estándar y extendido)
+        explainer = shap.TreeExplainer(model)
+        sv = explainer.shap_values(X_arr)
+        # Si devuelve lista [clase_0, clase_1] → tomamos clase 1
+        if isinstance(sv, list):
+            sv = sv[1]
 
         if hasattr(sv, 'values'):
             shap_arr = sv.values
