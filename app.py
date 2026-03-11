@@ -23,6 +23,9 @@ st.set_page_config(
 with open("src/assets/styles/main.css", encoding="utf-8") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+# Anchor invisible al inicio — fuerza scroll al top vía CSS focus
+st.markdown('<div id="top-anchor" tabindex="-1"></div>', unsafe_allow_html=True)
+
 # Inicializar el estado de la aplicación
 if 'pagina_actual' not in st.session_state:
     st.session_state.pagina_actual = "Home"
@@ -134,26 +137,30 @@ Los resultados deben ser interpretados en el contexto clínico completo del paci
 """)
 
 # ── Scroll automático al inicio en cada navegación ──
-# Se coloca al final para que se ejecute después de renderizar todo el contenido.
+# Inyecta un iframe invisible cuyo JS accede al DOM padre de Streamlit.
+# Se usa setTimeout para esperar a que el contenido esté renderizado.
 import streamlit.components.v1 as _components
 _components.html(
     """
     <script>
-        const doc = window.parent.document;
-        // Intentar múltiples selectores para máxima compatibilidad
-        const targets = [
-            doc.querySelector('section.main'),
-            doc.querySelector('[data-testid="stAppViewContainer"]'),
-            doc.querySelector('.main'),
-        ];
-        for (const el of targets) {
-            if (el) {
-                el.scrollTo({top: 0, left: 0});
-                break;
+        setTimeout(function(){
+            // Streamlit envuelve el contenido en un contenedor scrollable
+            var d = window.parent.document;
+            var el = d.querySelector('[data-testid="stMainBlockContainer"]')
+                  || d.querySelector('[data-testid="stAppViewContainer"]')
+                  || d.querySelector('section.main')
+                  || d.querySelector('.main');
+            if (el) el.scrollTop = 0;
+            // También intentar el contenedor con scroll real
+            var scrollContainer = el;
+            while (scrollContainer) {
+                if (scrollContainer.scrollHeight > scrollContainer.clientHeight) {
+                    scrollContainer.scrollTop = 0;
+                }
+                scrollContainer = scrollContainer.parentElement;
             }
-        }
-        // Fallback: scroll del window del parent
-        window.parent.scrollTo({top: 0, left: 0});
+            window.parent.scrollTo(0, 0);
+        }, 100);
     </script>
     """,
     height=0,
