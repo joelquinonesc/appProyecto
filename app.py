@@ -23,6 +23,17 @@ st.set_page_config(
 with open("src/assets/styles/main.css", encoding="utf-8") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+# Scroll automático al inicio de la página en cada navegación
+import streamlit.components.v1 as components
+components.html(
+    """
+    <script>
+        window.parent.document.querySelector('section.main').scrollTo(0, 0);
+    </script>
+    """,
+    height=0,
+)
+
 # Inicializar el estado de la aplicación
 if 'pagina_actual' not in st.session_state:
     st.session_state.pagina_actual = "Home"
