@@ -23,17 +23,6 @@ st.set_page_config(
 with open("src/assets/styles/main.css", encoding="utf-8") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Scroll automático al inicio de la página en cada navegación
-import streamlit.components.v1 as components
-components.html(
-    """
-    <script>
-        window.parent.document.querySelector('section.main').scrollTo(0, 0);
-    </script>
-    """,
-    height=0,
-)
-
 # Inicializar el estado de la aplicación
 if 'pagina_actual' not in st.session_state:
     st.session_state.pagina_actual = "Home"
@@ -143,3 +132,29 @@ st.sidebar.info("""
 **Nota**: Esta herramienta proporciona un análisis preliminar basado en modelos de aprendizaje automático supervisado.
 Los resultados deben ser interpretados en el contexto clínico completo del paciente y utilizados como apoyo en la toma de decisiones.
 """)
+
+# ── Scroll automático al inicio en cada navegación ──
+# Se coloca al final para que se ejecute después de renderizar todo el contenido.
+import streamlit.components.v1 as _components
+_components.html(
+    """
+    <script>
+        const doc = window.parent.document;
+        // Intentar múltiples selectores para máxima compatibilidad
+        const targets = [
+            doc.querySelector('section.main'),
+            doc.querySelector('[data-testid="stAppViewContainer"]'),
+            doc.querySelector('.main'),
+        ];
+        for (const el of targets) {
+            if (el) {
+                el.scrollTo({top: 0, left: 0});
+                break;
+            }
+        }
+        // Fallback: scroll del window del parent
+        window.parent.scrollTo({top: 0, left: 0});
+    </script>
+    """,
+    height=0,
+)
