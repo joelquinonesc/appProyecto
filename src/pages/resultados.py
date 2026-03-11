@@ -13,7 +13,6 @@ import pandas as pd
 import numpy as np
 from io import BytesIO
 from datetime import datetime
-import os
 
 from src.config import (
     MODEL_STANDARD_PATH,
@@ -589,29 +588,16 @@ def mostrar_shap_analysis(model, X, genero):
         matplotlib.use('Agg')
         import matplotlib.pyplot as plt
 
-        try:
-            from catboost import CatBoostClassifier
-            _has_cb = True
-        except ImportError:
-            _has_cb = False
-        try:
-            import lightgbm as lgb
-            _has_lgb = True
-        except ImportError:
-            _has_lgb = False
+        from catboost import CatBoostClassifier
 
         feature_names = list(X.columns)
         X_arr = X.values
 
-        # Seleccionar explainer
-        if _has_cb and isinstance(model, CatBoostClassifier):
-            explainer = shap.TreeExplainer(model)
-        elif _has_lgb and isinstance(model, lgb.LGBMClassifier):
-            explainer = shap.TreeExplainer(model)
-        else:
-            explainer = shap.KernelExplainer(model.predict_proba, X_arr, feature_names=feature_names)
+        # CatBoost usa TreeExplainer para máximo rendimiento
+        explainer = shap.TreeExplainer(model)
 
         sv = explainer.shap_values(X_arr)
+        # CatBoost TreeExplainer devuelve lista [clase_0, clase_1] → tomamos clase 1
         if isinstance(sv, list):
             sv = sv[1]
 

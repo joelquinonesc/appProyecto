@@ -1,3 +1,19 @@
+"""
+Funciones de transformación y cálculo para ANXRISK.
+
+Contiene toda la lógica pura (sin dependencias de Streamlit) para convertir
+los datos crudos del paciente en las variables que consumen los modelos
+CatBoost (estándar 13 features / extendido 22 features).
+
+Bloques:
+  1. Transformaciones demográficas (edad, género, educación)
+  2. Eventos vitales LTE-12
+  3. Salud SF-12 (componentes física y mental, cuartiles)
+  4. Niveles de ansiedad HADS y ZSAS
+  5. Clasificación de riesgo (umbrales fijos)
+"""
+
+
 def transformar_edad_a_grupo(edad):
     """
     Transforma la edad en una variable categórica binaria.
@@ -23,28 +39,6 @@ def transformar_genero_a_binario(genero):
     if isinstance(genero, str):
         return 0 if genero.lower() in ['masculino', 'hombre', 'male', 'm'] else 1
     return genero  # Si ya es numérico, retornar tal cual
-
-def validar_años_educacion(edad, años_educacion):
-    """
-    Valida que los años de educación no excedan el máximo permitido.
-    Regla: años_educacion <= (edad - 5)
-    
-    Args:
-        edad (int): Edad del paciente
-        años_educacion (int): Años de educación formal
-        
-    Returns:
-        tuple: (es_valido, max_permitido, mensaje)
-    """
-    max_permitido = max(0, edad - 5)
-    es_valido = años_educacion <= max_permitido
-    
-    if es_valido:
-        mensaje = f"✓ Años de educación válidos ({años_educacion} <= {max_permitido})"
-    else:
-        mensaje = f"✗ Los años de educación ({años_educacion}) exceden el máximo permitido ({max_permitido})"
-    
-    return es_valido, max_permitido, mensaje
 
 def calcular_nivel_hads(puntaje):
     if puntaje >= 8:
@@ -241,53 +235,6 @@ def transformar_sf12_mental_a_label(puntaje):
     if cuartil is None:
         return None
     return f"Q{cuartil}"
-
-
-def transformar_genotipo_prkca(genotipo):
-    """
-    Transforma el genotipo PRKCA a valor numérico.
-    T/T: 0, C/T: 1, C/C: 2
-    """
-    mapping = {'T/T': 0, 'C/T': 1, 'C/C': 2}
-    return mapping.get(genotipo, -1)
-
-
-def transformar_genotipo_tcf4(genotipo):
-    """
-    Transforma el genotipo TCF4 a valor numérico.
-    A/A: 0, A/T: 1, T/T: 2
-    """
-    mapping = {'A/A': 0, 'A/T': 1, 'T/T': 2}
-    return mapping.get(genotipo, -1)
-
-
-def transformar_genotipo_cdh20(genotipo):
-    """
-    Transforma el genotipo CDH20 a valor numérico.
-    G/G: 0, G/A: 1, A/A: 2
-    """
-    mapping = {'G/G': 0, 'G/A': 1, 'A/A': 2}
-    return mapping.get(genotipo, -1)
-def youden_threshold(y_true, probas):
-    """Calcula el umbral óptimo de Youden a partir de etiquetas verdaderas y probabilidades.
-
-    Args:
-        y_true (array-like): etiquetas 0/1
-        probas (array-like): probabilidades predichas para la clase positiva
-
-    Returns:
-        float|None: umbral óptimo (None si no se puede calcular)
-    """
-    try:
-        from sklearn.metrics import roc_curve
-        fpr, tpr, thr = roc_curve(y_true, probas)
-        j = [t - f for t, f in zip(tpr, fpr)]
-        if len(j) == 0:
-            return None
-        ix = max(range(len(j)), key=lambda i: j[i])
-        return float(thr[ix])
-    except Exception:
-        return None
 
 
 def clasificar_por_youden(proba, umbral, ancho=0.10):
