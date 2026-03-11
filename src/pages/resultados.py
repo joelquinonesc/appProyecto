@@ -596,14 +596,21 @@ def mostrar_shap_analysis(model, X, genero):
             # TreeExplainer para modelos basados en árboles (XGBoost)
             explainer = shap.TreeExplainer(model)
             sv = explainer.shap_values(X_arr)
+            # Si devuelve lista [clase_0, clase_1] → tomamos clase 1
+            if isinstance(sv, list):
+                sv = sv[1]
         except Exception:
             # KernelExplainer para otros modelos (Naive Bayes, etc.)
-            explainer = shap.KernelExplainer(model.predict_proba, X_arr)
-            sv = explainer.shap_values(X_arr)
-
-        # Si devuelve lista [clase_0, clase_1] → tomamos clase 1
-        if isinstance(sv, list):
-            sv = sv[1]
+            # Necesitamos un background representativo; usamos muestras sintéticas
+            # en lugar de X_arr (usar la misma muestra produce SHAP = 0)
+            np.random.seed(42)
+            n_bg = 50
+            bg_data = np.random.randint(0, 2, size=(n_bg, X_arr.shape[1])).astype(float)
+            # Usamos lambda para obtener solo P(clase=1) → SHAP values 2D directamente
+            explainer = shap.KernelExplainer(
+                lambda x: model.predict_proba(x)[:, 1], bg_data
+            )
+            sv = explainer.shap_values(X_arr, nsamples=200)
 
         if hasattr(sv, 'values'):
             shap_arr = sv.values

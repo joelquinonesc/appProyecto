@@ -121,11 +121,26 @@ def crear_explicador_shap(model, X):
     print("\n🤖 Creando explicador SHAP...")
     print("⏳ Esto puede tardar 1-2 minutos...")
     
-    # Usar KernelExplainer para máxima compatibilidad
-    explainer = shap.KernelExplainer(model.predict, shap.sample(X, min(100, len(X))))
+    bg_data = shap.sample(X, min(100, len(X)))
     
-    # Calcular valores SHAP para todos los datos
-    shap_values = explainer.shap_values(X)
+    # Usar TreeExplainer si es posible, si no KernelExplainer con P(clase=1)
+    try:
+        explainer = shap.TreeExplainer(model)
+        print("   ✓ Usando TreeExplainer (rápido)")
+        shap_values = explainer.shap_values(X)
+        if isinstance(shap_values, list):
+            shap_values = shap_values[1]
+    except Exception:
+        # KernelExplainer con P(clase=1) para Naive Bayes y otros
+        explainer = shap.KernelExplainer(
+            lambda x: model.predict_proba(x)[:, 1], bg_data
+        )
+        print("   ✓ Usando KernelExplainer (predict_proba clase 1)")
+        shap_values = explainer.shap_values(X)
+    
+    shap_values = np.array(shap_values)
+    if shap_values.ndim == 3:
+        shap_values = shap_values[:, :, -1]
     
     print("✅ Explicador SHAP creado exitosamente")
     
