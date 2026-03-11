@@ -37,8 +37,8 @@ def mostrar_analisis_masivo():
         'años_educacion': [12, 16, 14],
         'hads_score': [8, 5, 12],
         'zsas_score': [42, 28, 55],
-        'sf12_fisica': [35.5, 48.2, 32.1],
-        'sf12_mental': [42.1, 50.3, 38.5],
+        'sf12_fisica': [14, 18, 10],
+        'sf12_mental': [16, 22, 12],
         'lte12_count': [3, 1, 4],
         'prkca': ['C/T', 'T/T', 'C/C'],
         'tcf4': ['A/T', 'A/A', 'T/T'],
@@ -59,10 +59,10 @@ def mostrar_analisis_masivo():
     - **edad**: Edad en años (1-120)
     - **genero**: Masculino o Femenino
     - **años_educacion**: Años de educación formal
-    - **hads_score**: Puntuación HADS (0-42, >8 indica alto riesgo)
-    - **zsas_score**: Puntuación ZSAS (20-80, >36 indica alto riesgo)
-    - **sf12_fisica**: Puntuación SF-12 Física (0-100)
-    - **sf12_mental**: Puntuación SF-12 Mental (0-100)
+    - **hads_score**: Puntuación HADS-Ansiedad (0-21, ≥8 indica riesgo)
+    - **zsas_score**: Puntuación ZSAS (20-80, ≥36 indica riesgo)
+    - **sf12_fisica**: Suma ítems SF-12 Física (6-20)
+    - **sf12_mental**: Suma ítems SF-12 Mental (6-27)
     - **lte12_count**: Número de eventos vitales estresantes (0-12)
     - **prkca**: Genotipo (T/T, C/T, C/C)
     - **tcf4**: Genotipo (A/A, A/T, T/T)
@@ -498,9 +498,9 @@ def calcular_riesgo_simple(row):
     Calcula un riesgo simple basado en las métricas si el modelo no está disponible.
     Normaliza HADS y ZSAS para estimar un riesgo ponderado de apoyo.
     """
-    hads_norm = min(float(row['hads_score']) / 42, 1.0)
+    hads_norm = min(float(row['hads_score']) / 21, 1.0)
     zsas_norm = min((float(row['zsas_score']) - 20) / 60, 1.0)
-    sf12_mental_norm = 1 - (float(row['sf12_mental']) / 100)
+    sf12_mental_norm = 1 - (float(row['sf12_mental']) / 27)
 
     riesgo = (hads_norm * 0.3) + (zsas_norm * 0.3) + (sf12_mental_norm * 0.4)
     return round(riesgo, 4)

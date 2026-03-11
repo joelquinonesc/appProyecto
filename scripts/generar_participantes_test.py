@@ -202,9 +202,9 @@ def generar_datos_simulados(n_participantes=100):
     print("\n✅ Distribución de Riesgos Esperados:")
     # Crear puntuación de riesgo simple para visualización
     riesgo_simple = (
-        (hads_score / 42 * 0.4) +
+        (hads_score / 21 * 0.4) +
         ((zsas_score - 20) / 60 * 0.3) +
-        ((100 - sf12_mental) / 100 * 0.3)
+        ((27 - sf12_mental) / 21 * 0.3)
     )
     
     bajo_riesgo = sum(riesgo_simple < 0.3)
